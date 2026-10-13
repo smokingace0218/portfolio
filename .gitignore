@@ -1,0 +1,4 @@
+.DS_Store
+work/voice.lock
+outputs/*.tar.gz
+outputs/portfolio/.git/
