@@ -6,6 +6,6 @@
 - [Matera case study](https://shruti-portfolio.shruti786aaa.chatgpt.site/work/matera)
 - [Janitri experience](https://shruti-portfolio.shruti786aaa.chatgpt.site/experience/janitri#matera-answer)
 
-The Matera card in the Janitri experience opens the full case study. Direct links and refreshes work on the published site.
+For the current cross-chat handoff and verified navigation, see [CURRENT_BUILD.md](CURRENT_BUILD.md).
 
-The website is deployed separately from this private repository. GitHub Pages is unavailable for this repository on its current plan.
+The Matera card in the Janitri experience opens the full case study. Direct links and refreshes work on the published site. The website is deployed separately from this private repository. GitHub Pages is unavailable for this repository on its current plan.
