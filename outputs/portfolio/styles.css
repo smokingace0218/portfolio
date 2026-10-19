@@ -3769,8 +3769,8 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
 .connect-scene {
   position:relative;
   z-index:0;
-  margin:clamp(-210px,-24vh,-130px) calc(-1 * var(--page-gutter,0px)) 0;
-  padding:clamp(190px,25vh,250px) var(--page-gutter,0px) 0;
+  margin:clamp(-220px,-25vh,-160px) calc(-1 * var(--page-gutter,0px)) 0;
+  padding:clamp(150px,20vh,220px) var(--page-gutter,0px) 0;
   isolation:isolate;
 }
 .connect-birds {
@@ -3778,12 +3778,12 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
   z-index:-1;
   inset:0;
   overflow:hidden;
-  opacity:.68;
+  opacity:.72;
   pointer-events:none;
   mask-image:linear-gradient(to bottom,transparent 0%,#000 13%,#000 78%,transparent 100%);
   -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 13%,#000 78%,transparent 100%);
 }
-.connect-birds canvas { display:block; width:100%; height:100%; opacity:.78; filter:saturate(.55) brightness(1.18); }
+.connect-birds canvas { display:block; width:100%; height:100%; opacity:1; filter:saturate(.62) brightness(1.12); }
 .connect-stage {
   position:relative;
   z-index:1;
