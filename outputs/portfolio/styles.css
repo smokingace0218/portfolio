@@ -3658,3 +3658,19 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
   }
   .project-story-page--framed .project-story-beat { min-height: 34vh; }
 }
+
+.project-story-jazaa-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: .12em;
+  width: auto;
+  height: .76em;
+  margin: 0 .16em .02em 0;
+  vertical-align: baseline;
+}
+.project-story-jazaa-mark svg {
+  display: block;
+  flex: 0 0 .76em;
+  width: .76em;
+  height: .76em;
+}
