@@ -2690,7 +2690,7 @@ function observeReveal() {
 function renderProject(slug) {
   const project = projects.find(item => item.slug === slug);
   if (!project) return renderNotFound();
-  if (slug === 'matera') return renderMateraCaseStudy();
+  if (slug === 'matera') return renderProjectStory(project);
   if (slug === 'jazaa' || slug === 'cms') return renderProjectStory(project);
   renderComingSoon({
     title: `The ${project.title} story is coming together.`,
@@ -2704,20 +2704,26 @@ function renderProjectStory(project) {
   document.body.dataset.page = 'deep-page';
   const fromPortfolio = new URLSearchParams(location.search).get('from') === 'portfolio';
   const isCms = project.slug === 'cms';
-  const backLink = fromPortfolio ? '<a class="back-link" href="/portfolio/">← Back to Portfolio</a>' : isCms ? '<a class="back-link" href="/experience/janitri">← Back to Janitri</a>' : '<a class="back-link" href="/experience/sant-rams">← Back to Sant Ram’s</a>';
-  const kicker = isCms ? 'Selected work / 02 · Medtech · UX/UI' : 'Selected work / 03 · E-commerce · UX/UI';
-  const lede = isCms ? 'I designed alert and empty states for Janitri’s Assam public-health rollout, supporting centralized maternal and fetal monitoring.' : 'I explored JAZAA’s e-commerce website experience, shaping its information architecture, landing page and visual direction during my internship at Sant Ram’s Jewellers.';
+  const isMatera = project.slug === 'matera';
+  const backLink = fromPortfolio ? '<a class="back-link" href="/portfolio/">← Back to Portfolio</a>' : isCms || isMatera ? '<a class="back-link" href="/experience/janitri">← Back to Janitri</a>' : '<a class="back-link" href="/experience/sant-rams">← Back to Sant Ram’s</a>';
+  const kicker = isMatera ? 'Selected work / 01 · Medtech · UX/UI' : isCms ? 'Selected work / 02 · Medtech · UX/UI' : 'Selected work / 03 · E-commerce · UX/UI';
+  const lede = isMatera ? project.summary : isCms ? 'I designed alert and empty states for Janitri’s Assam public-health rollout, supporting centralized maternal and fetal monitoring.' : 'I explored JAZAA’s e-commerce website experience, shaping its information architecture, landing page and visual direction during my internship at Sant Ram’s Jewellers.';
   const diamond = '<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>';
-  const title = isCms ? 'CMS' : '<span class="project-story-jazaa-mark">' + diamond + 'JAZAA</span>';
-  const subtitle = isCms ? 'Central monitoring system' : 'Lab-grown diamond website experience';
-  const hook = isCms ? 'One connected monitoring system. Every state needed to be clear.' : 'A new brand needed a digital home. One as considered as its jewellery.';
-  const roleLine = isCms ? '<span><b>My role</b>UX/UI designer</span><span><b>Design scope</b>Alerts · Empty states</span>' : '<span><b>My role</b>UI/UX · Visual communication</span><span><b>Brand</b>JAZAA · Lab-grown diamonds</span>';
-  const contextLine = isCms ? '<span><b>Rollout context</b>Assam · Public health</span><span><b>Monitoring network</b>41 government hospitals · 82 cCTG devices</span>' : '<span><b>Design scope</b>Landing page · IA · Task flows</span><span><b>Context</b>Sant Ram’s Jewellers · Summer 2025</span>';
+  const title = isMatera ? 'Matera' : isCms ? 'CMS' : '<span class="project-story-jazaa-mark">' + diamond + 'JAZAA</span>';
+  const subtitle = isMatera ? 'Nurse-facing ANC experience' : isCms ? 'Central monitoring system' : 'Lab-grown diamond website experience';
+  const hook = isMatera ? 'The monitor had the readings. Nurses had to build the story.' : isCms ? 'One connected monitoring system. Every state needed to be clear.' : 'A new brand needed a digital home. One as considered as its jewellery.';
+  const roleLine = isMatera ? '<span><b>My role</b>Solo UX/UI designer</span><span><b>Guidance</b>Team-lead guidance · AVP review</span>' : isCms ? '<span><b>My role</b>UX/UI designer</span><span><b>Design scope</b>Alerts · Empty states</span>' : '<span><b>My role</b>UI/UX · Visual communication</span><span><b>Brand</b>JAZAA · Lab-grown diamonds</span>';
+  const contextLine = isMatera ? '<span><b>Research</b>Six nurses · Rangadore Memorial Hospital</span><span><b>Design scope</b>Patient context · Symptoms · Monitoring</span>' : isCms ? '<span><b>Rollout context</b>Assam · Public health</span><span><b>Monitoring network</b>41 government hospitals · 82 cCTG devices</span>' : '<span><b>Design scope</b>Landing page · IA · Task flows</span><span><b>Context</b>Sant Ram’s Jewellers · Summer 2025</span>';
+  const materaCaseUrl = 'https://www.figma.com/proto/nXlj4AyVUoA4G7ztBGQvcG/MATERA-ANC-FINAL?node-id=2264-416&t=O89vURF3ahrI2s0G-1&scaling=scale-down-width&content-scaling=fixed&page-id=2244%3A2&starting-point-node-id=2264%3A416';
+  const materaPrototypeUrl = 'https://www.figma.com/design/2fCrSdBPX90JpncH6V6W0L/ANC-for-chat-gpt?node-id=527-54637';
+  const materaIaUrl = 'https://www.figma.com/board/JOMXpYiZgNP4io3lmXPFnt/ANC-SITE-MAP?node-id=0-1&t=R4ULu80I1WIoXhQ1-1';
   const caseStudyUrl = 'https://www.figma.com/proto/3iLIvKNIdSq6dEG9tfLB1f/Jazaa-%E2%80%94-Landing-Page-Prototype?node-id=144-5237&t=HVESpVY0m77S6b0l-1&scaling=scale-down-width&content-scaling=fixed&page-id=138%3A5032&starting-point-node-id=138%3A5033';
   const landingUrl = 'https://www.figma.com/proto/3iLIvKNIdSq6dEG9tfLB1f/Jazaa-%E2%80%94-Landing-Page-Prototype?node-id=64-5672&t=kUo2BnN7Jcvj0vmc-1&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=64%3A5672';
-  const resources = isCms
-    ? '<a class="button-link" href="' + project.prototypeUrl + '" target="_blank" rel="noopener noreferrer">View alerts &amp; empty states <span aria-hidden="true">↗</span></a><a class="text-link" href="/experience/janitri">Janitri résumé context <span aria-hidden="true">↗</span></a>'
-    : '<a class="button-link" href="' + caseStudyUrl + '" target="_blank" rel="noopener noreferrer">JAZAA case study <span aria-hidden="true">↗</span></a><a class="button-link" href="' + landingUrl + '" target="_blank" rel="noopener noreferrer">Experience the landing page <span aria-hidden="true">↗</span></a>';
+  const resources = isMatera
+    ? '<a class="button-link" href="' + materaCaseUrl + '" target="_blank" rel="noopener noreferrer">Matera case study <span aria-hidden="true">↗</span></a><a class="button-link" href="' + materaPrototypeUrl + '" target="_blank" rel="noopener noreferrer">Explore the prototype <span aria-hidden="true">↗</span></a><a class="text-link" href="' + materaIaUrl + '" target="_blank" rel="noopener noreferrer">View IA &amp; user flows <span aria-hidden="true">↗</span></a>'
+    : isCms
+      ? '<a class="button-link" href="' + project.prototypeUrl + '" target="_blank" rel="noopener noreferrer">View CMS prototype <span aria-hidden="true">↗</span></a><a class="text-link" href="/experience/janitri">Janitri résumé context <span aria-hidden="true">↗</span></a>'
+      : '<a class="button-link" href="' + caseStudyUrl + '" target="_blank" rel="noopener noreferrer">JAZAA case study · IA &amp; flows <span aria-hidden="true">↗</span></a><a class="button-link" href="' + landingUrl + '" target="_blank" rel="noopener noreferrer">Landing page prototype <span aria-hidden="true">↗</span></a>';
   const contents = project.sections.map((section, index) => '<section class="project-story-beat reveal-on-scroll" id="' + project.slug + '-beat-' + (index + 1) + '" aria-labelledby="' + project.slug + '-beat-title-' + (index + 1) + '"><p class="eyebrow">0' + (index + 1) + ' / ' + project.title + '</p><h2 id="' + project.slug + '-beat-title-' + (index + 1) + '">' + section[0] + '</h2><p>' + section[1] + '</p></section>').join('');
   const tracks = Array.from({ length: 5 }, (_, index) => '<span data-story-beat="' + index + '"></span>').join('');
   main.innerHTML = '<article class="deep-page project-story-page project-story-page--' + project.slug + ' matera-case-page"><div class="wrap">' + backLink +
@@ -2727,6 +2733,7 @@ function renderProjectStory(project) {
     '<div class="matera-hero-copy-stage" data-project-copy><div class="matera-hero-copy-beat" data-copy-reveal="0"><p class="eyebrow matera-hero-kicker">' + kicker + '</p><div class="matera-hero-title-block"><h1 class="matera-moment-intro__title">' + title + '</h1><p class="matera-hero-subtitle">' + subtitle + '</p></div></div>' +
     '<div class="matera-hero-copy-beat" data-copy-reveal="1"><h2 id="' + project.slug + '-intro-title" aria-label="' + hook + '">' + hook + '</h2></div><div class="matera-hero-copy-beat" data-copy-reveal="2"><p class="deep-lede matera-moment-intro__lede">' + lede + '</p></div>' +
     '<div class="matera-hero-copy-beat" data-copy-reveal="3"><div class="matera-case-meta" aria-label="Project role and scope">' + roleLine + '</div><div class="matera-case-meta matera-case-meta--fieldwork" aria-label="Project context">' + contextLine + '</div></div></div>' +
+    '<nav class="project-story-quicklinks" aria-label="' + project.title + ' project resources"><p class="eyebrow">Explore this work</p><div class="matera-resource-links">' + resources + '</div></nav>' +
     '<div class="matera-hero-resource-stage" data-project-resources aria-label="' + project.title + ' project links" aria-hidden="true" inert><p class="eyebrow">Take a closer look</p><div class="matera-resource-links">' + resources + '</div></div></div>' +
     '<div class="matera-opening-story__track" aria-hidden="true">' + tracks + '</div></div></div></div></section>' +
     '<div id="' + project.slug + '-story" class="project-story-beats">' + contents + '</div><footer class="project-story-footer"><a class="text-link" href="' + (isCms ? '/experience/janitri' : '/experience/sant-rams') + '">Related résumé context <span aria-hidden="true">↗</span></a><a class="button-link" href="/portfolio/">Back to selected work <span aria-hidden="true">↑</span></a></footer></div></article>';
