@@ -1,30 +1,27 @@
-# Current portfolio build — resume from another chat
+# Current portfolio source — handoff
 
-This file is the current build handoff for the Portfolio repository. Read it before relying on older chat messages, localhost preview URLs, or earlier status notes.
+This handoff reflects the repository's current `main` branch. The portfolio source is tracked in GitHub under `outputs/portfolio/`.
 
-## Open the working build
+- [Current portfolio source on GitHub](https://github.com/smokingace0218/portfolio/tree/main/outputs/portfolio)
+- [Portfolio repository](https://github.com/smokingace0218/portfolio)
 
-- **Full portfolio:** https://shruti-portfolio.shruti786aaa.chatgpt.site
-- **Matera case study:** https://shruti-portfolio.shruti786aaa.chatgpt.site/work/matera
-- **Janitri entry at the Matera card:** https://shruti-portfolio.shruti786aaa.chatgpt.site/experience/janitri#matera-answer
+## Netlify status
 
-The site is already deployed. To preview it from another ChatGPT chat or device, open the live portfolio link above in the browser/web preview. Do not use `127.0.0.1` or `localhost`; those links only work while a local server is running on the original device.
+The repository includes a Netlify configuration, but a Netlify connection, successful build, and live production URL have not been verified.
 
-## Verified navigation
+- Base directory: `outputs/portfolio`
+- Build command: `npm run build`
+- Publish directory: `dist` (relative to the base directory)
+- Production branch intended by the repository instructions: `main`
 
-- The Janitri Matera card opens the full `/work/matera` case study.
-- The Matera return link goes back to `/experience/janitri#matera-answer`.
-- Directly opening or refreshing the Matera route works on the published site.
-- Matera includes the research, findings, workflow, patient continuity, symptom review, MEOWS, NST, design decisions, early feedback, selected screens, intended value, and next tests. Symptom review is a separate design story.
+To publish, import `smokingace0218/portfolio` into Netlify, use `main` as the production branch, and run the first production deploy. Netlify will report whether the build succeeds and provide the live URL.
 
-## Repository and source status
+## Portfolio content and evidence guardrails
 
-The repository is private. Its GitHub Pages setting is unavailable on the current plan; keep the repository private. The published website is deployed separately at the URLs above. The current GitHub repository still does not contain the website source files, so this memory is enough to open and review the running portfolio, but it is not enough to rebuild or run the source locally. Do not claim `npm start` works from a fresh clone until the source files are synced.
-
-## Matera evidence guardrails
-
+- The portfolio includes the landing experience, journey chapters, Janitri deep dive, and project case-study routes.
+- The Matera case study should keep symptom flagging as its own design story.
 - Sole UX/UI designer; team-lead guidance and approval, with AVP review.
 - Early fieldwork: six nurses at Rangadore Memorial Hospital only. Other care settings are deployment requirements, not research sites.
-- The product remains in development. Do not claim shipping, clinical validation, adoption, or outcome impact.
+- Matera remains in development. Do not claim shipping, clinical validation, adoption, or outcome impact.
 - Symptom insights are a possible signal for nurse/doctor review, never a diagnosis; the nurse decides whether to inform the doctor.
 - Early ideation feedback indicated interest in MEOWS, NST, and symptom flagging; do not call it formal usability or clinical validation.
