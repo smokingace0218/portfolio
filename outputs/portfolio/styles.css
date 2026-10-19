@@ -4028,3 +4028,14 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
     font-size:11px;
   }
 }
+
+/* Give the approved Connect flock enough contrast to read on the warm paper. */
+.connect-birds {
+  opacity:.9;
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 86%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 86%,transparent 100%);
+}
+.connect-birds canvas {
+  opacity:1;
+  filter:saturate(.9) contrast(1.22);
+}
