@@ -1,23 +1,20 @@
 # Shruti — interactive portfolio
 
-## Open the portfolio
+## Current portfolio source
 
-- [Live portfolio](https://shruti-portfolio.shruti786aaa.chatgpt.site)
-- [Matera case study](https://shruti-portfolio.shruti786aaa.chatgpt.site/work/matera)
-- [Janitri experience](https://shruti-portfolio.shruti786aaa.chatgpt.site/experience/janitri#matera-answer)
+- [Browse the current portfolio source on GitHub](https://github.com/smokingace0218/portfolio/tree/main/outputs/portfolio)
+- [View the latest source commit](https://github.com/smokingace0218/portfolio/commit/34ffc9bfd9fe4b6af01637a5a7987fe04912ffa7)
 
-For the current cross-chat handoff and verified navigation, see [CURRENT_BUILD.md](CURRENT_BUILD.md).
-
-The Matera card in the Janitri experience opens the full case study. Direct links and refreshes work on the published site.
+This repository contains the portfolio source. A live Netlify URL is not confirmed yet. See [CURRENT_BUILD.md](CURRENT_BUILD.md) for the deployment status and build settings.
 
 ## Netlify deployment
 
-The complete website source is in [`outputs/portfolio`](outputs/portfolio/). Netlify is configured from the repository root with `netlify.toml`:
+The complete website source is in [outputs/portfolio](outputs/portfolio/). Netlify is configured from the repository root with [netlify.toml](netlify.toml):
 
 - **Base directory:** `outputs/portfolio`
 - **Build command:** `npm run build`
 - **Publish directory:** `dist` (relative to the base directory)
 
-The build copies the site shell, route pages, and all portfolio assets into `dist`. `_redirects` sends client-side routes back to the portfolio shell so direct links and refreshes resolve.
+The build script copies the site shell, route pages, and portfolio assets into `dist`. The `_redirects` file routes client-side paths back through the portfolio shell.
 
-Connect the `main` branch to Netlify and enable production deploys from `main`. Future approved changes can be pushed to `main` when explicitly requested.
+To publish, connect this GitHub repository to Netlify, set `main` as the production branch, and run the first production deploy. The Netlify connection and build result have not been verified yet.
