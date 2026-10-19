@@ -32,6 +32,20 @@ const projects = [
     ]
   },
   {
+    slug: 'cms', title: 'CMS', year: '2025', featured: true, company: 'Janitri Innovations',
+    category: 'Healthcare UX · Alerts · Empty states', status: 'case-study-in-progress', thumbnail: '', media: [],
+    prototypeUrl: 'https://www.figma.com/proto/RH6iVlPE10Mx0FLOpOemXw/CMS--Copy-?node-id=1-97411&t=ntwoLUSdHy2c0apM-1&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A97411',
+    relatedExperience: 'janitri',
+    summary: 'Alert and empty-state design for a centralized maternal and fetal monitoring system supporting Assam public health.',
+    role: 'UX/UI designer · Alerts and empty states',
+    sections: [
+      ['A network to monitor', 'The system supported centralized maternal and fetal monitoring across 41 government hospitals and 82 cCTG devices in Assam.'],
+      ['When attention matters', 'I worked on alert states so critical information could stand out within a shared monitoring workflow.'],
+      ['When there is nothing to show', 'I designed empty states to make the system’s status clear when no monitoring information was available.'],
+      ['Scope and evidence', 'My contribution covered alert and empty-state design. These screens supported a public-health rollout; I am not claiming measured clinical outcomes.']
+    ]
+  },
+  {
     slug: 'matera', title: 'MATERA', year: '2026', featured: true, company: 'Janitri Innovations',
     category: 'Healthcare UX · Field research · Workflow design · Prototyping', status: 'case-study-in-progress', thumbnail: '', media: [], prototypeUrl: '', relatedExperience: 'janitri',
     summary: 'The monitor had the readings. Nurses had to build the story. A nurse-facing ANC experience connecting patient context, symptom review and monitoring.',
@@ -2677,12 +2691,65 @@ function renderProject(slug) {
   const project = projects.find(item => item.slug === slug);
   if (!project) return renderNotFound();
   if (slug === 'matera') return renderMateraCaseStudy();
+  if (slug === 'jazaa' || slug === 'cms') return renderProjectStory(project);
   renderComingSoon({
     title: `The ${project.title} story is coming together.`,
     message: `I’m gathering the work and decisions behind ${project.title}. I’ll bring you through it soon.`,
     backHref: '/',
     backLabel: 'Back to my journey'
   });
+}
+
+function renderProjectStory(project) {
+  document.body.dataset.page = 'deep-page';
+  const fromPortfolio = new URLSearchParams(location.search).get('from') === 'portfolio';
+  const isCms = project.slug === 'cms';
+  const backLink = fromPortfolio
+    ? '<a class="back-link" href="/portfolio/">← Back to Portfolio</a>'
+    : isCms
+      ? '<a class="back-link" href="/experience/janitri">← Back to Janitri</a>'
+      : '<a class="back-link" href="/experience/sant-rams">← Back to Sant Ram’s</a>';
+  const kicker = isCms ? 'Selected work / Healthcare UX · Janitri' : 'Selected work / Brand identity · Sant Ram’s';
+  const lede = isCms
+    ? 'Alert and empty-state design for a centralized maternal and fetal monitoring system supporting Assam public health.'
+    : 'I helped shape the early visual and digital pieces of a lab-grown diamond brand.';
+  const action = isCms
+    ? `<a class="button-link" href="${project.prototypeUrl}" target="_blank" rel="noopener noreferrer">View alerts &amp; empty states <span aria-hidden="true">↗</span></a>`
+    : '<a class="button-link" href="#jazaa-story">Read the JAZAA story <span aria-hidden="true">↓</span></a>';
+  const contents = project.sections.map((section, index) => `
+    <section class="project-story-beat reveal-on-scroll" id="${project.slug}-beat-${index + 1}" aria-labelledby="${project.slug}-beat-title-${index + 1}">
+      <p class="eyebrow">0${index + 1} / ${project.title}</p>
+      <h2 id="${project.slug}-beat-title-${index + 1}">${section[0]}</h2>
+      <p>${section[1]}</p>
+    </section>`).join('');
+  main.innerHTML = `<article class="deep-page project-story-page project-story-page--${project.slug}">
+    <div class="wrap">
+      ${backLink}
+      <div class="project-story-layout">
+        <figure class="matera-moment-intro__avatar project-story-avatar" aria-label="Shruti introducing the ${project.title} project">
+          <div class="matera-intro-avatar__art" data-avatar-frame="greet">
+            <img class="matera-intro-avatar__state" src="${ASSET}matera-intro-v3/greet-open.png" alt="" width="1301" height="1209" fetchpriority="high" decoding="async">
+            <img class="matera-intro-avatar__blink" src="${ASSET}matera-intro-v3/greet-blink.png" alt="" width="1301" height="1209" decoding="async" aria-hidden="true">
+          </div>
+        </figure>
+        <div class="project-story-content">
+          <header class="project-story-intro">
+            <p class="eyebrow">${kicker}</p>
+            <h1>${project.title === 'CMS' ? 'Central Monitoring System' : project.title}</h1>
+            <p class="deep-lede">${lede}</p>
+            <div class="matera-case-meta"><span><b>My role</b>${project.role}</span><span><b>Organization</b>${project.company}</span></div>
+            <div class="project-story-actions">${action}</div>
+          </header>
+          <div id="${project.slug}-story" class="project-story-beats">${contents}</div>
+          <footer class="project-story-footer">
+            <a class="text-link" href="${isCms ? '/experience/janitri' : '/experience/sant-rams'}">Related résumé context <span aria-hidden="true">↗</span></a>
+            <a class="button-link" href="/portfolio/">Back to selected work <span aria-hidden="true">↑</span></a>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </article>`;
+  observeReveal();
 }
 
 function renderMateraCaseStudy() {
@@ -3107,8 +3174,8 @@ function renderJanitriDeepDive() {
     const isCMS = story.kind === 'alert';
     const isLinked = isMatera || isCMS;
     const tag = isLinked ? 'a' : 'article';
-    const linkAttrs = isMatera ? 'href="/work/matera" id="matera-answer" data-return-to-journey data-return-hash="#matera-answer" aria-label="Explore the Matera case study: nurse-facing antenatal care experience"' : isCMS ? 'href="https://www.figma.com/proto/RH6iVlPE10Mx0FLOpOemXw/CMS--Copy-?node-id=1-97411&amp;t=ntwoLUSdHy2c0apM-1&amp;scaling=scale-down-width&amp;content-scaling=fixed&amp;page-id=0%3A1&amp;starting-point-node-id=1%3A97411" target="_blank" rel="noopener noreferrer" aria-label="Open Central Monitoring System alerts and empty states prototype"' : `aria-label="${story.project}: ${story.answer}"`;
-    return `<${tag} class="jd-answer-card jd-answer-card--${story.kind}${isLinked ? ' jd-answer-card--link' : ''}" data-answer-kind="${story.kind}" ${linkAttrs}><div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/${questionIllustrations[index].image}" alt="" width="1024" height="1024" loading="eager" decoding="async"></div><div class="jd-answer-copy"><p class="jd-answer-audience">${story.audience}</p><h3>${story.project}</h3><p class="jd-answer-text">${story.answer}</p>${isMatera ? '<span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span>' : isCMS ? '<span class="jd-answer-cta">View prototype <span aria-hidden="true">↗</span></span>' : ''}</div></${tag}>`;
+    const linkAttrs = isMatera ? 'href="/work/matera" id="matera-answer" data-return-to-journey data-return-hash="#matera-answer" aria-label="Explore the Matera case study: nurse-facing antenatal care experience"' : isCMS ? 'href="/work/cms" aria-label="Explore the Central Monitoring System case study"' : `aria-label="${story.project}: ${story.answer}"`;
+    return `<${tag} class="jd-answer-card jd-answer-card--${story.kind}${isLinked ? ' jd-answer-card--link' : ''}" data-answer-kind="${story.kind}" ${linkAttrs}><div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/${questionIllustrations[index].image}" alt="" width="1024" height="1024" loading="eager" decoding="async"></div><div class="jd-answer-copy"><p class="jd-answer-audience">${story.audience}</p><h3>${story.project}</h3><p class="jd-answer-text">${story.answer}</p>${isMatera ? '<span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span>' : isCMS ? '<span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span>' : ''}</div></${tag}>`;
   }).join('');
   main.innerHTML = `<article class="janitri-deep-page">
     <a class="jd-back text-link" href="/#janitri" data-return-to-journey data-return-hash="#janitri">← Back to my journey</a>
@@ -3164,14 +3231,14 @@ function renderPortfolio() {
         <div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/nurse-3d.png" alt="Nurse holding a patient chart" width="1024" height="1024"></div>
         <div class="jd-answer-copy"><p class="jd-answer-audience">For nurses · Janitri</p><h3>Matera</h3><p class="jd-answer-text">Nurse-facing ANC experience.</p><span class="jd-answer-cta">Explore case study <span aria-hidden="true">↗</span></span></div>
       </a>
-      <a class="jd-answer-card jd-answer-card--alert jd-answer-card--link portfolio-project-card is-answer-revealed" inert aria-hidden="true" href="https://www.figma.com/proto/RH6iVlPE10Mx0FLOpOemXw/CMS--Copy-?node-id=1-97411&amp;t=ntwoLUSdHy2c0apM-1&amp;scaling=scale-down-width&amp;content-scaling=fixed&amp;page-id=0%3A1&amp;starting-point-node-id=1%3A97411" target="_blank" rel="noopener noreferrer" aria-label="Open CMS alerts and empty states prototype">
+      <a class="jd-answer-card jd-answer-card--alert jd-answer-card--link portfolio-project-card is-answer-revealed" inert aria-hidden="true" href="/work/cms?from=portfolio" aria-label="Explore CMS alerts and empty states case study">
         <div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/emergency-alert-3d.png" alt="Emergency alert beacon" width="1024" height="1024"></div>
-        <div class="jd-answer-copy"><p class="jd-answer-audience">For critical moments · Janitri</p><h3>CMS</h3><p class="jd-answer-text">Central monitoring alerts and empty states.</p><span class="jd-answer-cta">Experience alerts &amp; empty states <span aria-hidden="true">↗</span></span></div>
+        <div class="jd-answer-copy"><p class="jd-answer-audience">For critical moments · Janitri</p><h3>CMS</h3><p class="jd-answer-text">Central monitoring alerts and empty states.</p><span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span></div>
       </a>
-      <article tabindex="0" class="jd-answer-card jd-answer-card--jewellery portfolio-project-card is-answer-revealed" inert aria-hidden="true" aria-labelledby="portfolio-jazaa-title">
+      <a class="jd-answer-card jd-answer-card--jewellery jd-answer-card--link portfolio-project-card is-answer-revealed" inert aria-hidden="true" href="/work/jazaa?from=portfolio" aria-label="Explore the JAZAA case study">
         <div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/jazaa-diamond-3d.png" alt="A softly lit three-dimensional diamond" width="1024" height="1024"></div>
-        <div class="jd-answer-copy"><p class="jd-answer-audience">E-commerce · Sant Ram’s Jewellers</p><h3 id="portfolio-jazaa-title">JAZAA</h3><p class="jd-answer-text">E-commerce website experience.</p><span class="jd-answer-cta">Coming soon</span></div>
-      </article>
+        <div class="jd-answer-copy"><p class="jd-answer-audience">E-commerce · Sant Ram’s Jewellers</p><h3 id="portfolio-jazaa-title">JAZAA</h3><p class="jd-answer-text">E-commerce website experience.</p><span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span></div>
+      </a>
       <article tabindex="0" class="jd-answer-card jd-answer-card--newborn portfolio-project-card is-answer-revealed" inert aria-hidden="true" aria-labelledby="portfolio-navam-title"><div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/newborn-3d.png" alt="Newborn resting in a basket" width="1024" height="1024"></div><div class="jd-answer-copy"><p class="jd-answer-audience">Neonatal care · Janitri</p><h3 id="portfolio-navam-title">Navam</h3><p class="jd-answer-text">Neonatal nurse app and doctors’ dashboard.</p><span class="jd-answer-cta">Coming soon</span></div></article>
     </section>
       <section class="portfolio-panel" role="tabpanel" id="portfolio-personal-panel" aria-labelledby="portfolio-personal-tab" data-portfolio-panel="personal" hidden>
