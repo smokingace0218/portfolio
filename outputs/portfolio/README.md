@@ -1,6 +1,6 @@
 # Shruti — interactive portfolio
 
-The live portfolio is published at [shruti-portfolio.shruti786aaa.chatgpt.site](https://shruti-portfolio.shruti786aaa.chatgpt.site). The Matera case study is at [`/work/matera`](https://shruti-portfolio.shruti786aaa.chatgpt.site/work/matera); its Janitri entry card links to the same case study, and its return links restore the Matera card.
+The current portfolio source is tracked in the [GitHub repository](https://github.com/smokingace0218/portfolio/tree/main/outputs/portfolio). A live Netlify URL is not confirmed yet; deployment settings are documented in the repository root README.
 
 The landing page at `/` is an image-led story about Shruti entering product design. Résumé and Portfolio remain immediate navigation options. Deeper routes are still available at `/resume`, `/portfolio`, `/experience/sant-rams`, `/experience/janitri` and `/work/{slug}`, but the landing story does not list internship deliverables.
 
@@ -26,4 +26,4 @@ The supplied Figma board was used as a character and pose reference. It did not 
 
 ## Run locally
 
-Start the included Node server from this folder with `npm start`; it serves the portfolio at `http://127.0.0.1:4173` and falls back to the homepage for deep links. Localhost works only while that server is running on your device. Use the live URL above when opening the portfolio from another device.
+Start the included Node server from this folder with `npm start`; it serves the portfolio at `http://127.0.0.1:4173` and falls back to the homepage for deep links. Localhost works only while that server is running on your device. For the current source, open the [GitHub repository](https://github.com/smokingace0218/portfolio/tree/main/outputs/portfolio).
