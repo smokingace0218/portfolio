@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Opening the portfolio…</title>
+    <script>
+      const prefix = location.pathname === '/portfolio' || location.pathname.startsWith('/portfolio/') ? '/portfolio' : '';
+      const path = prefix ? location.pathname.slice(prefix.length) || '/' : location.pathname;
+      const query = location.search ? `&destinationSearch=${encodeURIComponent(location.search)}` : '';
+      location.replace(`${prefix}/?route=${encodeURIComponent(path)}${query}${location.hash}`);
+    </script>
+  </head>
+  <body><p>Opening the portfolio…</p></body>
+</html>

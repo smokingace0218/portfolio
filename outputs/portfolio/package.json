@@ -1,0 +1,9 @@
+{
+  "name": "shruti-story-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "build": "node build.js"
+  }
+}

@@ -2,3 +2,7 @@
 work/voice.lock
 outputs/*.tar.gz
 outputs/portfolio/.git/
+outputs/portfolio/dist/
+outputs/portfolio/.openai/
+outputs/portfolio/.snapshots/
+outputs/portfolio/site-open-clean/
