@@ -2739,7 +2739,7 @@ function renderProjectStory(project) {
     
     '<div class="matera-hero-resource-stage" data-project-resources aria-label="' + project.title + ' project links" aria-hidden="true" inert><p class="eyebrow">Take a closer look</p><div class="matera-resource-links">' + resources + '</div></div></div>' +
     '<div class="matera-opening-story__track" aria-hidden="true">' + tracks + '</div></div></div></div></section>' +
-    '+ supportingContent + '</div></article>';
+    supportingContent + '</div></article>';
   bindProjectStoryScrollReveal();
   observeReveal();
 }
