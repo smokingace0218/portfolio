@@ -2735,7 +2735,7 @@ function renderProjectStory(project) {
         <div class="project-story-content">
           <header class="project-story-intro">
             <p class="eyebrow">${kicker}</p>
-            <h1>${project.title === 'CMS' ? 'Central Monitoring System' : project.title}</h1>
+            <h1>${isCms ? 'Central Monitoring System' : '<span class="project-story-jazaa-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span>JAZAA'}</h1>
             <p class="deep-lede">${lede}</p>
             <div class="matera-case-meta"><span><b>My role</b>${project.role}</span><span><b>Organization</b>${project.company}</span></div>
             <div class="project-story-actions">${action}</div>
@@ -3236,7 +3236,7 @@ function renderPortfolio() {
         <div class="jd-answer-copy"><p class="jd-answer-audience">For critical moments · Janitri</p><h3>CMS</h3><p class="jd-answer-text">Central monitoring alerts and empty states.</p><span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span></div>
       </a>
       <a class="jd-answer-card jd-answer-card--jewellery jd-answer-card--link portfolio-project-card is-answer-revealed" inert aria-hidden="true" href="/work/jazaa?from=portfolio" aria-label="Explore the JAZAA case study">
-        <div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/jazaa-diamond-3d.png" alt="A softly lit three-dimensional diamond" width="1024" height="1024"></div>
+        <div class="jd-answer-art-wrap portfolio-project-symbol" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></div>
         <div class="jd-answer-copy"><p class="jd-answer-audience">E-commerce · Sant Ram’s Jewellers</p><h3 id="portfolio-jazaa-title">JAZAA</h3><p class="jd-answer-text">E-commerce website experience.</p><span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span></div>
       </a>
       <article tabindex="0" class="jd-answer-card jd-answer-card--newborn portfolio-project-card is-answer-revealed" inert aria-hidden="true" aria-labelledby="portfolio-navam-title"><div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/newborn-3d.png" alt="Newborn resting in a basket" width="1024" height="1024"></div><div class="jd-answer-copy"><p class="jd-answer-audience">Neonatal care · Janitri</p><h3 id="portfolio-navam-title">Navam</h3><p class="jd-answer-text">Neonatal nurse app and doctors’ dashboard.</p><span class="jd-answer-cta">Coming soon</span></div></article>
@@ -3381,7 +3381,102 @@ function bindPortfolioIdeaMotion() {
 
 function renderContact() {
   document.body.dataset.page = 'deep-page';
-  main.innerHTML = `<article class="deep-page contact-page"><div class="wrap"><p class="eyebrow">Say hi</p><h1>Let’s make something<br><em>together.</em></h1><div class="contact-resource-links"><a class="button-link" href="mailto:Shruti786aaa@gmail.com">Shruti786aaa@gmail.com <span aria-hidden="true">↗</span></a><a class="text-link" href="https://www.linkedin.com/in/shruti-singh0218" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a class="text-link" href="https://wa.me/919572697539" target="_blank" rel="noopener noreferrer">WhatsApp <span aria-hidden="true">↗</span></a></div></div></article>`;
+  main.innerHTML = `<article class="deep-page contact-page contact-story-page" id="main">
+    <div class="wrap">
+      <header class="contact-story-heading">
+        <p class="eyebrow">Connect</p>
+        <h1>Good things start<br><em>with a conversation.</em></h1>
+        <p>Have a project, an opportunity, or an idea? I’d love to hear about it.</p>
+      </header>
+      <section class="contact-story-stage" aria-label="Three ways to connect with Shruti">
+        <div class="contact-birds" aria-hidden="true">
+          ${Array.from({ length: 7 }, (_, index) => `<svg class="contact-bird contact-bird--${index + 1}" viewBox="0 0 40 24"><path d="M2 17c5-10 10-10 17 0 6-10 12-10 19 0-5-3-10-2-15 4l-4-5-5 5C10 15 6 14 2 17Z"/></svg>`).join('')}
+        </div>
+        <a class="contact-story-card contact-story-card--linkedin reveal-on-scroll" data-contact-pose="present" href="https://www.linkedin.com/in/shruti-singh0218" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn — let’s stay connected">
+          <span class="contact-story-icon contact-story-icon--linkedin" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="7"/><path d="M14 20v15m0-21v.2M22 35V20m0 6c0-4 10-5 10 1v8"/></svg></span>
+          <span class="contact-story-card__copy"><span class="eyebrow">LinkedIn</span><strong>Let’s stay connected.</strong></span><span class="contact-story-arrow" aria-hidden="true">↗</span>
+        </a>
+        <figure class="contact-story-avatar" data-contact-avatar data-contact-pose="wave" aria-label="Shruti greets you and responds as you explore the contact options">
+          <img class="contact-story-avatar__pose is-active" data-pose="wave" src="${ASSET}avatar-wave.png" alt="" width="1024" height="1536" fetchpriority="high" decoding="async">
+          <img class="contact-story-avatar__pose" data-pose="present" src="${ASSET}avatar-present.png" alt="" width="1024" height="1536" decoding="async">
+          <img class="contact-story-avatar__pose" data-pose="phone" src="${ASSET}avatar-tablet.webp" alt="" width="1024" height="1536" decoding="async">
+        </figure>
+        <a class="contact-story-card contact-story-card--email reveal-on-scroll" data-contact-pose="present" href="mailto:Shruti786aaa@gmail.com" aria-label="Email — have something in mind? Let’s talk">
+          <span class="contact-story-icon contact-story-icon--email" aria-hidden="true"><svg viewBox="0 0 48 36"><path d="M3 8 24 24 45 8M4 7v25h40V7"/><path d="M4 7 11 2h26l7 5"/></svg></span>
+          <span class="contact-story-card__copy"><span class="eyebrow">Email</span><strong>Have something in mind? Let’s talk.</strong></span><span class="contact-story-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="contact-story-card contact-story-card--whatsapp reveal-on-scroll" data-contact-pose="phone" href="https://wa.me/919572697539" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp — start a conversation">
+          <span class="contact-story-icon contact-story-icon--whatsapp" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 5a18 18 0 0 0-15 28L6 42l10-3a18 18 0 1 0 8-34Z"/><path d="M17 16c1-2 3-1 3 1l1 3-2 2c2 4 4 6 8 7l2-2c1-1 3 0 4 1l1 2c0 2-2 4-5 4-8-1-16-9-16-16 0-1 2-3 4-2Z"/></svg></span>
+          <span class="contact-story-card__copy"><span class="eyebrow">WhatsApp</span><strong>Start a conversation.</strong></span><span class="contact-story-arrow" aria-hidden="true">↗</span>
+        </a>
+      </section>
+      <p class="contact-story-note">Choose whichever feels most comfortable. I’ll be glad to hear from you.</p>
+    </div>
+  </article>`;
+  const birds = main.querySelector('.contact-birds');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (birds && !reducedMotion) {
+    const loadScript = (src, ready) => {
+      if (ready()) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        let script = [...document.scripts].find(item => item.src === src);
+        if (!script) {
+          script = document.createElement('script');
+          script.src = src;
+          script.async = true;
+          document.head.appendChild(script);
+        }
+        script.addEventListener('load', resolve, { once: true });
+        script.addEventListener('error', reject, { once: true });
+      });
+    };
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js', () => Boolean(window.THREE))
+      .then(() => loadScript('https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js', () => Boolean(window.VANTA?.BIRDS)))
+      .then(() => {
+        if (!birds.isConnected || !window.VANTA?.BIRDS) return;
+        window.VANTA.BIRDS({
+          el: birds,
+          THREE: window.THREE,
+          mouseControls: false,
+          touchControls: false,
+          gyroControls: false,
+          minHeight: 200,
+          minWidth: 200,
+          scale: 1,
+          scaleMobile: 1,
+          backgroundAlpha: 0,
+          backgroundColor: 465199,
+          color1: 16711680,
+          color2: 53759,
+          colorMode: 'varianceGradient',
+          birdSize: 1,
+          quantity: 5,
+          wingSpan: 30,
+          speedLimit: 5,
+          separation: 20,
+          alignment: 20,
+          cohesion: 20
+        });
+        birds.classList.add('is-vanta-ready');
+      })
+      .catch(() => birds.classList.add('is-vanta-fallback'));
+  }
+  const avatar = main.querySelector('[data-contact-avatar]');
+  const cards = [...main.querySelectorAll('[data-contact-pose]')];
+  const setPose = pose => {
+    if (!avatar) return;
+    avatar.dataset.contactPose = pose;
+    avatar.querySelectorAll('.contact-story-avatar__pose').forEach(image => image.classList.toggle('is-active', image.dataset.pose === pose));
+  };
+  cards.forEach(card => {
+    const activate = () => setPose(card.dataset.contactPose);
+    const restore = () => setPose('wave');
+    card.addEventListener('pointerenter', activate);
+    card.addEventListener('pointerleave', restore);
+    card.addEventListener('focus', activate);
+    card.addEventListener('blur', restore);
+  });
+  observeReveal();
 }
 
 function renderNotFound() {
