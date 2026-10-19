@@ -2709,12 +2709,12 @@ function renderProjectStory(project) {
     : isCms
       ? '<a class="back-link" href="/experience/janitri">← Back to Janitri</a>'
       : '<a class="back-link" href="/experience/sant-rams">← Back to Sant Ram’s</a>';
-  const kicker = isCms ? 'Selected work / Healthcare UX · Janitri' : 'Selected work / Brand identity · Sant Ram’s';
+  const kicker = isCms ? 'Selected work / 02 · Medtech · UX/UI' : 'Selected work / 03 · E-commerce · UX/UI';
   const lede = isCms
-    ? 'Alert and empty-state design for a centralized maternal and fetal monitoring system supporting Assam public health.'
-    : 'I helped shape the early visual and digital pieces of a lab-grown diamond brand.';
+    ? 'I designed alert and empty states for Janitri’s Assam public-health rollout, supporting centralized maternal and fetal monitoring.'
+    : 'I explored JAZAA’s e-commerce website experience, shaping its information architecture, landing page and visual direction during my internship at Sant Ram’s Jewellers.';
   const action = isCms
-    ? `<a class="button-link" href="${project.prototypeUrl}" target="_blank" rel="noopener noreferrer">View alerts &amp; empty states <span aria-hidden="true">↗</span></a>`
+    ? (project.prototypeUrl ? `<a class="button-link" href="${project.prototypeUrl}" target="_blank" rel="noopener noreferrer">View alerts &amp; empty states <span aria-hidden="true">↗</span></a>` : '')
     : '<a class="button-link" href="#jazaa-story">Read the JAZAA story <span aria-hidden="true">↓</span></a>';
   const contents = project.sections.map((section, index) => `
     <section class="project-story-beat reveal-on-scroll" id="${project.slug}-beat-${index + 1}" aria-labelledby="${project.slug}-beat-title-${index + 1}">
@@ -2722,31 +2722,30 @@ function renderProjectStory(project) {
       <h2 id="${project.slug}-beat-title-${index + 1}">${section[0]}</h2>
       <p>${section[1]}</p>
     </section>`).join('');
-  main.innerHTML = `<article class="deep-page project-story-page project-story-page--${project.slug}">
+  main.innerHTML = `<article class="deep-page project-story-page project-story-page--${project.slug} project-story-page--framed">
     <div class="wrap">
       ${backLink}
-      <div class="project-story-layout">
+      <section class="project-story-frame" aria-labelledby="${project.slug}-title">
         <figure class="matera-moment-intro__avatar project-story-avatar" aria-label="Shruti introducing the ${project.title} project">
           <div class="matera-intro-avatar__art" data-avatar-frame="greet">
             <img class="matera-intro-avatar__state" src="${ASSET}matera-intro-v3/greet-open.png" alt="" width="1301" height="1209" fetchpriority="high" decoding="async">
-            <img class="matera-intro-avatar__blink" src="${ASSET}matera-intro-v3/greet-blink.png" alt="" width="1301" height="1209" decoding="async" aria-hidden="true">
           </div>
         </figure>
-        <div class="project-story-content">
-          <header class="project-story-intro">
-            <p class="eyebrow">${kicker}</p>
-            <h1>${isCms ? 'Central Monitoring System' : '<span class="project-story-jazaa-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span>JAZAA'}</h1>
-            <p class="deep-lede">${lede}</p>
-            <div class="matera-case-meta"><span><b>My role</b>${project.role}</span><span><b>Organization</b>${project.company}</span></div>
-            <div class="project-story-actions">${action}</div>
-          </header>
-          <div id="${project.slug}-story" class="project-story-beats">${contents}</div>
-          <footer class="project-story-footer">
-            <a class="text-link" href="${isCms ? '/experience/janitri' : '/experience/sant-rams'}">Related résumé context <span aria-hidden="true">↗</span></a>
-            <a class="button-link" href="/portfolio/">Back to selected work <span aria-hidden="true">↑</span></a>
-          </footer>
-        </div>
-      </div>
+        <header class="project-story-intro">
+          <p class="eyebrow">${kicker}</p>
+          <h1 id="${project.slug}-title">${isCms ? 'Central Monitoring System' : '<span class="project-story-jazaa-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span>JAZAA'}`
+          </h1>
+          <p class="project-story-subtitle">${isCms ? 'Maternal and fetal monitoring · UX/UI' : 'Lab-grown diamond website experience'}</p>
+          <p class="deep-lede">${lede}</p>
+          <div class="matera-case-meta"><span><b>My role</b>${project.role}</span><span><b>Organization</b>${project.company}</span></div>
+          <div class="project-story-actions">${action}</div>
+        </header>
+      </section>
+      <div id="${project.slug}-story" class="project-story-beats">${contents}</div>
+      <footer class="project-story-footer">
+        <a class="text-link" href="${isCms ? '/experience/janitri' : '/experience/sant-rams'}">Related résumé context <span aria-hidden="true">↗</span></a>
+        <a class="button-link" href="/portfolio/">Back to selected work <span aria-hidden="true">↑</span></a>
+      </footer>
     </div>
   </article>`;
   observeReveal();
@@ -3392,12 +3391,12 @@ function renderContact() {
         <div class="contact-birds" aria-hidden="true">
           ${Array.from({ length: 7 }, (_, index) => `<svg class="contact-bird contact-bird--${index + 1}" viewBox="0 0 40 24"><path d="M2 17c5-10 10-10 17 0 6-10 12-10 19 0-5-3-10-2-15 4l-4-5-5 5C10 15 6 14 2 17Z"/></svg>`).join('')}
         </div>
-        <a class="contact-story-card contact-story-card--linkedin reveal-on-scroll" data-contact-pose="present" href="https://www.linkedin.com/in/shruti-singh0218" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn — let’s stay connected">
+        <a class="contact-story-card contact-story-card--linkedin reveal-on-scroll" data-contact-pose="wave" href="https://www.linkedin.com/in/shruti-singh0218" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn — let’s stay connected">
           <span class="contact-story-icon contact-story-icon--linkedin" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="7"/><path d="M14 20v15m0-21v.2M22 35V20m0 6c0-4 10-5 10 1v8"/></svg></span>
           <span class="contact-story-card__copy"><span class="eyebrow">LinkedIn</span><strong>Let’s stay connected.</strong></span><span class="contact-story-arrow" aria-hidden="true">↗</span>
         </a>
         <figure class="contact-story-avatar" data-contact-avatar data-contact-pose="wave" aria-label="Shruti greets you and responds as you explore the contact options">
-          <img class="contact-story-avatar__pose is-active" data-pose="wave" src="${ASSET}avatar-wave.png" alt="" width="1024" height="1536" fetchpriority="high" decoding="async">
+          <img class="contact-story-avatar__pose is-active" data-pose="wave" src="${ASSET}avatar-intro.webp" alt="" width="1024" height="1536" fetchpriority="high" decoding="async">
           <img class="contact-story-avatar__pose" data-pose="present" src="${ASSET}avatar-present.png" alt="" width="1024" height="1536" decoding="async">
           <img class="contact-story-avatar__pose" data-pose="phone" src="${ASSET}avatar-tablet.webp" alt="" width="1024" height="1536" decoding="async">
         </figure>
