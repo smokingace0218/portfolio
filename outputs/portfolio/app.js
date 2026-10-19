@@ -42,7 +42,7 @@ const projects = [
       ['A network to monitor', 'The system supported centralized maternal and fetal monitoring across 41 government hospitals and 82 cCTG devices in Assam.'],
       ['When attention matters', 'I worked on alert states so critical information could stand out within a shared monitoring workflow.'],
       ['When there is nothing to show', 'I designed empty states to make the system’s status clear when no monitoring information was available.'],
-      ['Scope and evidence', 'My contribution covered alert and empty-state design. These screens supported a public-health rollout; I am not claiming measured clinical outcomes.']
+      ['Scope and evidence', 'My contribution focused on alert and empty-state design for a public-health rollout across Assam.']
     ]
   },
   {
