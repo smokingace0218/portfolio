@@ -2837,6 +2837,165 @@ function bindProjectStoryScrollReveal() {
     sync();
   }
 }
+function renderPortfolio() {
+  document.body.dataset.page = 'portfolio';
+  main.innerHTML = `<article class="deep-page portfolio-page"><div class="wrap">
+    <header class="portfolio-header"><div><p class="eyebrow portfolio-entry-label" aria-label="Work & explorations"><span data-portfolio-typed aria-hidden="true"></span><span class="portfolio-caret" aria-hidden="true">|</span></p><h1 class="portfolio-entry-title">Know my work</h1></div><div class="portfolio-tabs" role="tablist" aria-label="Project category"><button type="button" role="tab" id="portfolio-selected-tab" aria-controls="portfolio-selected-panel" aria-selected="true" data-portfolio-tab="selected" disabled>Selected work</button><button type="button" role="tab" id="portfolio-personal-tab" aria-controls="portfolio-personal-panel" aria-selected="false" tabindex="-1" data-portfolio-tab="personal" disabled>Personal work</button></div></header>
+    <div class="portfolio-showcase"><div class="portfolio-selected-scene">
+      <section class="portfolio-panel" role="tabpanel" id="portfolio-selected-panel" aria-labelledby="portfolio-selected-tab" data-portfolio-panel="selected">
+      <a class="jd-answer-card jd-answer-card--nurse jd-answer-card--link portfolio-project-card is-answer-revealed" inert aria-hidden="true" href="/work/matera?from=portfolio" aria-label="Explore Matera: nurse-facing antenatal care experience">
+        <div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/nurse-3d.png" alt="Nurse holding a patient chart" width="1024" height="1024"></div>
+        <div class="jd-answer-copy"><p class="jd-answer-audience">For nurses · Janitri</p><h3>Matera</h3><p class="jd-answer-text">Nurse-facing ANC experience.</p><span class="jd-answer-cta">Explore case study <span aria-hidden="true">↗</span></span></div>
+      </a>
+      <a class="jd-answer-card jd-answer-card--alert jd-answer-card--link portfolio-project-card is-answer-revealed" inert aria-hidden="true" href="/work/cms?from=portfolio" aria-label="Explore CMS alerts and empty states case study">
+        <div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/emergency-alert-3d.png" alt="Emergency alert beacon" width="1024" height="1024"></div>
+        <div class="jd-answer-copy"><p class="jd-answer-audience">For critical moments · Janitri</p><h3>CMS</h3><p class="jd-answer-text">Central monitoring alerts and empty states.</p><span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span></div>
+      </a>
+      <a class="jd-answer-card jd-answer-card--jewellery jd-answer-card--link portfolio-project-card is-answer-revealed" inert aria-hidden="true" href="/work/jazaa?from=portfolio" aria-label="Explore the JAZAA case study">
+        <div class="jd-answer-art-wrap portfolio-project-symbol" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></div>
+        <div class="jd-answer-copy"><p class="jd-answer-audience">E-commerce · Sant Ram’s Jewellers</p><h3 id="portfolio-jazaa-title">JAZAA</h3><p class="jd-answer-text">E-commerce website experience.</p><span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span></div>
+      </a>
+      <article tabindex="0" class="jd-answer-card jd-answer-card--newborn portfolio-project-card is-answer-revealed" inert aria-hidden="true" aria-labelledby="portfolio-navam-title"><div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/newborn-3d.png" alt="Newborn resting in a basket" width="1024" height="1024"></div><div class="jd-answer-copy"><p class="jd-answer-audience">Neonatal care · Janitri</p><h3 id="portfolio-navam-title">Navam</h3><p class="jd-answer-text">Neonatal nurse app and doctors’ dashboard.</p><span class="jd-answer-cta">Coming soon</span></div></article>
+    </section>
+      <section class="portfolio-panel" role="tabpanel" id="portfolio-personal-panel" aria-labelledby="portfolio-personal-tab" data-portfolio-panel="personal" hidden>
+      <article tabindex="0" class="jd-answer-card jd-answer-card--travel portfolio-project-card is-answer-revealed" inert aria-hidden="true" aria-labelledby="portfolio-aether-title">
+        <div class="jd-answer-art-wrap portfolio-project-symbol" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="35" stroke="currentColor" stroke-width="2"/><path d="m65 32-9 25-23 12 10-25Z" fill="currentColor" fill-opacity=".13" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" r="3" fill="currentColor"/></svg></div>
+        <div class="jd-answer-copy"><p class="jd-answer-audience">Travel · Personal project</p><h3 id="portfolio-aether-title">AETHER</h3><p class="jd-answer-text">A discovery-first travel platform for finding where to go, starting with how you want to feel.</p><span class="jd-answer-cta">Coming soon</span></div>
+      </article>
+      <article tabindex="0" class="jd-answer-card portfolio-project-card is-answer-revealed" inert aria-hidden="true" aria-labelledby="portfolio-irctc-title"><div class="jd-answer-art-wrap portfolio-project-symbol" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none"><rect x="24" y="15" width="52" height="62" rx="12" stroke="currentColor" stroke-width="2"/><path d="M24 47h52M42 15v32M58 15v32M35 77l-9 13M65 77l9 13M29 86h42" stroke="currentColor" stroke-width="2"/><circle cx="37" cy="63" r="4" fill="currentColor"/><circle cx="63" cy="63" r="4" fill="currentColor"/></svg></div><div class="jd-answer-copy"><p class="jd-answer-audience">Travel · Personal project</p><h3 id="portfolio-irctc-title">IRCTC redesign</h3><p class="jd-answer-text">A redesign of the IRCTC booking experience.</p><span class="jd-answer-cta">Coming soon</span></div></article>
+      <article tabindex="0" class="jd-answer-card portfolio-project-card is-answer-revealed" inert aria-hidden="true" aria-labelledby="portfolio-investwise-title"><div class="jd-answer-art-wrap portfolio-project-symbol" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none"><path d="M18 18v64h66M29 66l19-20 13 8 23-31M66 23h18v18" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="jd-answer-copy"><p class="jd-answer-audience">Finance · Personal project</p><h3 id="portfolio-investwise-title">Investwise</h3><p class="jd-answer-text">A smart increment app.</p><span class="jd-answer-cta">Coming soon</span></div></article>
+    </section>
+      <div class="portfolio-beige-frame"><div class="portfolio-avatar-stage"><div class="jd-idea-avatar portfolio-idea-avatar is-snap-open" aria-hidden="true"><img class="jd-idea-frame jd-idea-frame--snap-open" src="${ASSET}janitri-concepts/shruti-idea-snap-open.png" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-wink" src="${ASSET}janitri-concepts/shruti-idea-snap-wink.png" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-blink" src="${ASSET}janitri-concepts/shruti-idea-snap-blink.png" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-final" src="${ASSET}janitri-concepts/shruti-idea-got-it-final.png" alt="" width="1024" height="1536" loading="eager" decoding="async"></div></div><nav class="portfolio-footer-links" aria-label="Connect with Shruti"><a class="text-link" href="${ASSET}shruti-kumari-resume.pdf" target="_blank" rel="noopener noreferrer">Résumé <span aria-hidden="true">↗</span></a><a class="button-link" href="/contact">Connect <span aria-hidden="true">↗</span></a></nav></div>
+    </div></div>
+  </div></article>`;
+  bindPortfolioIdeaMotion();
+}
+
+function bindPortfolioIdeaMotion() {
+  const avatar = main.querySelector('.portfolio-idea-avatar');
+  if (!avatar) return;
+  const scene = avatar.closest('.portfolio-selected-scene');
+  const page = avatar.closest('.portfolio-page');
+  const typed = page.querySelector('[data-portfolio-typed]');
+  let introReady = false;
+  let introStarted = false;
+  let introTimer;
+  let assetsReady = false;
+  const panels = [...scene.querySelectorAll('[data-portfolio-panel]')];
+  const tabs = [...main.querySelectorAll('[data-portfolio-tab]')];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const poses = ['is-snap-open', 'is-snap-blink', 'is-snap-open', 'is-snap-wink', 'is-snap-open', 'is-snap-final'];
+  const durations = [900, 150, 260, 240, 180, 3000];
+  let timer;
+  let revealTimer;
+  let visible = false;
+  let generation = 0;
+  let sequenceComplete = false;
+  const reveal = () => {
+    sequenceComplete = true;
+    avatar.classList.remove('is-snapping');
+    scene.classList.add('has-projects');
+    panels.filter(panel => !panel.hidden).forEach(panel => panel.querySelectorAll('.portfolio-project-card').forEach(card => { card.inert = false; card.removeAttribute('aria-hidden'); }));
+  };
+  const show = index => {
+    avatar.classList.remove(...poses, 'is-snapping');
+    avatar.classList.add(poses[index]);
+    if (index === poses.length - 1) {
+      if (reduced.matches) reveal();
+      else {
+        avatar.classList.add('is-snapping');
+        // The snap takes 520ms; only reveal projects once it has finished.
+        clearTimeout(revealTimer);
+        revealTimer = window.setTimeout(reveal, 560);
+      }
+    }
+  };
+  const stop = () => { ++generation; clearTimeout(timer); clearTimeout(revealTimer); };
+  const play = () => {
+    stop();
+    if (!avatar.isConnected || !visible || document.hidden || !introReady || !assetsReady || sequenceComplete) return;
+    if (reduced.matches) { show(poses.length - 1); return; }
+    const token = generation;
+    const step = index => {
+      if (token !== generation || !avatar.isConnected) return;
+      show(index);
+      if (index < poses.length - 1) timer = window.setTimeout(() => step(index + 1), durations[index]);
+    };
+    step(0);
+  };
+  const select = tab => {
+    if (tab.getAttribute('aria-selected') === 'true') return;
+    sequenceComplete = false;
+    scene.classList.remove('has-projects');
+    scene.querySelectorAll('.portfolio-project-card').forEach(card => { card.inert = true; card.setAttribute('aria-hidden', 'true'); });
+    tabs.forEach(item => { const active = item === tab; item.setAttribute('aria-selected', String(active)); item.tabIndex = active ? 0 : -1; });
+    panels.forEach(panel => { panel.hidden = panel.dataset.portfolioPanel !== tab.dataset.portfolioTab; });
+    show(0);
+    play();
+  };
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      tabs[next].focus(); select(tabs[next]);
+    });
+  });
+  const finishIntro = () => {
+    page.classList.add('is-title-visible', 'is-frame-visible', 'is-avatar-visible', 'is-intro-ready');
+    introReady = true;
+    tabs.forEach(tab => { tab.disabled = false; });
+    play();
+  };
+  const beginIntro = () => {
+    if (introStarted) return;
+    introStarted = true;
+    const copy = 'Work & explorations';
+    if (reduced.matches) { typed.textContent = copy; finishIntro(); return; }
+    let index = 0;
+    const type = () => {
+      if (!page.isConnected) return;
+      const character = copy[index++];
+      typed.textContent += character;
+      if (character !== ' ' && interfaceAudioContext?.state === 'running' && !document.hidden) playTypewriterKey(interfaceAudioContext);
+      if (index < copy.length) { introTimer = window.setTimeout(type, 65); return; }
+      introTimer = window.setTimeout(() => {
+        page.classList.add('is-title-visible');
+        introTimer = window.setTimeout(() => {
+          page.classList.add('is-frame-visible');
+          introTimer = window.setTimeout(() => {
+            page.classList.add('is-avatar-visible');
+            introTimer = window.setTimeout(finishIntro, 600);
+          }, 900);
+        }, 650);
+      }, 220);
+    };
+    type();
+  };
+  const observer = new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    if (visible) { beginIntro(); play(); } else stop();
+  }, { threshold: .15 });
+  observer.observe(scene);
+  Promise.all([...avatar.querySelectorAll('img')].map(img => img.decode().catch(() => {}))).then(() => { assetsReady = true; play(); });
+  document.addEventListener('visibilitychange', play);
+  reduced.addEventListener('change', play);
+  window.addEventListener('pagehide', () => { stop(); clearTimeout(introTimer); });
+  window.addEventListener('pageshow', event => {
+    if (!event.persisted) return;
+    introReady = false; introStarted = false;
+    typed.textContent = '';
+    page.classList.remove('is-title-visible', 'is-frame-visible', 'is-avatar-visible', 'is-intro-ready');
+    sequenceComplete = false;
+    scene.classList.remove('has-projects');
+    scene.querySelectorAll('.portfolio-project-card').forEach(card => { card.inert = true; card.setAttribute('aria-hidden', 'true'); });
+    tabs.forEach(tab => { tab.disabled = true; });
+    if (visible) beginIntro();
+  });
+}
+
+
 function renderContact() {
   document.body.dataset.page = 'deep-page';
   main.innerHTML = '<article class="deep-page contact-page contact-approved-page" id="main"><div class="wrap connect-wrap">' +
