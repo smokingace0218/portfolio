@@ -2736,7 +2736,6 @@ function renderProjectStory(project) {
         <header class="project-story-intro">
           <p class="eyebrow">${kicker}</p>
           <h1 id="${project.slug}-title">${title}</h1>
-          </h1>
           <p class="project-story-subtitle">${isCms ? 'Maternal and fetal monitoring · UX/UI' : 'Lab-grown diamond website experience'}</p>
           <p class="deep-lede">${lede}</p>
           <div class="matera-case-meta"><span><b>My role</b>${project.role}</span><span><b>Organization</b>${project.company}</span></div>
