@@ -3588,3 +3588,73 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
  .portfolio-selected-scene { --portfolio-seat-width:clamp(360px,25vw,460px); }
  .matera-context-left .matera-question-avatar { width:min(112%,760px); }
 }
+
+
+/* Review build: keep the CMS and JAZAA opening frame broad and readable. */
+.project-story-page--framed .project-story-frame {
+  display: grid;
+  grid-template-columns: minmax(280px, .92fr) minmax(0, 1.08fr);
+  align-items: center;
+  gap: clamp(36px, 7vw, 104px);
+  min-height: min(78vh, 800px);
+  padding: clamp(28px, 5vh, 64px) 0 clamp(64px, 9vh, 112px);
+}
+.project-story-page--framed .project-story-avatar {
+  position: relative;
+  top: auto;
+  width: min(100%, 620px);
+  transform: none;
+}
+.project-story-page--framed .matera-intro-avatar__art {
+  width: 100%;
+  aspect-ratio: 1301 / 1209;
+}
+.project-story-page--framed .project-story-intro {
+  min-height: 0;
+  padding: 0;
+}
+.project-story-page--framed .project-story-intro h1 {
+  max-width: 12ch;
+  overflow-wrap: normal;
+  word-break: normal;
+  font-size: clamp(52px, 7vw, 100px);
+  line-height: .98;
+}
+.project-story-page--framed .project-story-subtitle {
+  margin: -4px 0 18px;
+  color: var(--terracotta);
+  font: 600 .82rem/1.25 var(--font-mono, monospace);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.project-story-page--framed .project-story-intro .deep-lede {
+  max-width: 48ch;
+}
+.project-story-page--framed .project-story-beat {
+  min-height: 46vh;
+  padding: clamp(48px, 8vh, 96px) 0;
+}
+.contact-birds.is-vanta-ready canvas {
+  opacity: .30;
+  filter: saturate(.62);
+}
+.contact-birds.is-vanta-fallback .contact-bird {
+  fill: #c98c82;
+  opacity: .22;
+}
+@media (max-width: 760px) {
+  .project-story-page--framed .project-story-frame {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    min-height: auto;
+    padding: 20px 0 64px;
+  }
+  .project-story-page--framed .project-story-avatar {
+    width: min(76vw, 420px);
+    margin: 0 auto -12px;
+  }
+  .project-story-page--framed .project-story-intro h1 {
+    font-size: clamp(48px, 13vw, 78px);
+  }
+  .project-story-page--framed .project-story-beat { min-height: 34vh; }
+}
