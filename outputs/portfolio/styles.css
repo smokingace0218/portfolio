@@ -4039,3 +4039,39 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
   opacity:1;
   filter:saturate(.9) contrast(1.22);
 }
+
+
+/* Place portfolio CTAs in the opening beat so each project is immediately actionable. */
+.project-story-quicklinks {
+  position:relative;
+  right:auto;
+  bottom:auto;
+  left:auto;
+  z-index:4;
+  margin-top:clamp(14px,2vh,22px);
+  padding-top:0;
+  border-top:0;
+}
+.project-story-quicklinks > .eyebrow {
+  margin:0 0 8px;
+  font-size:10px;
+}
+.project-story-quicklinks .matera-resource-links {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  margin:0;
+}
+.project-story-quicklinks .button-link,
+.project-story-quicklinks .text-link {
+  min-height:40px;
+  font-size:12px;
+}
+@media (max-width:760px) {
+  .project-story-quicklinks { margin-top:12px; }
+  .project-story-quicklinks .matera-resource-links { gap:6px 10px; }
+  .project-story-quicklinks .button-link,
+  .project-story-quicklinks .text-link { min-height:36px; font-size:11px; }
+}
