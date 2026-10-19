@@ -2864,7 +2864,7 @@ function renderContact() {
       .then(() => loadScript('https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js', () => Boolean(window.VANTA && window.VANTA.BIRDS)))
       .then(() => {
         if (!birds.isConnected || !window.VANTA || !window.VANTA.BIRDS) return;
-        window.VANTA.BIRDS({ el: birds, THREE: window.THREE, mouseControls: false, touchControls: false, gyroControls: false, minHeight: 200, minWidth: 200, scale: 1, scaleMobile: 1, backgroundAlpha: 0, backgroundColor: 465199, color1: 15053479, color2: 15392425, colorMode: 'varianceGradient', birdSize: .88, quantity: 5, wingSpan: 24, speedLimit: 2.7, separation: 25, alignment: 18, cohesion: 16 });
+        window.VANTA.BIRDS({ el: birds, THREE: window.THREE, mouseControls: false, touchControls: false, gyroControls: false, minHeight: 200, minWidth: 200, scale: 1, scaleMobile: 1, backgroundAlpha: 0, backgroundColor: 465199, color1: 12150859, color2: 7634289, colorMode: 'varianceGradient', birdSize: .78, quantity: 5, wingSpan: 24, speedLimit: 2.7, separation: 25, alignment: 18, cohesion: 16 });
         birds.classList.add('is-vanta-ready');
       })
       .catch(() => birds.classList.add('is-vanta-fallback'));
