@@ -3932,3 +3932,99 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
   .connect-option,.connect-option__icon,.connect-avatar__frame { transition:none; }
   .connect-birds { display:none; }
 }
+
+
+/* Keep the project narrative readable and its work links available from the opening frame. */
+.project-story-moment .matera-moment-intro__layout {
+  grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);
+  gap:clamp(24px,3.4vw,52px);
+  align-items:start;
+}
+.project-story-moment .matera-moment-intro__avatar {
+  width:min(100%,560px);
+}
+.project-story-moment .matera-moment-intro__content {
+  min-width:0;
+  width:100%;
+}
+.project-story-moment .matera-opening-story__pin {
+  position:relative;
+  overflow:hidden;
+  padding:clamp(16px,2.2vw,28px) 0 clamp(104px,13vh,136px);
+}
+.project-story-moment .matera-hero-copy-beat > h2 {
+  width:100%;
+  max-width:28ch;
+  font-size:clamp(40px,5.2vw,72px);
+  line-height:1.04;
+  text-wrap:balance;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+.project-story-moment .matera-hero-copy-beat[data-copy-reveal="2"] .matera-moment-intro__lede {
+  max-width:62ch;
+  font-size:clamp(17px,1.55vw,21px);
+  line-height:1.55;
+}
+.project-story-page--matera .matera-moment-intro__title {
+  width:max-content;
+  max-width:100%;
+  white-space:nowrap;
+}
+.project-story-quicklinks {
+  position:absolute;
+  z-index:5;
+  right:0;
+  bottom:clamp(18px,2.5vh,30px);
+  left:0;
+  padding-top:12px;
+  border-top:1px solid rgba(39,35,31,.22);
+}
+.project-story-quicklinks > .eyebrow {
+  margin:0 0 8px;
+  font-size:10px;
+}
+.project-story-quicklinks .matera-resource-links {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px 18px;
+  margin:0;
+}
+.project-story-quicklinks .button-link,
+.project-story-quicklinks .text-link {
+  min-height:38px;
+  font-size:12px;
+}
+@media (max-width:760px) {
+  .project-story-moment .matera-moment-intro__layout {
+    grid-template-columns:minmax(0,1fr);
+    gap:20px;
+  }
+  .project-story-moment .matera-moment-intro__avatar {
+    position:relative;
+    top:auto;
+    transform:none;
+    width:min(82%,420px);
+  }
+  .project-story-moment .matera-opening-story__pin {
+    min-height:62vh;
+    padding:20px 0 120px;
+  }
+  .project-story-moment .matera-hero-copy-beat > h2 {
+    max-width:25ch;
+    font-size:clamp(34px,8vw,48px);
+  }
+  .project-story-quicklinks {
+    bottom:12px;
+  }
+  .project-story-quicklinks .matera-resource-links {
+    gap:4px 12px;
+  }
+  .project-story-quicklinks .button-link,
+  .project-story-quicklinks .text-link {
+    min-height:34px;
+    font-size:11px;
+  }
+}
