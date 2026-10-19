@@ -2716,6 +2716,8 @@ function renderProjectStory(project) {
   const action = isCms
     ? (project.prototypeUrl ? `<a class="button-link" href="${project.prototypeUrl}" target="_blank" rel="noopener noreferrer">View alerts &amp; empty states <span aria-hidden="true">↗</span></a>` : '')
     : '<a class="button-link" href="#jazaa-story">Read the JAZAA story <span aria-hidden="true">↓</span></a>';
+  const diamond = '<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>';
+  const title = isCms ? 'Central Monitoring System' : `<span class="project-story-jazaa-mark">${diamond}JAZAA</span>`;
   const contents = project.sections.map((section, index) => `
     <section class="project-story-beat reveal-on-scroll" id="${project.slug}-beat-${index + 1}" aria-labelledby="${project.slug}-beat-title-${index + 1}">
       <p class="eyebrow">0${index + 1} / ${project.title}</p>
@@ -2733,7 +2735,7 @@ function renderProjectStory(project) {
         </figure>
         <header class="project-story-intro">
           <p class="eyebrow">${kicker}</p>
-          <h1 id="${project.slug}-title">${isCms ? 'Central Monitoring System' : '<span class="project-story-jazaa-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span>JAZAA'}`
+          <h1 id="${project.slug}-title">${title}</h1>
           </h1>
           <p class="project-story-subtitle">${isCms ? 'Maternal and fetal monitoring · UX/UI' : 'Lab-grown diamond website experience'}</p>
           <p class="deep-lede">${lede}</p>
