@@ -2707,135 +2707,69 @@ function renderProjectStory(project) {
   const isMatera = project.slug === 'matera';
   const backLink = fromPortfolio ? '<a class="back-link" href="/portfolio/">← Back to Portfolio</a>' : isCms || isMatera ? '<a class="back-link" href="/experience/janitri">← Back to Janitri</a>' : '<a class="back-link" href="/experience/sant-rams">← Back to Sant Ram’s</a>';
   const kicker = isMatera ? 'Selected work / 01 · Medtech · UX/UI' : isCms ? 'Selected work / 02 · Medtech · UX/UI' : 'Selected work / 03 · E-commerce · UX/UI';
-  const lede = isMatera ? project.summary : isCms ? 'I designed alert and empty states for Janitri’s Assam public-health rollout, supporting centralized maternal and fetal monitoring.' : 'I explored JAZAA’s e-commerce website experience, shaping its information architecture, landing page and visual direction during my internship at Sant Ram’s Jewellers.';
   const diamond = '<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M12 24 22 11h20l10 13-20 30L12 24Z M12 24h40M22 11l10 43 10-43M22 11l10 13 10-13M12 24l20 30 20-30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>';
   const title = isMatera ? 'Matera' : isCms ? 'CMS' : '<span class="project-story-jazaa-mark">' + diamond + 'JAZAA</span>';
   const subtitle = isMatera ? 'Nurse-facing ANC experience' : isCms ? 'Central monitoring system' : 'Lab-grown diamond website experience';
-  const hook = isMatera ? 'The monitor had the readings. Nurses had to build the story.' : isCms ? 'One connected monitoring system. Every state needed to be clear.' : 'A new brand needed a digital home. One as considered as its jewellery.';
-  const roleLine = isMatera ? '<span><b>My role</b>Solo UX/UI designer</span><span><b>Guidance</b>Team-lead guidance · AVP review</span>' : isCms ? '<span><b>My role</b>UX/UI designer</span><span><b>Design scope</b>Alerts · Empty states</span>' : '<span><b>My role</b>UI/UX · Visual communication</span><span><b>Brand</b>JAZAA · Lab-grown diamonds</span>';
-  const contextLine = isMatera ? '<span><b>Research</b>Six nurses · Rangadore Memorial Hospital</span><span><b>Design scope</b>Patient context · Symptoms · Monitoring</span>' : isCms ? '<span><b>Rollout context</b>Assam · Public health</span><span><b>Monitoring network</b>41 government hospitals · 82 cCTG devices</span>' : '<span><b>Design scope</b>Landing page · IA · Task flows</span><span><b>Context</b>Sant Ram’s Jewellers · Summer 2025</span>';
-  const materaCaseUrl = 'https://www.figma.com/proto/nXlj4AyVUoA4G7ztBGQvcG/MATERA-ANC-FINAL?node-id=2264-416&t=O89vURF3ahrI2s0G-1&scaling=scale-down-width&content-scaling=fixed&page-id=2244%3A2&starting-point-node-id=2264%3A416';
-  const materaPrototypeUrl = 'https://www.figma.com/design/2fCrSdBPX90JpncH6V6W0L/ANC-for-chat-gpt?node-id=527-54637';
-  const materaIaUrl = 'https://www.figma.com/board/JOMXpYiZgNP4io3lmXPFnt/ANC-SITE-MAP?node-id=0-1&t=R4ULu80I1WIoXhQ1-1';
-  const caseStudyUrl = 'https://www.figma.com/proto/3iLIvKNIdSq6dEG9tfLB1f/Jazaa-%E2%80%94-Landing-Page-Prototype?node-id=144-5237&t=HVESpVY0m77S6b0l-1&scaling=scale-down-width&content-scaling=fixed&page-id=138%3A5032&starting-point-node-id=138%3A5033';
-  const landingUrl = 'https://www.figma.com/proto/3iLIvKNIdSq6dEG9tfLB1f/Jazaa-%E2%80%94-Landing-Page-Prototype?node-id=64-5672&t=kUo2BnN7Jcvj0vmc-1&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=64%3A5672';
-  const resources = isMatera
-    ? '<a class="button-link" href="' + materaCaseUrl + '" target="_blank" rel="noopener noreferrer">Matera case study <span aria-hidden="true">↗</span></a><a class="button-link" href="' + materaPrototypeUrl + '" target="_blank" rel="noopener noreferrer">Explore the prototype <span aria-hidden="true">↗</span></a><a class="button-link" href="' + materaIaUrl + '" target="_blank" rel="noopener noreferrer">IA &amp; user flows <span aria-hidden="true">↗</span></a>'
+  const links = isMatera
+    ? '<a class="button-link" href="https://www.figma.com/proto/nXlj4AyVUoA4G7ztBGQvcG/MATERA-ANC-FINAL?node-id=2264-416&t=O89vURF3ahrI2s0G-1&scaling=scale-down-width&content-scaling=fixed&page-id=2244%3A2&starting-point-node-id=2264%3A416" target="_blank" rel="noopener noreferrer">Matera case study <span aria-hidden="true">↗</span></a><a class="button-link" href="https://www.figma.com/design/2fCrSdBPX90JpncH6V6W0L/ANC-for-chat-gpt?node-id=527-54637" target="_blank" rel="noopener noreferrer">Explore the prototype <span aria-hidden="true">↗</span></a><a class="button-link" href="https://www.figma.com/board/JOMXpYiZgNP4io3lmXPFnt/ANC-SITE-MAP?node-id=0-1&t=R4ULu80I1WIoXhQ1-1" target="_blank" rel="noopener noreferrer">IA &amp; user flows <span aria-hidden="true">↗</span></a>'
     : isCms
-      ? '<a class="button-link" href="' + project.prototypeUrl + '" target="_blank" rel="noopener noreferrer">View CMS prototype <span aria-hidden="true">↗</span></a><a class="text-link" href="/experience/janitri">Janitri résumé context <span aria-hidden="true">↗</span></a>'
-      : '<a class="button-link" href="' + caseStudyUrl + '" target="_blank" rel="noopener noreferrer">JAZAA case study · IA &amp; flows <span aria-hidden="true">↗</span></a><a class="button-link" href="' + landingUrl + '" target="_blank" rel="noopener noreferrer">Landing page prototype <span aria-hidden="true">↗</span></a>';
-  const contents = project.sections.map((section, index) => '<section class="project-story-beat reveal-on-scroll" id="' + project.slug + '-beat-' + (index + 1) + '" aria-labelledby="' + project.slug + '-beat-title-' + (index + 1) + '"><p class="eyebrow">0' + (index + 1) + ' / ' + project.title + '</p><h2 id="' + project.slug + '-beat-title-' + (index + 1) + '">' + section[0] + '</h2><p>' + section[1] + '</p></section>').join('');
-  const tracks = Array.from({ length: 5 }, (_, index) => '<span data-story-beat="' + index + '"></span>').join('');
-  const supportingContent = isMatera
-    ? '<div id="' + project.slug + '-story" class="project-story-beats">' + contents + '</div><footer class="project-story-footer"><a class="text-link" href="/experience/janitri">Related résumé context <span aria-hidden="true">↗</span></a><a class="button-link" href="/portfolio/">Back to selected work <span aria-hidden="true">↑</span></a></footer>'
-    : '';
+      ? '<a class="button-link" href="' + project.prototypeUrl + '" target="_blank" rel="noopener noreferrer">View CMS prototype <span aria-hidden="true">↗</span></a><a class="text-link" href="/experience/janitri">Explore Janitri experience <span aria-hidden="true">↗</span></a>'
+      : '<a class="button-link" href="https://www.figma.com/proto/3iLIvKNIdSq6dEG9tfLB1f/Jazaa-%E2%80%94-Landing-Page-Prototype?node-id=144-5237&t=HVESpVY0m77S6b0l-1&scaling=scale-down-width&content-scaling=fixed&page-id=138%3A5032&starting-point-node-id=138%3A5033" target="_blank" rel="noopener noreferrer">JAZAA case study · IA &amp; flows <span aria-hidden="true">↗</span></a><a class="button-link" href="https://www.figma.com/proto/3iLIvKNIdSq6dEG9tfLB1f/Jazaa-%E2%80%94-Landing-Page-Prototype?node-id=64-5672&t=kUo2BnN7Jcvj0vmc-1&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=64%3A5672" target="_blank" rel="noopener noreferrer">Landing page prototype <span aria-hidden="true">↗</span></a>';
+  const stories = project.sections.map((section,index) => '<section class="project-story-beat" data-copy-reveal="' + (index + 1) + '" data-story-beat="' + (index + 1) + '" aria-hidden="true" inert><p class="eyebrow">0' + (index + 1) + ' / ' + project.title + '</p><h2>' + section[0] + '</h2><p>' + section[1] + '</p></section>').join('');
+  const tracks = Array.from({length:project.sections.length + 1},(_,index) => '<span data-story-beat="' + index + '"></span>').join('');
   main.innerHTML = '<article class="deep-page project-story-page project-story-page--' + project.slug + ' matera-case-page"><div class="wrap">' + backLink +
-    '<section class="matera-case-section matera-moment-intro project-story-moment" aria-label="' + project.title + ' project introduction"><div class="wrap matera-moment-intro__layout">' +
-    '<figure class="matera-moment-intro__avatar" aria-label="Shruti seated with her notebook as each part of the ' + project.title + ' story is revealed"><div class="matera-intro-avatar__art" data-avatar-frame="greet"><img class="matera-intro-avatar__state" src="' + ASSET + 'matera-intro-v3/greet-open.png" alt="" width="1301" height="1209" fetchpriority="high" decoding="async"><img class="matera-intro-avatar__blink" src="' + ASSET + 'matera-intro-v3/greet-blink.png" alt="" width="1301" height="1209" decoding="async" aria-hidden="true"></div></figure>' +
-    '<div class="matera-moment-intro__content"><div class="matera-opening-story" aria-label="' + project.title + ' introduction and project links"><div class="matera-opening-story__pin matera-hero-story__pin" aria-live="polite">' +
-    '<div class="matera-hero-copy-stage" data-project-copy><div class="matera-hero-copy-beat" data-copy-reveal="0"><p class="eyebrow matera-hero-kicker">' + kicker + '</p><div class="matera-hero-title-block"><h1 class="matera-moment-intro__title">' + title + '</h1><p class="matera-hero-subtitle">' + subtitle + '</p></div><nav class="project-story-quicklinks" aria-label="' + project.title + ' project resources"><p class="eyebrow">Explore this work</p><div class="matera-resource-links">' + resources + '</div></nav></div>' +
-    '<div class="matera-hero-copy-beat" data-copy-reveal="1"><h2 id="' + project.slug + '-intro-title" aria-label="' + hook + '">' + hook + '</h2></div><div class="matera-hero-copy-beat" data-copy-reveal="2"><p class="deep-lede matera-moment-intro__lede">' + lede + '</p></div>' +
-    '<div class="matera-hero-copy-beat" data-copy-reveal="3"><div class="matera-case-meta" aria-label="Project role and scope">' + roleLine + '</div><div class="matera-case-meta matera-case-meta--fieldwork" aria-label="Project context">' + contextLine + '</div></div></div>' +
-    
-    '<div class="matera-hero-resource-stage" data-project-resources aria-label="' + project.title + ' project links" aria-hidden="true" inert><p class="eyebrow">Take a closer look</p><div class="matera-resource-links">' + resources + '</div></div></div>' +
-    '<div class="matera-opening-story__track" aria-hidden="true">' + tracks + '</div></div></div></div></section>' +
-    supportingContent + '</div></article>';
+    '<section class="matera-case-section matera-moment-intro project-story-moment" aria-label="' + project.title + ' project story"><div class="wrap matera-moment-intro__layout">' +
+    '<figure class="matera-moment-intro__avatar" aria-label="Shruti seated with her notebook as each part of the ' + project.title + ' story is revealed"><div class="matera-intro-avatar__art" data-avatar-frame="title"><img class="matera-intro-avatar__state" src="' + ASSET + 'matera-intro-v3/title-open.png" alt="" width="1301" height="1209" fetchpriority="high" decoding="async"><img class="matera-intro-avatar__blink" src="' + ASSET + 'matera-intro-v3/title-blink.png" alt="" width="1301" height="1209" decoding="async" aria-hidden="true"></div></figure>' +
+    '<div class="matera-moment-intro__content"><div class="matera-opening-story" aria-label="' + project.title + ' project story and links"><div class="matera-opening-story__pin matera-hero-story__pin" aria-live="polite">' +
+    '<header class="project-story-heading"><p class="eyebrow matera-hero-kicker">' + kicker + '</p><h1 class="matera-moment-intro__title">' + title + '</h1><p class="matera-hero-subtitle">' + subtitle + '</p></header>' +
+    '<div class="matera-hero-copy-stage project-story-copy" data-project-copy>' + stories + '</div>' +
+    '<nav class="project-story-quicklinks" aria-label="' + project.title + ' project resources"><p class="eyebrow">Explore this work</p><div class="matera-resource-links">' + links + '</div></nav>' +
+    '</div><div class="matera-opening-story__track" aria-hidden="true">' + tracks + '</div></div></div></div></section></div></article>';
   bindProjectStoryScrollReveal();
-  observeReveal();
 }
 function bindProjectStoryScrollReveal() {
-  const intro = document.querySelector('.project-story-moment');
-  const introArt = intro && intro.querySelector('.matera-intro-avatar__art');
-  if (!intro || !introArt || intro.dataset.storyBound) return;
-  intro.dataset.storyBound = 'true';
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const beats = [...intro.querySelectorAll('[data-story-beat]')];
-  const copyStage = intro.querySelector('[data-project-copy]');
-  const copySteps = [...intro.querySelectorAll('[data-copy-reveal]')];
-  const resourceStage = intro.querySelector('[data-project-resources]');
-  const heroHeadline = intro.querySelector('h2[id$="-intro-title"]');
-  const headlineCopy = heroHeadline ? heroHeadline.textContent : '';
-  const avatarStates = ['greet', 'title', 'thinking', 'screen-up', 'screen-down'];
-  const stateImage = introArt.querySelector('.matera-intro-avatar__state');
-  const blinkImage = introArt.querySelector('.matera-intro-avatar__blink');
-  const frameCache = new Map(avatarStates.map(state => {
-    const open = new Image(), blink = new Image();
-    open.src = ASSET + 'matera-intro-v3/' + state + '-open.png';
-    blink.src = ASSET + 'matera-intro-v3/' + state + '-blink.png';
-    return [state, { open, blink }];
-  }));
-  const framesReady = Promise.all([...frameCache.values()].flatMap(({ open, blink }) => [open, blink].map(img => img.decode && img.decode().catch(() => {}) || Promise.resolve())));
-  let typingTimers = [], currentBeat = -1;
-  const clearTyping = () => { typingTimers.forEach(window.clearTimeout); typingTimers = []; };
-  const finishHeadline = () => { clearTyping(); if (heroHeadline) { heroHeadline.textContent = headlineCopy; heroHeadline.classList.add('is-headline-visible'); heroHeadline.classList.remove('is-typing'); } };
-  const typeHeadline = () => {
-    clearTyping();
-    if (!heroHeadline) return;
-    if (reduced) { finishHeadline(); return; }
-    heroHeadline.textContent = '';
-    heroHeadline.classList.add('is-headline-visible', 'is-typing');
-    let delay = 0;
-    [...headlineCopy].forEach(character => { delay += character === ' ' ? 25 : 33; typingTimers.push(window.setTimeout(() => { heroHeadline.textContent += character; }, delay)); });
-    typingTimers.push(window.setTimeout(() => heroHeadline.classList.remove('is-typing'), delay + 40));
-  };
-  const setBeat = index => {
-    const next = Math.max(0, Math.min(beats.length - 1, index));
-    if (next === currentBeat) return;
-    const previous = currentBeat;
-    currentBeat = next;
-    if (previous >= 0 && typeof playMateraScrollCue === 'function') playMateraScrollCue();
-    const resourceVisible = next >= copySteps.length;
-    const state = avatarStates[next] || 'screen-down';
-    introArt.classList.remove('is-blinking');
-    introArt.dataset.avatarFrame = state;
-    introArt.dataset.avatarMotion = 'rest';
-    if (stateImage) stateImage.src = ASSET + 'matera-intro-v3/' + state + '-open.png';
-    if (blinkImage) blinkImage.src = ASSET + 'matera-intro-v3/' + state + '-blink.png';
-    if (next === 1) {
-      if (heroHeadline) { heroHeadline.textContent = ''; heroHeadline.classList.add('is-headline-visible', 'is-typing'); }
-      framesReady.then(() => { if (currentBeat !== 1) return; introArt.classList.add('is-blinking'); window.setTimeout(() => introArt.classList.remove('is-blinking'), 150); window.setTimeout(() => { if (currentBeat === 1) typeHeadline(); }, reduced ? 0 : 420); });
-    } else if (next > 1) finishHeadline();
-    copyStage.classList.toggle('is-swapped', resourceVisible);
-    resourceStage.classList.toggle('is-active', resourceVisible);
-    copyStage.setAttribute('aria-hidden', String(resourceVisible));
-    resourceStage.setAttribute('aria-hidden', String(!resourceVisible));
-    copyStage.inert = resourceVisible;
-    resourceStage.inert = !resourceVisible;
-    copySteps.forEach((step, stepIndex) => step.classList.toggle('is-revealed', !resourceVisible && stepIndex <= next));
+  const intro=document.querySelector('.project-story-moment'), art=intro?.querySelector('.matera-intro-avatar__art');
+  if(!intro||!art||intro.dataset.storyBound)return;
+  intro.dataset.storyBound='true';
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const beats=[...intro.querySelectorAll('[data-story-beat]')], steps=[...intro.querySelectorAll('[data-copy-reveal]')];
+  const states=['title','thinking','screen-up','screen-down'];
+  const open=art.querySelector('.matera-intro-avatar__state'), blink=art.querySelector('.matera-intro-avatar__blink');
+  let current=-1, scheduled=0, blinkTimer=0;
+  const setBeat=index=>{
+    const next=Math.max(0,Math.min(beats.length-1,index));
+    if(next===current)return;
+    current=next;
+    const state=states[Math.min(next,states.length-1)];
+    art.dataset.avatarFrame=state;
+    art.classList.remove('is-blinking');
+    if(open)open.src=ASSET+'matera-intro-v3/'+state+'-open.png';
+    if(blink)blink.src=ASSET+'matera-intro-v3/'+state+'-blink.png';
+    steps.forEach((step,i)=>{
+      const active=i+1===next;
+      step.classList.toggle('is-revealed',active);
+      step.setAttribute('aria-hidden',String(!active));
+      step.inert=!active;
+    });
+    if(next>0&&typeof playMateraScrollCue==='function')playMateraScrollCue();
+    if(!reduced)window.setTimeout(()=>{if(current===next){art.classList.add('is-blinking');window.setTimeout(()=>art.classList.remove('is-blinking'),150);}},80);
   };
   setBeat(0);
-  framesReady.then(() => intro.classList.add('is-avatar-ready'));
-  if (!reduced && 'IntersectionObserver' in window) {
-    let blinkTimer = 0;
-    const blinkObserver = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !blinkTimer) blinkTimer = window.setInterval(() => {
-        const rect = intro.getBoundingClientRect();
-        if (rect.bottom <= 0 || rect.top >= innerHeight) return;
-        introArt.classList.add('is-blinking'); window.setTimeout(() => introArt.classList.remove('is-blinking'), 150);
-      }, 4200);
-      else if (!entry.isIntersecting && blinkTimer) { window.clearInterval(blinkTimer); blinkTimer = 0; introArt.classList.remove('is-blinking'); }
-    }, { threshold: 0 });
-    blinkObserver.observe(intro);
+  if(!reduced&&'IntersectionObserver'in window){
+    const observer=new IntersectionObserver(([entry])=>{
+      if(entry.isIntersecting&&!blinkTimer)blinkTimer=window.setInterval(()=>{art.classList.add('is-blinking');window.setTimeout(()=>art.classList.remove('is-blinking'),150);},4200);
+      else if(!entry.isIntersecting&&blinkTimer){window.clearInterval(blinkTimer);blinkTimer=0;}
+    },{threshold:0}); observer.observe(intro);
   }
-  if (beats.length) {
-    let frame = 0;
-    const sync = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        const center = innerHeight / 2;
-        let nearest = 0, distance = Infinity;
-        beats.forEach((beat, index) => {
-          const rect = beat.getBoundingClientRect(), nextDistance = Math.abs(rect.top + rect.height / 2 - center);
-          if (nextDistance < distance) { distance = nextDistance; nearest = index; }
-        });
-        setBeat(nearest);
-      });
-    };
-    window.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync, { passive: true });
-    sync();
-  }
+  const sync=()=>{
+    if(scheduled)return;
+    scheduled=requestAnimationFrame(()=>{
+      scheduled=0; const center=innerHeight/2; let nearest=0,distance=Infinity;
+      beats.forEach((beat,index)=>{const rect=beat.getBoundingClientRect(),d=Math.abs(rect.top+rect.height/2-center);if(d<distance){distance=d;nearest=index;}});
+      setBeat(nearest);
+    });
+  };
+  window.addEventListener('scroll',sync,{passive:true}); window.addEventListener('resize',sync,{passive:true}); sync();
 }
 function renderPortfolio() {
   document.body.dataset.page = 'portfolio';
@@ -2999,7 +2933,7 @@ function bindPortfolioIdeaMotion() {
 function renderContact() {
   document.body.dataset.page = 'deep-page';
   main.innerHTML = '<article class="deep-page contact-page contact-approved-page" id="main"><div class="wrap connect-wrap">' +
-    '<header class="connect-intro"><p class="eyebrow">Connect</p><h1>Good things start<br><em>with a conversation.</em></h1><p>Have a project, an opportunity, or an idea? I’d love to hear about it.</p></header>' +
+    '<header class="connect-intro"><p class="eyebrow" data-connect-drop>Connect</p><h1 data-connect-drop>Good things start<br><em>with a conversation.</em></h1><p class="connect-intro__typed" data-connect-typed aria-label="Have a project, an opportunity, or an idea? I’d love to hear about it."><span></span><i aria-hidden="true"></i></p></header>' +
     '<section class="connect-scene" aria-label="Three ways to connect with Shruti"><div class="connect-birds" aria-hidden="true"></div><div class="connect-stage" data-connect-state="neutral">' +
     '<a class="connect-option connect-option--linkedin" data-connect="linkedin" href="https://www.linkedin.com/in/shruti-singh0218" target="_blank" rel="noopener noreferrer"><span class="connect-option__icon"><img src="' + ASSET + 'contact-icons/linkedin.svg" alt="" width="64" height="64"></span><span class="connect-option__copy"><strong class="button-link connect-option__label">LinkedIn <span aria-hidden="true">↗</span></strong><span>Let’s stay connected.</span></span></a>' +
     '<figure class="connect-avatar" aria-label="Shruti reacts with a small wave, an envelope or a glance at her phone as you explore the contact options"><div class="connect-avatar__frames">' +
@@ -3031,6 +2965,26 @@ function renderContact() {
       })
       .catch(() => birds.classList.add('is-vanta-fallback'));
   }
+  const typedLine=main.querySelector('[data-connect-typed]'), typedText='Have a project, an opportunity, or an idea? I’d love to hear about it.', typedTarget=typedLine?.querySelector('span');
+  let typingTimers=[],autoTimers=[],manualContact=false;
+  const clearTimers=timers=>{timers.forEach(window.clearTimeout);timers.length=0;};
+  const startContactDemo=()=>{
+    if(manualContact)return;
+    ['linkedin','whatsapp','email','neutral'].forEach((state,index)=>autoTimers.push(window.setTimeout(()=>{
+      if(manualContact)return;
+      main.querySelectorAll('[data-connect]').forEach(option=>option.classList.toggle('is-auto-active',option.dataset.connect===state));
+      setConnect(state);
+    },900+index*1900)));
+  };
+  if(typedTarget){
+    typedTarget.textContent=''; typedLine.classList.add('is-typing');
+    const stride=reducedMotion?typedText.length:2; let delay=0;
+    for(let i=0;i<typedText.length;i+=stride){
+      delay+=reducedMotion?0:44;
+      typingTimers.push(window.setTimeout(()=>{typedTarget.textContent=typedText.slice(0,Math.min(typedText.length,i+stride));if(i%6===0)playTypewriterKey(interfaceAudioContext);},delay));
+    }
+    typingTimers.push(window.setTimeout(()=>{typedLine.classList.remove('is-typing');if(!reducedMotion)startContactDemo();},delay+120));
+  }
   const stage = main.querySelector('.connect-stage');
   const frames = [...main.querySelectorAll('[data-connect-frame]')];
   let blinkTimer = 0, waveTimer = 0;
@@ -3048,12 +3002,14 @@ function renderContact() {
     }
   };
   main.querySelectorAll('[data-connect]').forEach(option => {
-    option.addEventListener('pointerenter', () => setConnect(option.dataset.connect));
-    option.addEventListener('pointerleave', () => { if (!option.matches(':focus')) setConnect('neutral'); });
-    option.addEventListener('focus', () => setConnect(option.dataset.connect));
-    option.addEventListener('blur', () => setConnect('neutral'));
+    const interruptDemo=()=>{manualContact=true;clearTimers(autoTimers);main.querySelectorAll('[data-connect]').forEach(item=>item.classList.remove('is-auto-active'));};
+    option.addEventListener('pointerenter',()=>{interruptDemo();setConnect(option.dataset.connect);});
+    option.addEventListener('pointerleave',()=>{if(!option.matches(':focus'))setConnect('neutral');});
+    option.addEventListener('focus',()=>{interruptDemo();setConnect(option.dataset.connect);});
+    option.addEventListener('blur',()=>setConnect('neutral'));
   });
   setConnect('neutral');
+  main.querySelectorAll('[data-connect-drop]').forEach((item,index)=>item.style.setProperty('--connect-drop-delay',(index*180)+'ms'));
 }
 function renderNotFound() {
   renderComingSoon({ title: 'This page is still taking shape.', message: 'I’m working on this part of the story. There’ll be more to see here soon.', backHref: '/', backLabel: 'Back to my journey' });
@@ -3710,4 +3666,79 @@ mobileMenu?.querySelectorAll('a').forEach(link => link.addEventListener('click',
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 if (window.location.hash && location.pathname === '/') sessionStorage.setItem('restoreJourneyHash', window.location.hash);
-renderRoute();
+renderRoute();function renderJanitriDeepDive() {
+  document.body.dataset.page = 'janitri-deep-dive';
+  // Native browser-back restoration can otherwise reuse the previous chapter's
+  // scroll position. Always restore this branch to Shruti's Janitri ID scene.
+  sessionStorage.setItem('restoreJourneyHash', '#janitri');
+  const questions = [
+    { lineOne: 'A nurse has a hundred things to do.', lineTwo: 'What needs to come first?' },
+    { lineOne: '<strong>Same newborn.</strong> Different roles.', lineTwo: 'Should they see the same thing?' },
+    { lineOne: 'When something needs urgent attention,', lineTwo: 'will anyone miss it?' },
+    { lineOne: 'Before designing for mothers,', lineTwo: "shouldn't we listen to them?" }
+  ];
+  const questionIllustrations = [
+    { kind: 'nurse', label: 'Maternal care · nurses', image: 'nurse-3d.png', alt: 'A smiling nurse holding a patient chart' },
+    { kind: 'newborn', label: 'Neonatal care · Navam', image: 'newborn-3d.png', alt: 'A smiling newborn resting in a woven bassinet' },
+    { kind: 'alert', label: 'Emergency alerts · central monitoring', image: 'emergency-alert-3d.png', alt: 'A red emergency alert beacon with signal waves' },
+    { kind: 'mother', label: 'Pregnancy care · Janitri for Mothers', image: 'mother-3d-full.png', alt: 'An expecting mother holding her belly and a phone' }
+  ];
+  const answerStories = [
+    { kind: 'nurse', project: 'Matera', audience: 'For nurses', answer: 'Making the next step clearer for nurses managing antenatal care.' },
+    { kind: 'newborn', project: 'Navam', audience: 'For neonatal teams', answer: 'One newborn, two perspectives—designing for nurses and doctors.' },
+    { kind: 'alert', project: 'Central Monitoring System', audience: 'For critical moments', answer: 'Helping critical alerts stand out when attention matters most.' },
+    { kind: 'mother', project: 'Janitri for Mothers', audience: 'For expecting parents', answer: 'Listening first, then mapping what expecting mothers need.' }
+  ];
+  const cards = questions.map(({ lineOne, lineTwo }, index) => {
+    const illustration = questionIllustrations[index];
+    return `<article class="jd-question" data-question-card="${index}" data-question-kind="${illustration.kind}"><div class="jd-question-copy"><p class="jd-question-kicker">0${index + 1} · ${illustration.label}</p><h3><span>${lineOne}</span><span>${lineTwo}</span></h3></div><div class="jd-question-illustration jd-question-illustration--${illustration.kind}" data-illustration-kind="${illustration.kind}" aria-hidden="true"><img class="jd-question-art" src="${ASSET}janitri-concepts/${illustration.image}" alt="" width="1024" height="1024" loading="eager" decoding="async"></div></article>`;
+  }).join('');
+  const answerCards = answerStories.map((story, index) => {
+    const isMatera = story.project === 'Matera';
+    const isCMS = story.kind === 'alert';
+    const isLinked = isMatera || isCMS;
+    const tag = isLinked ? 'a' : 'article';
+    const linkAttrs = isMatera ? 'href="/work/matera" id="matera-answer" data-return-to-journey data-return-hash="#matera-answer" aria-label="Explore the Matera case study: nurse-facing antenatal care experience"' : isCMS ? 'href="/work/cms" aria-label="Explore the Central Monitoring System case study"' : `aria-label="${story.project}: ${story.answer}"`;
+    return `<${tag} class="jd-answer-card jd-answer-card--${story.kind}${isLinked ? ' jd-answer-card--link' : ''}" data-answer-kind="${story.kind}" ${linkAttrs}><div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${ASSET}janitri-concepts/${questionIllustrations[index].image}" alt="" width="1024" height="1024" loading="eager" decoding="async"></div><div class="jd-answer-copy"><p class="jd-answer-audience">${story.audience}</p><h3>${story.project}</h3><p class="jd-answer-text">${story.answer}</p>${isMatera ? '<span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span>' : isCMS ? '<span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span>' : ''}</div></${tag}>`;
+  }).join('');
+  main.innerHTML = `<article class="janitri-deep-page">
+    <a class="jd-back text-link" href="/#janitri" data-return-to-journey data-return-hash="#janitri">← Back to my journey</a>
+    <section class="jd-arrival chandigarh-arrival" aria-label="Arrival at Janitri Innovations">
+      <audio class="story-cue story-cue--landing" src="${ASSET}jump-landing-thud.wav" preload="auto"></audio>
+      <div class="arrival-sky" aria-hidden="true"></div>
+      <div class="jd-arrival-copy arrival-copy" aria-live="polite">
+        <p class="eyebrow jd-arrival-eyebrow">A new chapter · Bengaluru</p>
+        <div class="arrival-location jd-arrival-location" aria-label="Janitri Innovations, Bengaluru">
+          <svg class="arrival-location-pin" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 29S2 17.5 2 11a10 10 0 1 1 20 0c0 6.5-10 18-10 18Z"/><circle cx="12" cy="11" r="3.2"/></svg>
+          <a class="jd-logo-link" href="https://www.janitri.in/" target="_blank" rel="noreferrer" aria-label="Visit Janitri’s website"><img src="https://cdn.prod.website-files.com/637a0e4c359e1d804d8ec5b7/65afb2e7e04845c25685113d_Janitri%20logo.webp" alt="Janitri Innovations Pvt. Ltd."></a>
+          <p class="arrival-city" aria-label="December 2025 to April 2026"><span class="arrival-date"></span></p>
+        </div>
+        <p class="arrival-caption jd-arrival-note" aria-live="polite" aria-atomic="true" aria-label="Janitri builds connected technology for maternal and newborn care."></p>
+        <a class="jd-arrival-shark-link text-link" href="https://www.youtube.com/watch?v=yR6rnWoASG0" target="_blank" rel="noreferrer" aria-label="Watch Janitri on Shark Tank India">Janitri on Shark Tank India <span aria-hidden="true">↗</span></a>
+      </div>
+      <span class="arrival-scene-shadow" aria-hidden="true"></span>
+      <div class="arrival-avatar jd-arrival-avatar" data-pose="drop" aria-hidden="true">
+        <img class="arrival-sequence-frame arrival-frame--drop" src="${ASSET}chandigarh-drop-entry-aligned.png" alt="" width="1493" height="1054" fetchpriority="high">
+        <img class="arrival-sequence-frame arrival-frame--midair" src="${ASSET}chandigarh-drop-midair-aligned.png" alt="" width="1493" height="1054" loading="eager" decoding="async">
+        <img class="arrival-sequence-frame arrival-frame--impact" src="${ASSET}chandigarh-touchdown-aligned.png" alt="" width="1493" height="1054" loading="eager" decoding="async">
+        <img class="arrival-sequence-frame arrival-frame--recover" src="${ASSET}chandigarh-walk-recover-aligned.png" alt="" width="1493" height="1054" loading="eager" decoding="async">
+        <img class="arrival-sequence-frame arrival-frame--stride-one" src="${ASSET}chandigarh-walk-left-lead-blink-aligned.png" alt="" width="1493" height="1054" loading="eager" decoding="async">
+        <img class="arrival-sequence-frame arrival-frame--stride-two" src="${ASSET}chandigarh-walk-pass-aligned.png" alt="" width="1493" height="1054" loading="eager" decoding="async">
+        <img class="arrival-sequence-frame arrival-frame--stride-three" src="${ASSET}chandigarh-walk-next-aligned.png" alt="" width="1493" height="1054" loading="eager" decoding="async">
+      </div>
+    </section>
+    <section class="jd-questions" aria-labelledby="jd-questions-title" data-stage="quiet">
+      <div class="jd-question-intro"><p class="eyebrow">A quieter question, underneath the work</p><h2 id="jd-questions-title">One connected system. So many different people relying on it.</h2><p class="jd-start-line" aria-label="Where do I even begin?"></p></div>
+      <div class="jd-seated-avatar" data-avatar-state="looks-good" aria-hidden="true"><img class="jd-avatar-frame jd-avatar-frame--looks-good" src="${ASSET}avatar-research-looks-good.png" alt=""><img class="jd-avatar-frame jd-avatar-frame--questioning" src="${ASSET}avatar-research-questioning.png" alt=""><img class="jd-avatar-frame jd-avatar-frame--gaze" src="${ASSET}avatar-research-new-gaze.png" alt=""><img class="jd-avatar-frame jd-avatar-frame--bridge" src="${ASSET}avatar-research-bridge.png" alt=""><img class="jd-avatar-frame jd-avatar-frame--realisation" src="${ASSET}avatar-research-solve-open.png" alt=""><img class="jd-avatar-frame jd-avatar-frame--solve-blink" src="${ASSET}avatar-research-solve-blink.png" alt=""><img class="jd-avatar-frame jd-avatar-frame--blink" src="${ASSET}avatar-research-new-blink.png" alt=""></div>
+      <div class="jd-question-marks" aria-hidden="true">${questions.map(() => '<span class="jd-question-icon">?</span>').join('')}</div>
+      <div class="jd-question-clusters" aria-live="polite">${cards}</div>
+      <p class="jd-question-resolution"><span>Different people. Different screens. One connected system.</span></p>
+    </section>
+    <section class="jd-screens jd-answers" aria-labelledby="jd-screens-title"><header class="jd-screens-heading"><p class="eyebrow">From questions to design</p><h2 id="jd-screens-title">Okay. Let's figure this out.</h2><p>Four challenges. Four different starting points.</p></header><div class="jd-answer-stage" aria-label="Four project answers with Shruti seated at the frame edge"><div class="jd-idea-avatar" aria-hidden="true"><img class="jd-idea-frame jd-idea-frame--snap-open" src="${ASSET}janitri-concepts/shruti-idea-snap-open.png" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-wink" src="${ASSET}janitri-concepts/shruti-idea-snap-wink.png" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-blink" src="${ASSET}janitri-concepts/shruti-idea-snap-blink.png" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-final" src="${ASSET}janitri-concepts/shruti-idea-got-it-final.png" alt="" width="1024" height="1536" loading="eager" decoding="async"></div>${answerCards}</div><div class="jd-answer-lower"><p>Different people. Different needs. No one-size-fits-all answer.</p><a class="button-link jd-back-end" href="/#janitri" data-return-to-journey data-return-hash="#janitri">Back to my journey <span aria-hidden="true">↗</span></a></div></section>
+  </article>`;
+  bindReturnLinks('janitri');
+  bindJanitriDeepDive();
+  if (location.hash === '#matera-answer') requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById('matera-answer')?.scrollIntoView({ behavior: 'instant', block: 'center' })));
+}
+
+
