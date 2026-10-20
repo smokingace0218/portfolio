@@ -4135,3 +4135,37 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
   .connect-intro [data-connect-drop],.project-story-copy .project-story-beat.is-revealed { opacity:1; transform:none; animation:none; }
   .connect-intro__typed i { animation:none; }
 }
+
+
+/* Make the project title and persistent links readable through legacy story-layer rules. */
+.project-story-moment .project-story-heading {
+  position:relative;
+  z-index:3;
+  grid-area:auto;
+  display:block;
+  color:var(--ink);
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+}
+.project-story-moment .project-story-heading > *,
+.project-story-moment .project-story-heading .matera-moment-intro__title,
+.project-story-moment .project-story-heading .matera-hero-subtitle {
+  color:var(--ink);
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+}
+.project-story-moment .project-story-quicklinks {
+  grid-area:auto;
+  display:block;
+  opacity:1!important;
+  visibility:visible!important;
+}
+.project-story-moment .project-story-copy { grid-area:auto; }
+.project-story-moment .project-story-copy .project-story-beat.is-revealed {
+  display:block;
+  color:var(--ink);
+  opacity:1!important;
+  visibility:visible!important;
+}
