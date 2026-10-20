@@ -2755,6 +2755,7 @@ function bindProjectStoryScrollReveal() {
     if(!reduced)window.setTimeout(()=>{if(current===next){art.classList.add('is-blinking');window.setTimeout(()=>art.classList.remove('is-blinking'),150);}},80);
   };
   setBeat(0);
+  intro.classList.add('is-avatar-ready');
   if(!reduced&&'IntersectionObserver'in window){
     const observer=new IntersectionObserver(([entry])=>{
       if(entry.isIntersecting&&!blinkTimer)blinkTimer=window.setInterval(()=>{art.classList.add('is-blinking');window.setTimeout(()=>art.classList.remove('is-blinking'),150);},4200);
