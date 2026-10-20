@@ -15,8 +15,10 @@
       }
       // A new visit opens the storybook first. Once its final page hands off,
       // keep the portfolio landing available for the rest of this tab session.
+      window.__PORTFOLIO_OPENS_STORYBOOK__ = false;
       try {
         if (!portfolioBase && location.pathname === '/' && !requestedRoute && sessionStorage.getItem('storybook-preview-seen') !== '1') {
+          window.__PORTFOLIO_OPENS_STORYBOOK__ = true;
           location.replace('/sketchbook/');
         }
       } catch (_) {}
@@ -26,17 +28,18 @@
     <title>Shruti — Come with me</title>
     <script>
       const assetRoot = portfolioBase;
-      document.write(`
+      const landingPreloads = window.__PORTFOLIO_OPENS_STORYBOOK__ ? '' : `
         <link rel="preload" as="image" href="${assetRoot}/assets/gateway-frame-01-fingertips.webp">
         <link rel="preload" as="image" href="${assetRoot}/assets/gateway-frame-02-curious-peek.webp">
         <link rel="preload" as="image" href="${assetRoot}/assets/gateway-frame-03-happy-smile.webp">
         <link rel="preload" as="image" href="${assetRoot}/assets/chandigarh-drop-entry-aligned.png">
         <link rel="preload" as="image" href="${assetRoot}/assets/chandigarh-drop-midair-aligned.png">
-        <link rel="preload" as="image" href="${assetRoot}/assets/chandigarh-touchdown-aligned.png">
+        <link rel="preload" as="image" href="${assetRoot}/assets/chandigarh-touchdown-aligned.png">`;
+      document.write(`
+        ${landingPreloads}
         <link rel="stylesheet" href="${assetRoot}/styles.css?v128-portfolio-final-20261020">
-        <script src="${assetRoot}/app.js?v128-portfolio-final-20261020" defer><\/script>
-      `);
-    </script>
+        <script src="${assetRoot}/app.js?v128-portfolio-final-20261020" defer><\\/script>
+      `);    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to story</a>
