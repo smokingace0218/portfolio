@@ -6,3 +6,6 @@ outputs/portfolio/dist/
 outputs/portfolio/.openai/
 outputs/portfolio/.snapshots/
 outputs/portfolio/site-open-clean/
+
+# Local Netlify development artifacts
+/.netlify/

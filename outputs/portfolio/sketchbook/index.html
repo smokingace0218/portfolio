@@ -522,6 +522,22 @@ body.story-exit .story-whiteout{opacity:1}
   letter-spacing:.16em;text-transform:uppercase;transition:background-color .22s ease,color .22s ease,transform .22s ease}
 .zoom-in-link:hover{background:var(--earth);color:#fffaf1;transform:translateY(-2px)}
 @media (prefers-reduced-motion:reduce){.zoom-in-link{transition:none}.zoom-in-link:hover{transform:none}}
+/* Keep the painted spread proportional with room for page controls. */
+.hero { overflow-x:clip; }
+@media (max-width:900px), (max-height:600px) {
+  .sb-3d { width:min(960px,calc(100vw - 88px),max(240px,calc((100svh - 280px) * 1.419))); }
+  .sb-captions { height:auto; min-height:3.1em; }
+  .sb-arrow { min-width:44px; min-height:44px; }
+  .loupe { display:none; }
+}
+@media (max-width:640px) {
+  .sb-wrap { width:100%; margin-inline:0; }
+  .top { flex-wrap:wrap; }
+  .top nav { flex-wrap:wrap; justify-content:flex-end; }
+  .top nav a, .top .icon-btn { min-height:44px; display:inline-flex; align-items:center; }
+  .plate { grid-template-columns:2em minmax(0,1fr); gap:8px 12px; }
+  .plate .p { grid-column:2; text-align:left; }
+}
 </style>
 </head>
 <body>
