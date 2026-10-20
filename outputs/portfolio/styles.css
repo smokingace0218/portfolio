@@ -4245,3 +4245,38 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
     transform:none!important;
   }
 }
+
+
+/* Match the compact beige landing frame: avatar, story title, and links stay inside it. */
+.project-story-moment .matera-moment-intro__avatar {
+  top:clamp(152px,23vh,170px)!important;
+  width:min(100%,460px);
+  transform:none!important;
+}
+.project-story-moment .matera-opening-story__pin {
+  top:clamp(152px,23vh,170px)!important;
+  min-height:calc(100svh - clamp(166px,25vh,190px));
+  max-height:calc(100svh - clamp(166px,25vh,190px));
+}
+.project-story-moment .project-story-heading { margin:0; }
+.project-story-moment .project-story-copy { min-height:clamp(130px,18vh,190px); }
+@media (max-width:760px) {
+  .project-story-moment .matera-moment-intro__avatar {
+    top:132px!important;
+    width:min(62%,300px);
+  }
+  .project-story-moment .matera-opening-story__pin {
+    top:132px!important;
+    min-height:calc(100svh - 142px);
+    max-height:calc(100svh - 142px);
+  }
+  .project-story-moment .project-story-copy { min-height:clamp(110px,16vh,150px); }
+}
+@media (max-height:700px) and (min-width:761px) {
+  .project-story-moment .matera-moment-intro__avatar { top:152px!important; }
+  .project-story-moment .matera-opening-story__pin {
+    top:152px!important;
+    min-height:calc(100svh - 162px);
+    max-height:calc(100svh - 162px);
+  }
+}
