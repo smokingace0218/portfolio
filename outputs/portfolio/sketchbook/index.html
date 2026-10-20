@@ -142,6 +142,15 @@ button{font:inherit}
 .skip-story:hover span,.skip-story:focus-visible span{color:#fffaf4}
 .skip-story:hover span{transform:translate(2px,-2px)}
 .skip-story:focus-visible{outline:2px solid var(--earth);outline-offset:4px}
+.skip-story{animation:meet-designer-bounce 2.8s ease-in-out infinite}
+@keyframes meet-designer-bounce{
+  0%,78%,100%{transform:translateY(0)}
+  84%{transform:translateY(-7px)}
+  89%{transform:translateY(0)}
+  94%{transform:translateY(-3px)}
+}
+.skip-story:hover,.skip-story:focus-visible{animation-play-state:paused}
+
 .hero-down{
   position:absolute;bottom:30px;left:50%;transform:translateX(-50%);border:0;background:transparent;
   padding:10px 14px;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent;
@@ -149,7 +158,7 @@ button{font:inherit}
 }
 .hero-down:hover{animation:none;opacity:1}
 @keyframes cue-breathe{0%,100%{opacity:.15}50%{opacity:.7}}
-@media (prefers-reduced-motion:reduce){.hero-down{animation:none;opacity:.5}}
+@media (prefers-reduced-motion:reduce){.hero-down{animation:none;opacity:.5}.skip-story{animation:none}}
 
 /* ---------------- sketchbook ---------------- */
 .hero,.hero *{-webkit-user-select:none;-moz-user-select:none;user-select:none}
@@ -1351,15 +1360,8 @@ function startIntro(){
     return;
   }
   setTimeout(startIntro,220);
-  /* Warm the remaining leaves in the background, one at a time, so the
-     opening spread is never held hostage by a burst of large image requests. */
-  (async()=>{
-    for(let offset=2;offset<M;offset++){
-      const page=(idx+offset)%M;
-      try{await ensurePageImage(page);}catch{}
-      await new Promise(resolve=>setTimeout(resolve,80));
-    }
-  })();
+  /* Keep the first view light: the current and next leaf are ready now,
+     and warmNextPage() loads each later leaf only as the reader advances. */
 })();
 </script>
 </body>
