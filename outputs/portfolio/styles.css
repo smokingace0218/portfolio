@@ -4226,3 +4226,22 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
   .project-story-quicklinks .matera-resource-links { gap:3px 8px; }
   .project-story-quicklinks .button-link,.project-story-quicklinks .text-link { min-height:32px; font-size:10px; }
 }
+
+
+/* Keep the notebook avatar centered and expose the project CTAs from the first frame. */
+.project-story-moment .matera-moment-intro__avatar {
+  top:clamp(84px,12vh,120px)!important;
+  transform:none!important;
+}
+.project-story-moment .project-story-quicklinks .button-link,
+.project-story-moment .project-story-quicklinks .text-link {
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+}
+@media (max-height:700px) and (min-width:761px) {
+  .project-story-moment .matera-moment-intro__avatar {
+    top:76px!important;
+    transform:none!important;
+  }
+}
