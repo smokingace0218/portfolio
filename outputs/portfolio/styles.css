@@ -4075,3 +4075,63 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
   .project-story-quicklinks .button-link,
   .project-story-quicklinks .text-link { min-height:36px; font-size:11px; }
 }
+
+
+/* Scroll stories keep the approved beige frame and seated avatar in view. */
+.project-story-moment .matera-moment-intro__layout {
+  grid-template-columns:minmax(300px,.88fr) minmax(0,1.12fr);
+  align-items:center;
+  gap:clamp(24px,4vw,64px);
+}
+.project-story-moment .matera-moment-intro__avatar { width:min(100%,560px); }
+.project-story-moment .matera-moment-intro__content { min-width:0; width:100%; }
+.project-story-moment .matera-opening-story__pin {
+  position:sticky;
+  top:clamp(82px,10vh,112px);
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:clamp(12px,1.6vh,20px);
+  min-height:calc(100svh - clamp(96px,12vh,132px));
+  max-height:calc(100svh - clamp(96px,12vh,132px));
+  overflow:hidden;
+  padding:clamp(16px,2vw,30px) 0;
+  background:var(--parchment);
+}
+.project-story-heading { align-self:center; }
+.project-story-heading .matera-moment-intro__title { width:max-content; max-width:100%; white-space:nowrap; }
+.project-story-copy { position:relative; display:grid; align-content:center; min-height:clamp(160px,26vh,290px); }
+.project-story-copy .project-story-beat { display:none; opacity:0; transform:translateY(14px); }
+.project-story-copy .project-story-beat.is-revealed { display:block; animation:project-story-enter .42s cubic-bezier(.2,.72,.25,1) both; }
+.project-story-copy .project-story-beat > h2 { max-width:24ch; font-size:clamp(30px,3.5vw,52px); line-height:1.05; text-wrap:balance; }
+.project-story-copy .project-story-beat > p:last-child { max-width:58ch; font-size:clamp(16px,1.35vw,20px); line-height:1.55; }
+.project-story-quicklinks { position:relative; z-index:4; margin:0; padding-top:12px; border-top:1px solid rgba(39,35,31,.22); }
+.project-story-quicklinks > .eyebrow { margin:0 0 8px; font-size:10px; }
+.project-story-quicklinks .matera-resource-links { display:flex; flex-wrap:wrap; gap:6px 12px; margin:0; }
+.project-story-quicklinks .button-link,.project-story-quicklinks .text-link { min-height:38px; font-size:11px; }
+.project-story-moment .matera-opening-story__track > span { height:clamp(460px,68vh,760px); }
+.project-story-moment .matera-opening-story__track > span:first-child { height:clamp(520px,78vh,860px); }
+.project-story-moment .matera-opening-story__track > span:last-child { height:clamp(620px,88vh,940px); }
+@keyframes project-story-enter { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+.connect-intro [data-connect-drop] { opacity:0; transform:translateY(-24px); animation:connect-drop-in .72s cubic-bezier(.2,.72,.25,1) both; animation-delay:var(--connect-drop-delay,0ms); }
+@keyframes connect-drop-in { to { opacity:1; transform:translateY(0); } }
+.connect-intro__typed { position:relative; min-height:1.5em; }
+.connect-intro__typed i { display:none; width:2px; height:1em; margin-left:4px; vertical-align:-.12em; background:currentColor; }
+.connect-intro__typed.is-typing i { display:inline-block; animation:connect-caret .8s steps(1,end) infinite; }
+@keyframes connect-caret { 50% { opacity:0; } }
+.connect-option.is-auto-active { transform:translateY(-3px); }
+.connect-option.is-auto-active .connect-option__label { color:var(--terracotta); }
+@media (max-width:760px) {
+  .project-story-moment .matera-moment-intro__layout { grid-template-columns:minmax(0,1fr); gap:10px; }
+  .project-story-moment .matera-moment-intro__avatar { width:min(58%,300px); margin-inline:auto; }
+  .project-story-moment .matera-opening-story__pin { top:76px; min-height:calc(100svh - 86px); max-height:calc(100svh - 86px); padding:10px 0; }
+  .project-story-heading .matera-moment-intro__title { font-size:clamp(42px,11vw,64px); }
+  .project-story-copy { min-height:clamp(120px,20vh,190px); }
+  .project-story-copy .project-story-beat > h2 { font-size:clamp(28px,7vw,40px); }
+  .project-story-moment .matera-opening-story__track > span { height:54vh; }
+  .project-story-moment .matera-opening-story__track > span:first-child { height:62vh; }
+  .project-story-moment .matera-opening-story__track > span:last-child { height:72vh; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .connect-intro [data-connect-drop],.project-story-copy .project-story-beat.is-revealed { opacity:1; transform:none; animation:none; }
+  .connect-intro__typed i { animation:none; }
+}
