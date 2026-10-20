@@ -2731,21 +2731,26 @@ function bindProjectStoryScrollReveal() {
   if(!intro||!art||intro.dataset.storyBound)return;
   intro.dataset.storyBound='true';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const beats=[...intro.querySelectorAll('[data-story-beat]')], steps=[...intro.querySelectorAll('[data-copy-reveal]')];
+  const beats=[...intro.querySelectorAll('.matera-opening-story__track [data-story-beat]')], steps=[...intro.querySelectorAll('[data-copy-reveal]')];
   const states=['title','thinking','screen-up','screen-down'];
   const open=art.querySelector('.matera-intro-avatar__state'), blink=art.querySelector('.matera-intro-avatar__blink');
-  let current=-1, scheduled=0, blinkTimer=0;
+  const readingLayout=matchMedia('(max-width: 900px), (max-height: 600px)');
+  let current=-1, currentReading=null, scheduled=0, blinkTimer=0;
   const setBeat=index=>{
     const next=Math.max(0,Math.min(beats.length-1,index));
-    if(next===current)return;
+    const reading=readingLayout.matches;
+    if(next===current&&reading===currentReading)return;
     current=next;
+    currentReading=reading;
+    intro.classList.toggle('is-reading-layout',reading);
+    intro.querySelector('[aria-live]')?.setAttribute('aria-live',reading?'off':'polite');
     const state=states[Math.min(next,states.length-1)];
     art.dataset.avatarFrame=state;
     art.classList.remove('is-blinking');
     if(open)open.src=ASSET+'matera-intro-v3/'+state+'-open.png';
     if(blink)blink.src=ASSET+'matera-intro-v3/'+state+'-blink.png';
     steps.forEach((step,i)=>{
-      const active=i+1===next;
+      const active=reading||i+1===next;
       step.classList.toggle('is-revealed',active);
       step.setAttribute('aria-hidden',String(!active));
       step.inert=!active;

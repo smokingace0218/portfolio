@@ -4289,3 +4289,103 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
   border-top:0!important;
   border-bottom:0!important;
 }
+
+
+/* Preserve the desktop scenes; give compact screens a continuous reading flow. */
+@media (max-width:900px), (max-height:600px) {
+  .project-story-moment .matera-moment-intro__layout {
+    grid-template-columns:minmax(0,1fr);
+    gap:24px;
+  }
+  .project-story-moment .matera-moment-intro__avatar {
+    position:relative!important;
+    top:auto!important;
+    width:min(65%,300px);
+    margin-inline:auto;
+  }
+  .project-story-moment .matera-opening-story__pin {
+    position:relative!important;
+    top:auto!important;
+    height:auto;
+    min-height:0;
+    max-height:none;
+    overflow:visible;
+    padding:12px 0 32px;
+    gap:32px;
+  }
+  .project-story-moment .project-story-heading .matera-moment-intro__title {
+    width:auto;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    font-size:clamp(40px,9vw,64px);
+  }
+  .project-story-moment .project-story-copy {
+    display:grid;
+    gap:32px;
+    min-height:0;
+  }
+  .project-story-moment.is-reading-layout .project-story-beat {
+    display:block;
+    min-height:0;
+    margin:0;
+    opacity:1!important;
+    visibility:visible!important;
+    transform:none!important;
+    animation:none;
+  }
+  .project-story-moment .project-story-beat > h2 { font-size:clamp(28px,6vw,40px); }
+  .project-story-moment .project-story-beat > p:last-child { margin-bottom:0; }
+  .project-story-moment .matera-opening-story__track { display:none; }
+  .project-story-quicklinks .button-link,
+  .project-story-quicklinks .text-link { min-height:44px; white-space:normal; }
+}
+@media (max-width:600px) {
+  .connect-stage {
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto;
+    gap:20px;
+    min-height:0;
+  }
+  .connect-stage .connect-avatar {
+    grid-column:1;
+    grid-row:1;
+    width:min(70%,260px);
+    max-width:100%;
+  }
+  .connect-stage .connect-option {
+    grid-column:1;
+    grid-row:auto;
+    flex-direction:row;
+    align-items:center;
+    justify-self:stretch;
+    gap:20px;
+    padding:12px 0;
+    text-align:left;
+  }
+  .connect-option__icon { flex:0 0 48px; }
+  .connect-option strong { min-height:44px; font-size:12px; }
+  .connect-option--linkedin strong { justify-content:flex-start; }
+  .connect-option__copy > span:last-child { font-size:14px; }
+  .connect-option--email .connect-option__label { padding-inline:16px; }
+}
+@media (max-width:480px) {
+  .portfolio-page .portfolio-panel,
+  .portfolio-page .has-projects .portfolio-panel { grid-template-columns:minmax(0,1fr); }
+  .portfolio-page .portfolio-panel .portfolio-project-card {
+    grid-template-columns:48px minmax(0,1fr);
+    gap:16px;
+    padding:16px;
+  }
+  .portfolio-panel .jd-answer-art-wrap { width:48px; height:64px; }
+  .portfolio-panel .jd-answer-copy h3 { font-size:26px; }
+  .portfolio-panel .jd-answer-text { font-size:14px; }
+  .portfolio-panel .jd-answer-cta { min-height:44px; font-size:11px; }
+  .portfolio-header .portfolio-tabs { align-self:stretch; display:flex; flex-wrap:wrap; }
+  .portfolio-tabs button { flex:1 1 auto; }
+}
+@media (pointer:coarse) {
+  .top-nav a, .mobile-menu a { min-height:44px; display:inline-flex; align-items:center; }
+}
+@media (pointer:coarse) and (max-width:640px) {
+  .mobile-menu-toggle { display:inline-flex; }
+}
