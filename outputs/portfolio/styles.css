@@ -4280,3 +4280,12 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
     max-height:calc(100svh - 162px);
   }
 }
+
+
+/* The approved project landing card has a clean beige edge without divider strokes. */
+.project-story-moment,
+.project-story-moment.matera-case-section {
+  border:0!important;
+  border-top:0!important;
+  border-bottom:0!important;
+}
