@@ -522,6 +522,7 @@ function mount(root, opts = {}) {
   uniform vec4 uHand;
   uniform vec4 uHand2;
   uniform vec3 uFloorGain;
+  uniform float uClearFloor;
   out vec4 outC;
 
   vec3 KEY;
@@ -812,22 +813,25 @@ function mount(root, opts = {}) {
     ivec2 c = ivec2(gl_FragCoord.xy);
     vec2 p = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y) / uDpr;
     vec4 g = gAt(c);
+    float cov = g.w > 0.5 ? 1.0 : clamp(0.5 - g.x * uDpr, 0.0, 1.0);
+    // A poster or parchment page has no studio floor. Empty pixels stay clear so the page shows through.
+    if (uClearFloor > 0.5 && cov <= 0.001) { outC = vec4(0.0); return; }
     vec3 col;
     if (g.w < 0.5) {
-      col = floorShade(p);
-      // analytic edge coverage from the closest approach of the ray (also keeps hair-thin strands visible)
-      float cov = clamp(0.5 - g.x * uDpr, 0.0, 1.0);
-      if (cov > 0.0) {
-        vec4 n0 = gAt(c + ivec2(1, 0)), n1 = gAt(c - ivec2(1, 0)), n2 = gAt(c + ivec2(0, 1)), n3 = gAt(c - ivec2(0, 1));
-        vec4 gn = n0.w > 0.5 ? n0 : n1.w > 0.5 ? n1 : n2.w > 0.5 ? n2 : n3.w > 0.5 ? n3 : vec4(0.0);
-        col = mix(col, gn.w > 0.5 ? shadeAny(p, gn) : vec3(0.012), cov);
+      vec4 n0 = gAt(c + ivec2(1, 0)), n1 = gAt(c - ivec2(1, 0)), n2 = gAt(c + ivec2(0, 1)), n3 = gAt(c - ivec2(0, 1));
+      vec4 gn = n0.w > 0.5 ? n0 : n1.w > 0.5 ? n1 : n2.w > 0.5 ? n2 : n3.w > 0.5 ? n3 : vec4(0.0);
+      vec3 strand = gn.w > 0.5 ? shadeAny(p, gn) : vec3(0.012);
+      if (uClearFloor > 0.5) col = strand;
+      else {
+        col = floorShade(p);
+        if (cov > 0.0) col = mix(col, strand, cov);
       }
     } else {
       col = shadeAny(p, g);
     }
     col = pow(aces(col * 0.95), vec3(1.0 / 2.2));
     col += (hash12(gl_FragCoord.xy + fract(uTime) * 61.0) - 0.5) / 255.0;
-    outC = vec4(col, g.w > 0.5 ? 1.0 : clamp(0.5 - g.x * uDpr, 0.0, 1.0));
+    outC = vec4(col, cov);
   }`;
 
   function compile(type, src) {
@@ -852,7 +856,7 @@ function mount(root, opts = {}) {
     return { prog, u };
   }
   const p1 = program(FRAG_SCENE, ['uArrowSDF', 'uMorph', 'uCoat', 'uNC', 'uCoil', 'uCBox', 'uHandSDF', 'uHand', 'uHand2', 'uRes', 'uDpr', 'uTime', 'uBtn', 'uBtnZ', 'uBtnZ2', 'uPull', 'uPeak', 'uNS', 'uPts', 'uBox', 'uAnc', 'uAncD', 'uNBr', 'uBr', 'uNB', 'uBlob', 'uBlobZ', 'uRip', 'uLabel', 'uLabelBox', 'uEmboss', 'uZTop', 'uK']);
-  const p2 = program(FRAG_SHADE, ['uG', 'uLabel', 'uRes', 'uDpr', 'uTime', 'uLabelBox', 'uLabelAmt', 'uLabelLod', 'uIri', 'uZMax', 'uLift', 'uBtnP', 'uWin', 'uBtnH', 'uHandCol', 'uArrowCol', 'uMorph', 'uHand', 'uHand2', 'uFloorGain']);
+  const p2 = program(FRAG_SHADE, ['uG', 'uLabel', 'uRes', 'uDpr', 'uTime', 'uLabelBox', 'uLabelAmt', 'uLabelLod', 'uIri', 'uZMax', 'uLift', 'uBtnP', 'uWin', 'uBtnH', 'uHandCol', 'uArrowCol', 'uMorph', 'uHand', 'uHand2', 'uFloorGain', 'uClearFloor']);
 
   // ── icon textures (arrow + hand): colour (for shading) + signed distance field (for the 3D slab)
   const handColTex = gl.createTexture(), handSdfTex = gl.createTexture();
@@ -1744,6 +1748,7 @@ function mount(root, opts = {}) {
     gl.activeTexture(gl.TEXTURE6); gl.bindTexture(gl.TEXTURE_2D, arrowColTex);
     gl.uniform1f(u2.uMorph, hand.m);
     gl.uniform3fv(u2.uFloorGain, floorGain);
+    gl.uniform1f(u2.uClearFloor, opts.clearFloor ? 1 : 0);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
     // pass 3: FXAA to the screen
@@ -1796,7 +1801,7 @@ function mount(root, opts = {}) {
     }
     return [255, 255, 255];
   }
-  function recalibrate() { calib.target = opts.floor ? null : pageBackground(); calib.n = calib.target ? 0 : 99; }
+  function recalibrate() { if (opts.clearFloor) { calib.target = null; calib.n = 99; return; } calib.target = opts.floor ? null : pageBackground(); calib.n = calib.target ? 0 : 99; }
   const lin = (b) => ((b + 0.5) / 255) ** 2.2;
   const px1 = new Uint8Array(4);
   function calibrateFloor() {

@@ -23,13 +23,13 @@ function createStoryTrail(world){
  function arrive(id,reveal){cancel();const mine=token;if(reduced()){reveal();return}const w=world.clientWidth,h=world.clientHeight;const banners={nift:['I solemnly swear','I am up to no good'],sant:['A little craft','A whole new world'],janitri:['Listening first','Designing for care'],me:['Mischief','Managed']};const words=banners[id]||['Mischief','Managed'];banner.querySelectorAll('span').forEach((el,i)=>el.textContent=words[i]);status.hidden=false;status.textContent='Follow the footsteps.';layer.dataset.phase='footsteps';
  const schedule=(at,run)=>stages.push({at,run:()=>{if(token===mine)run()}});
  // Alternating prints settle fully before the wand begins. All times are milliseconds after arrival.
- for(let i=0;i<6;i++){const q=i/5,v=1-q,side=i%2?-1:1;const x=(v*v*.10+2*v*q*.30+q*q*.23)*w+side*(w<650?15:23),y=(v*v*.82+2*v*q*.58+q*q*.30)*h;const dx=2*v*(.30-.10)+2*q*(.23-.30),dy=2*v*(.58-.82)+2*q*(.30-.58),angle=Math.atan2(dx*w,-dy*h)*180/Math.PI;const step=document.createElement('span');step.className='map-step';step.dataset.tone=i%2?'beige':'orange';step.style.cssText=`left:${x}px;top:${y}px;--step-scale:${1.1-q*.20};--step-side:${side};--step-turn:${angle}deg`;layer.append(step);schedule(i*80,()=>step.classList.add('visible'))}
- // Footprints settle, then the hand casts, then the fireworks, then the chapter.
- schedule(760,()=>{layer.dataset.phase='spell';status.textContent='A little magic…';playHand();worldSound.paper()});
- schedule(1720,()=>{stopHand();layer.dataset.phase='fireworks';status.textContent='Your chapter is about to unfold.';fire(true);layer.querySelectorAll('.map-step').forEach(el=>el.classList.add('fading'))});
- schedule(1880,()=>{layer.dataset.phase='banner';status.hidden=true;banner.querySelectorAll('span').forEach((el,i)=>{el.textContent=words[i]});banner.classList.add('visible')});
- schedule(4280,()=>banner.classList.remove('visible'));
- schedule(4660,()=>{layer.dataset.phase='chapter';status.hidden=true;fire(false);layer.querySelectorAll('.map-step').forEach(el=>el.remove());reveal()});
+ for(let i=0;i<6;i++){const q=i/5,v=1-q,side=i%2?-1:1;const x=(v*v*.10+2*v*q*.30+q*q*.23)*w+side*(w<650?15:23),y=(v*v*.82+2*v*q*.58+q*q*.30)*h;const dx=2*v*(.30-.10)+2*q*(.23-.30),dy=2*v*(.58-.82)+2*q*(.30-.58),angle=Math.atan2(dx*w,-dy*h)*180/Math.PI;const step=document.createElement('span');step.className='map-step';step.dataset.tone=i%2?'beige':'orange';step.style.cssText=`left:${x}px;top:${y}px;--step-scale:${1.1-q*.20};--step-side:${side};--step-turn:${angle}deg`;layer.append(step);schedule(i*55,()=>step.classList.add('visible'))}
+ // Footprints, the wand, a short burst of fireworks, then the chapter. The beats stay; the wait does not.
+ schedule(480,()=>{layer.dataset.phase='spell';status.textContent='A little magic…';playHand();worldSound.paper()});
+ schedule(1100,()=>{stopHand();layer.dataset.phase='fireworks';status.textContent='Your chapter is about to unfold.';fire(true);layer.querySelectorAll('.map-step').forEach(el=>el.classList.add('fading'))});
+ schedule(1240,()=>{layer.dataset.phase='banner';status.hidden=true;banner.querySelectorAll('span').forEach((el,i)=>{el.textContent=words[i]});banner.classList.add('visible')});
+ schedule(1960,()=>banner.classList.remove('visible'));
+ schedule(2100,()=>{layer.dataset.phase='chapter';status.hidden=true;fire(false);layer.querySelectorAll('.map-step').forEach(el=>el.remove());reveal()});
  sequenceTime=0;sequenceLast=performance.now();sequenceRAF=requestAnimationFrame(sequenceFrame);
  }
  return{arrive,cancel,fire,place};
