@@ -99,10 +99,10 @@ const homePush=pointerPush+heroDepth+hoverPreviewBlend*.065*driftBlend,homeMargi
 const home={push:homePush,focusX:Math.max(homeMargin,Math.min(1-homeMargin,.5+driftX+previewFocusX)),focusY:Math.max(homeMargin,Math.min(1-homeMargin,.5+driftY+previewFocusY))};
 const registration=activeDestination?CameraRegistration.view(activeDestination,cameraRig.push/4.2,{w:worldW,h:worldH},sceneFrame,cameraJourney?restHome:home,(cameraJourney||cameraRig.push>3.95)?0:idleDepth,{x:depthPointer.x+detailDrift,y:depthPointer.y}):null;if(!cameraJourney)restHome=home;
 const widePose=registration?.wide||home,widePush=widePose.push,renderFocusX=widePose.focusX,renderFocusY=widePose.focusY;
-const detailOpaque=destinationView.opacity()>.995&&cameraRig.push>3.95&&!cameraJourney;
+const detailOpaque=destinationView.opacity()>.995&&cameraRig.push>3.95;
 const storyHold=storyIsOpen()&&!cameraJourney;
 if(!storyHold&&!detailOpaque){atmosphere.draw(t,dt,{dark,width:w,height:h,x:depthPointer.x*driftBlend,y:depthPointer.y*driftBlend,push:widePush,focusX:renderFocusX,focusY:renderFocusY});livingWater.draw(t,{w,h,dark,push:widePush,focusX:renderFocusX,focusY:renderFocusY});drawTree(t,dt)}
-if(!storyHold)destinationView.draw(t,{push:cameraRig.push,dark,x:depthPointer.x+detailDrift,y:depthPointer.y,hovered:!!hoveredPlace,idleDepth,registration});
+if(!storyHold)destinationView.draw(t,{push:cameraRig.push,dark,x:depthPointer.x+detailDrift,y:depthPointer.y,hovered:!!hoveredPlace,idleDepth,traveling:!!cameraJourney,registration});
 if(!storyHold)for(const anchor of pinAnchors){if(anchor.el.classList.contains('hover-active'))continue;const depthScale=(1+widePush)*(1+widePush*.045*(anchor.depth-.44));const pinX=((anchor.px-renderFocusX)*depthScale+.5-anchor.px)*w,pinY=((anchor.py-renderFocusY)*depthScale+.5-anchor.py)*h;if(anchor.lx===null||Math.abs(pinX-anchor.lx)>.02){anchor.lx=pinX;anchor.el.style.setProperty('--pin-x',pinX.toFixed(2)+'px')}if(anchor.ly===null||Math.abs(pinY-anchor.ly)>.02){anchor.ly=pinY;anchor.el.style.setProperty('--pin-y',pinY.toFixed(2)+'px')}}
 if(!storyHold&&!detailOpaque){ctx.save();const z=1+widePush;ctx.translate(w*.5-renderFocusX*w*z,h*.5-renderFocusY*h*z);ctx.scale(z,z);ctx.save();clipFlightSky(ctx,w,h,null);const skyActors=skyCast(t,dark);const wizard=skyActors.find(a=>a.name==='broom');if(wizard){const {x,y}=flightPose(wizard,w,h);broom(x,y,(w<700?.50:.72)*wizard.scale,t)}
 // The Ford Anglia makes a slow looping pass above Platform 9¾.

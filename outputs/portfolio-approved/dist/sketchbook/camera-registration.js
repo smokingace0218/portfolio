@@ -9,26 +9,23 @@ const CameraRegistration=(()=>{
  };
  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),mix=(a,b,t)=>a+(b-a)*t;
  const smooth=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*t*(10+t*(-15+6*t))};
- // Soft shoulders, then a steady cruise. The slope stays above 0.7, so the dolly never sits.
- const pace=t=>{t=clamp(t,0,1);const s=t*t*(3-2*t);return s*.28+t*.72};
+ // Almost even speed, with a short shoulder so the tap does not kick or brake.
+ // The slope stays above 0.9, so the dolly never sits.
+ const pace=t=>{t=clamp(t,0,1);const s=t*t*(3-2*t);return s*.06+t*.94};
+ // Ease into the frame edge. A hard clamp stops the pan while the zoom keeps going.
+ const easeEdge=(x,lo,hi)=>{if(!(hi>lo))return (lo+hi)/2||x;const m=Math.min(.05,(hi-lo)*.28);if(x<=lo)return lo;if(x>=hi)return hi;const glide=t=>t*t*(2-t);if(x<lo+m){const t=(x-lo)/m;return lo+m*glide(t)}if(x>hi-m){const t=(hi-x)/m;return hi-m*glide(t)}return x};
   function view(id,progress,viewport,scene,home,idle=0,pointer={x:0,y:0}){
   const profile=profiles[id];if(!profile)return null;const p=clamp(progress,0,1),travel=pace(p);
-  // Framing follows the dolly the whole way. The closeup fades across that same move, so it never catches up in a second jump.
-  const fade=clamp((p-.2)/.68,0,1),alpha=fade*fade*(3-2*fade),settle=travel,landing=travel,aspect=1672/941;
-  const cover=Math.max(viewport.w/1672,viewport.h/941),photoW=1672*cover*1.065*(1+idle*landing),photoH=941*cover*1.065*(1+idle*landing);
+  // The closeup is the same framing as the dolly. A second crop used to slide across it on the way in and the way out.
+  const fade=clamp((p-.2)/.68,0,1),alpha=fade*fade*(3-2*fade),aspect=1672/941;
+  const cover=Math.max(viewport.w/1672,viewport.h/941),photoW=1672*cover*1.065,photoH=941*cover*1.065;
   const portrait=clamp((1.15-viewport.w/viewport.h)/.65,0,1);
   const horizontalBias=id==='ministry'?viewport.w*.07*(1-portrait):0;
   const centredLeft=(viewport.w-photoW)/2+horizontalBias;
   const focusedLeft=viewport.w*.55-profile.day.anchor[0]*photoW;
-  const finalLeft=clamp(mix(centredLeft,focusedLeft,portrait)-pointer.x*8*settle,viewport.w-photoW,0),finalTop=clamp((viewport.h-photoH)/2-pointer.y*5*settle,viewport.h-photoH,0);
-  // A wider arrival view and a gentle off-axis dolly share the same source plate.
-  // Both are cover-clamped, so neither exposes a second image at the edges.
-  const approachW=1672*cover*1.015,approachH=941*cover*1.015;
-  const side={nift:-.018,sant:.018,janitri:-.014,ministry:.012,me:.020}[id];
-  const approachLeft=clamp((viewport.w-approachW)/2+horizontalBias+side*viewport.w,viewport.w-approachW,0);
-  const approachTop=clamp((viewport.h-approachH)/2+viewport.h*.006,viewport.h-approachH,0);
-  const finalAnchor={x:approachLeft+profile.day.anchor[0]*approachW,y:approachTop+profile.day.anchor[1]*approachH};
-  const endZ=clamp(approachH*profile.day.span/(scene.h*profile.wideSpan),1.6,5.5),startZ=1+home.push;
+  const destLeft=clamp(mix(centredLeft,focusedLeft,portrait),viewport.w-photoW,0),destTop=clamp((viewport.h-photoH)/2,viewport.h-photoH,0);
+  const finalAnchor={x:destLeft+profile.day.anchor[0]*photoW,y:destTop+profile.day.anchor[1]*photoH};
+  const endZ=clamp(photoH*profile.day.span/(scene.h*profile.wideSpan),1.6,5.5),startZ=1+home.push;
   const z=Math.exp(mix(Math.log(startZ),Math.log(endZ),travel));
   const bounds=z=>({left:(.5+scene.x/scene.w)/z,right:1-((viewport.w-scene.x)/scene.w-.5)/z,top:(.5+scene.y/scene.h)/z,bottom:1-((viewport.h-scene.y)/scene.h-.5)/z});
   const endBounds=bounds(endZ);
@@ -37,12 +34,11 @@ const CameraRegistration=(()=>{
   const initial=project({x:home.focusX,y:home.focusY},startZ),dock=project(endFocus,endZ),curve=16*travel*travel*(1-travel)*(1-travel);
   const pathAnchor={x:mix(initial.x,dock.x,travel)+profile.bow[0]*viewport.w*curve,y:mix(initial.y,dock.y,travel)+profile.bow[1]*viewport.h*curve};
   const viewBounds=bounds(z);
-  const focus={x:clamp(profile.wide[0]-((pathAnchor.x-scene.x)/scene.w-.5)/z,viewBounds.left,viewBounds.right),y:clamp(profile.wide[1]-((pathAnchor.y-scene.y)/scene.h-.5)/z,viewBounds.top,viewBounds.bottom)};
-  const wideAnchor=project(focus,z),anchor={x:wideAnchor.x+(finalAnchor.x-dock.x)*settle,y:wideAnchor.y+(finalAnchor.y-dock.y)*settle};
+  const focus={x:easeEdge(profile.wide[0]-((pathAnchor.x-scene.x)/scene.w-.5)/z,viewBounds.left,viewBounds.right),y:easeEdge(profile.wide[1]-((pathAnchor.y-scene.y)/scene.h-.5)/z,viewBounds.top,viewBounds.bottom)};
+  const wideAnchor=project(focus,z);
   const span=scene.h*z*profile.wideSpan;
   const plate=theme=>{const a=profile[theme].anchor,h=span/profile[theme].span,w=h*aspect;
-   const landed={x:mix(approachLeft,finalLeft,landing),y:mix(approachTop,finalTop,landing),w:mix(approachW,photoW,landing),h:mix(approachH,photoH,landing)};
-   return{x:mix(anchor.x-a[0]*w,landed.x,settle),y:mix(anchor.y-a[1]*h,landed.y,settle),w:mix(w,landed.w,settle),h:mix(h,landed.h,settle),anchor:a};
+   return{x:wideAnchor.x-a[0]*w,y:wideAnchor.y-a[1]*h,w,h,anchor:a};
   };
   return{progress:p,alpha,phase:p<.22?'world':p<.9?'approach':'landing',wide:{push:z-1,focusX:focus.x,focusY:focus.y},wideAnchor,finalAnchor,day:plate('day'),night:plate('night')};
  }
