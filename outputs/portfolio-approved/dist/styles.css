@@ -3368,13 +3368,17 @@ body[data-page="portfolio"] .site-header, body[data-page="portfolio"] .scene-pro
  .portfolio-footer-links { gap:16px; }
 }
 
-/* College Fashion Communication uses the same cards. The craft brief stays inside its own card. */
-#portfolio-college-panel { align-items: start; }
-.college-aims-label { margin: 8px 0 0; color: var(--terracotta); font: 600 8px/1.3 var(--reading); letter-spacing: .08em; text-transform: uppercase; }
-.college-aims { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 5px; }
-.college-aims li { position: relative; padding-left: 11px; color: #6f6257; font: 11px/1.35 var(--reading); }
-.college-aims li::before { content: ""; position: absolute; left: 0; top: .5em; width: 4px; height: 4px; border-radius: 50%; background: var(--terracotta); }
-#portfolio-college-panel .jd-answer-copy { padding-bottom: 22px; }
+/* Craft cluster keeps Matera’s seated frame still, then the study sits underneath. */
+.craft-cluster-page .matera-moment-intro { min-height: 0; padding-bottom: 28px; }
+.craft-cluster-page .matera-moment-intro__avatar { position: relative; top: auto; transform: none; }
+.craft-aims-label { margin: 22px 0 0; color: var(--terracotta); font: 600 11px/1.3 var(--reading); letter-spacing: .08em; text-transform: uppercase; }
+.craft-aims { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; max-width: 640px; }
+.craft-aims li { position: relative; padding-left: 16px; color: #504940; font: 16px/1.45 var(--reading); }
+.craft-aims li::before { content: ""; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; border-radius: 50%; background: var(--terracotta); }
+.craft-flipbook { display: grid; gap: 16px; margin: 8px 0 72px; }
+.craft-flipbook__heading h2 { margin: 6px 0 0; font: 500 clamp(32px, 4vw, 48px)/1 var(--display); }
+.craft-flipbook__frame { width: 100%; height: min(78vh, 820px); min-height: 480px; border: 0; border-radius: 18px; background: #fffdfa; box-shadow: 0 14px 42px #49352212; }
+@media (max-width: 700px) { .craft-flipbook__frame { min-height: 420px; height: 70vh; } }
 
 /* Project categories stay in the page’s upper-right corner. */
 .portfolio-header .portfolio-tabs { flex:none; align-self:center; margin-left:auto; width:max-content; }

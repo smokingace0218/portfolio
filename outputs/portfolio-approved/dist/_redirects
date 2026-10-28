@@ -23,6 +23,8 @@
 /work/cms/                  /work/cms/index.html                   200
 /work/aether                /work/aether/index.html                200
 /work/aether/               /work/aether/index.html                200
+/work/craft-cluster         /work/craft-cluster/index.html         200
+/work/craft-cluster/        /work/craft-cluster/index.html         200
 
 # Any other portfolio path renders through the home shell, which reads the URL.
 /*                          /index.html                            200
