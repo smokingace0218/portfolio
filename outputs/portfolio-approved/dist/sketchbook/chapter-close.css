@@ -1,0 +1,153 @@
+/* Shared close control for every chapter and contact panel. */
+#paper .close,#nift-map .chapter-close,#snitch-game .chapter-close,#connect-card #close-connect{
+  box-sizing:border-box;width:44px;height:44px;min-width:44px;min-height:44px;
+  padding:0;display:grid;place-items:center;border:1px solid #d6b78a;border-radius:50%;
+  background:#4d3027;color:#f9ebcf;box-shadow:0 3px 12px #3b1f1b55;
+  font:400 28px/1 Georgia,serif;text-align:center;cursor:pointer;z-index:10;
+}
+#paper .close,#paper[data-kind=wanted] .close{position:sticky;float:right;top:14px;right:14px;margin:14px 14px -58px 0}
+#nift-map .map-fold .chapter-close,#nift-map .map-sheet .chapter-close{position:absolute!important;top:14px!important;right:14px!important;left:auto!important;float:none;margin:0;transform:none!important}
+#snitch-game .chapter-close,#connect-card #close-connect{position:absolute;top:14px;right:14px;margin:0}
+#paper .close:hover,#nift-map .chapter-close:hover,#snitch-game .chapter-close:hover,#connect-card #close-connect:hover{background:#684337}
+
+/* Controls and panels ease in place. Camera-driven motion stays on the frame clock. */
+@property --pin-hover{syntax:"<length>";inherits:true;initial-value:0px}
+.plate{transition:opacity .85s cubic-bezier(.4,0,.2,1)}
+#world .pin.location-marker{transition:--pin-hover .42s cubic-bezier(.22,.8,.24,1),filter .22s ease}
+#world .pin.location-marker .marker-group{transition:opacity .32s ease,transform .42s cubic-bezier(.22,.8,.24,1),visibility .32s,filter .25s ease}
+#destination-detail .arrival-foreground{transition:none}
+.utilities button,.return-world,.wizard-cta,#snitch-game .snitch-skip,#paper .close,.chapter-close,#connect-card #close-connect{transition:background-color .2s ease,color .2s ease,filter .2s ease,opacity .28s ease,scale .16s ease}
+.utilities button:active,.return-world:active,.wizard-cta:active,#snitch-game .snitch-skip:active,#paper .close:active,.chapter-close:active,#connect-card #close-connect:active{scale:.96}
+.chapter-menu{opacity:0;visibility:hidden;pointer-events:none;translate:0 8px;transition:opacity .28s ease,translate .36s cubic-bezier(.22,.8,.24,1),visibility .28s}
+.chapter-menu.is-open{opacity:1;visibility:visible;pointer-events:auto;translate:0 0}
+#connect-card[open]{animation:chapter-materialise .45s cubic-bezier(.22,.8,.24,1) both}
+#paper::backdrop,#nift-map::backdrop,#snitch-game::backdrop,#connect-card::backdrop{transition:opacity .32s ease}
+#paper.is-closing,#nift-map.is-closing,#snitch-game.is-closing,#connect-card.is-closing{animation:chapter-dissolve .32s ease both}
+#paper.is-closing::backdrop,#nift-map.is-closing::backdrop,#snitch-game.is-closing::backdrop,#connect-card.is-closing::backdrop{opacity:0}
+#snitch-game.caught .golden-snitch{transition:left .55s cubic-bezier(.22,.8,.24,1),top .55s cubic-bezier(.22,.8,.24,1),transform .55s cubic-bezier(.22,.8,.24,1),filter .25s}
+@keyframes chapter-dissolve{from{opacity:1}to{opacity:0}}
+@media(prefers-reduced-motion:reduce){
+  .plate,#world .pin.location-marker,#world .pin.location-marker .marker-group,#destination-detail .arrival-foreground,.utilities button,.return-world,.wizard-cta,#snitch-game .snitch-skip,#paper .close,.chapter-close,#connect-card #close-connect,.chapter-menu,#paper,#nift-map,#snitch-game,#connect-card,#snitch-game .golden-snitch,#paper::backdrop,#nift-map::backdrop,#snitch-game::backdrop,#connect-card::backdrop{transition:none;animation:none}
+}
+
+/* A little larger, still small enough for the cursor to meet the ball. */
+#snitch-game .golden-snitch{width:min(160px,40vw);max-width:40vw;height:auto;aspect-ratio:2/1;z-index:6;pointer-events:auto;cursor:crosshair}
+#snitch-game.caught:not(.opened) .golden-snitch,#snitch-game.opened .golden-snitch{width:min(196px,48vw);max-width:48vw;height:auto}
+#snitch-game .snitch-glow,#snitch-game .snitch-heading{pointer-events:none}
+#snitch-game .story-fireworks{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none}
+#snitch-game .snitch-heading{position:relative;z-index:2}
+#snitch-game .snitch-arena,#snitch-game .snitch-skip{z-index:2}
+#snitch-game[data-chase=dodge] .golden-snitch,#snitch-game[data-chase=invite] .golden-snitch,#snitch-game[data-chase=yield] .golden-snitch{pointer-events:none}
+#snitch-game[data-chase=offer] .golden-snitch{pointer-events:auto;cursor:pointer;filter:drop-shadow(0 0 16px #f6dc8ee0)}
+#snitch-game[data-chase=yield] .golden-snitch{filter:drop-shadow(0 0 8px #f0d49a88)}
+#snitch-game .snitch-wing{pointer-events:none}
+@media(max-width:600px){
+  #snitch-game .golden-snitch{width:min(128px,42vw);max-width:42vw}
+  #snitch-game.caught:not(.opened) .golden-snitch,#snitch-game.opened .golden-snitch{width:min(156px,50vw);max-width:50vw}
+}
+
+/* The quote uses the preloaded Harry P face so the Snitch page does not swap type or reflow. */
+#snitch-game .snitch-heading{min-height:7.6rem}
+#snitch-game .snitch-heading .snitch-quote{font:400 clamp(28px,3.4vw,40px)/1.2 'Harry P',Georgia,serif;letter-spacing:.02em;text-wrap:balance}
+#snitch-game .snitch-quote-credit,#snitch-game .snitch-instruction,#snitch-game .snitch-reveal h3{font-family:'Harry P',Georgia,serif}
+.story-trail .arrival-spell.casting{animation:arrival-wand-flick .62s cubic-bezier(.3,.15,.25,1) both}
+.arrival-spell.casting .spell-tip{animation:spell-tip-light .62s ease both}
+
+/* Scrolling a chapter should composite the page, not restyle the world behind it. */
+#paper{filter:none;box-shadow:0 18px 48px #04101888}
+#paper::backdrop,#nift-map::backdrop,#snitch-game::backdrop{backdrop-filter:none;-webkit-backdrop-filter:none;background:#06141bcc}
+#paper article,#nift-map .map-sheet,#snitch-game .snitch-reveal{contain:layout style}
+
+/* Connect arrives with the scene instead of popping in at full strength. Opacity only, so chapter placement transforms stay put. */
+@keyframes venom-arrive{from{opacity:0}to{opacity:1}}
+#connect-venom.venom-cta,.chapter-venom.venom-cta{animation:venom-arrive .65s cubic-bezier(.22,.8,.24,1) both}
+.bottom-ctas{transition:opacity .5s ease,visibility .5s linear}
+.camera-travel .bottom-ctas,body:has(#paper[open]) .bottom-ctas,body:has(#nift-map[open]) .bottom-ctas,body:has(#snitch-game[open]) .bottom-ctas{transition:opacity .32s ease,visibility 0s linear .32s}
+@media(prefers-reduced-motion:reduce){
+  #connect-venom.venom-cta,.chapter-venom.venom-cta,.bottom-ctas,.camera-travel .bottom-ctas,body:has(#paper[open]) .bottom-ctas,body:has(#nift-map[open]) .bottom-ctas,body:has(#snitch-game[open]) .bottom-ctas{animation:none;transition:none}
+}
+
+/* Replay the entrance when a chapter opens. The older rule ran at load, while the dialog was still hidden. */
+#paper,#nift-map,#snitch-game{animation:none}
+#paper[open]:not(.is-closing),#nift-map[open]:not(.is-closing),#snitch-game[open]:not(.is-closing),#connect-card[open]:not(.is-closing){animation:chapter-materialise .48s cubic-bezier(.22,.8,.24,1) both}
+#paper[open]:not(.is-closing)::backdrop,#nift-map[open]:not(.is-closing)::backdrop,#snitch-game[open]:not(.is-closing)::backdrop,#connect-card[open]:not(.is-closing)::backdrop{animation:chapter-backdrop-in .32s ease both}
+#paper.is-closing::backdrop,#nift-map.is-closing::backdrop,#snitch-game.is-closing::backdrop,#connect-card.is-closing::backdrop{animation:chapter-dissolve .32s ease both}
+@keyframes chapter-backdrop-in{from{opacity:0}to{opacity:1}}
+
+/* The Snitch grows into the catch, and the next chapter rises instead of popping. */
+#snitch-game .golden-snitch{transition:filter .28s ease,width .5s cubic-bezier(.22,.8,.24,1),max-width .5s cubic-bezier(.22,.8,.24,1)}
+#snitch-game.caught .golden-snitch{transition:left .55s cubic-bezier(.22,.8,.24,1),top .55s cubic-bezier(.22,.8,.24,1),transform .55s cubic-bezier(.22,.8,.24,1),filter .28s ease,width .55s cubic-bezier(.22,.8,.24,1),max-width .55s cubic-bezier(.22,.8,.24,1)}
+/* The catch light shares the Snitch's centre. A separate top slide used to rise first,
+   and the burst scale was shifting that centre until the animation finished. */
+#snitch-game.caught .snitch-glow,#snitch-game.opening .snitch-glow,#snitch-game.opened .snitch-glow{left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .35s ease}
+#snitch-game.caught .snitch-glow,#snitch-game.opening .snitch-glow{top:43%}
+#snitch-game.opened .snitch-glow{top:36%;transition:top .55s cubic-bezier(.22,.8,.24,1),opacity .35s ease}
+@keyframes snitch-light-burst{0%{opacity:0;transform:translate(-50%,-50%) scale(.35)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}100%{opacity:.72;transform:translate(-50%,-50%) scale(1)}}
+#snitch-game .snitch-reveal{animation:none}
+#snitch-game.opened .snitch-reveal:not([hidden]){animation:unfold .55s cubic-bezier(.22,.8,.24,1) both}
+
+/* Footprints and the ribbon finish their own fades inside the arrival, then the chapter opens. */
+.story-trail .map-step.fading{animation:footprint-fade .45s ease both}
+@keyframes footprint-fade{to{opacity:0}}
+.story-trail .mischief-banner{transition:opacity .2s ease,transform .26s cubic-bezier(.22,.8,.24,1)}
+@keyframes note-arrive{from{opacity:0}to{opacity:1}}
+#nift-map .map-notes.is-arriving h3,#nift-map .map-notes.is-arriving .map-detail{animation:note-arrive .32s ease both}
+#nift-map .map-stops button,.chapter-menu button{transition:background-color .22s ease,color .22s ease}
+
+@media(prefers-reduced-motion:reduce){
+  #paper[open]:not(.is-closing),#nift-map[open]:not(.is-closing),#snitch-game[open]:not(.is-closing),#connect-card[open]:not(.is-closing),
+  #paper[open]:not(.is-closing)::backdrop,#nift-map[open]:not(.is-closing)::backdrop,#snitch-game[open]:not(.is-closing)::backdrop,#connect-card[open]:not(.is-closing)::backdrop,
+  #paper.is-closing::backdrop,#nift-map.is-closing::backdrop,#snitch-game.is-closing::backdrop,#connect-card.is-closing::backdrop,
+  #snitch-game .golden-snitch,#snitch-game.caught .golden-snitch,#snitch-game .snitch-glow,#snitch-game.opened .snitch-reveal:not([hidden]),
+  .story-trail .map-step.fading,.story-trail .mischief-banner,#nift-map .map-notes.is-arriving h3,#nift-map .map-notes.is-arriving .map-detail,
+  #nift-map .map-stops button,.chapter-menu button{animation:none;transition:none}
+}
+
+/* The two world actions need a little air between them. The buttons overflow their cells, so the bar grows with the gap. */
+.bottom-ctas{gap:52px!important;width:min(468px,96vw)!important;max-width:468px!important}
+@media(max-width:650px){
+  .bottom-ctas{gap:28px!important;width:min(440px,96vw)!important;max-width:440px!important}
+}
+
+/* When the NIFT map opens, hard rays meet at the centre and shoot outward, then clear. */
+#nift-map.bursting{overflow:visible}
+#nift-map.bursting::before,
+#nift-map.bursting::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:180vmax;
+  height:180vmax;
+  translate:-50% -50%;
+  pointer-events:none;
+  z-index:5;
+  transform-origin:center;
+}
+#nift-map.bursting::before{
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 1.2%, #fff6c8 1.8%, transparent 7%),
+    repeating-conic-gradient(from 0deg at 50% 50%, #fff 0deg .35deg, #ffe7a4 .35deg .7deg, transparent .95deg 5deg);
+  -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 0%, #000 14%, transparent 58%);
+  mask-image:radial-gradient(circle at 50% 50%, #000 0%, #000 14%, transparent 58%);
+  filter:contrast(1.45);
+  animation:map-rays-out .7s cubic-bezier(.14,.82,.24,1) .16s both;
+}
+#nift-map.bursting::after{
+  background:repeating-conic-gradient(from 2.5deg at 50% 50%, #fff 0deg 1.2deg, #fff1c4 1.2deg 1.55deg, transparent 1.85deg 15deg);
+  -webkit-mask-image:radial-gradient(circle at 50% 50%, transparent 0 1.5%, #000 6%, #000 18%, transparent 62%);
+  mask-image:radial-gradient(circle at 50% 50%, transparent 0 1.5%, #000 6%, #000 18%, transparent 62%);
+  filter:contrast(1.5);
+  animation:map-rays-out .78s cubic-bezier(.12,.8,.2,1) .16s both;
+}
+@keyframes map-rays-out{
+  0%{opacity:0;scale:.04}
+  12%{opacity:1;scale:.18}
+  62%{opacity:1;scale:1}
+  100%{opacity:0;scale:1.22}
+}
+@media(prefers-reduced-motion:reduce){
+  #nift-map.bursting{overflow:auto}
+  #nift-map.bursting::before,
+  #nift-map.bursting::after{content:none!important;animation:none!important}
+}

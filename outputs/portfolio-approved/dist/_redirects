@@ -1,0 +1,28 @@
+# Real pages are files. These rules run before the portfolio fallback so a
+# directory is never replaced by the home shell. Static files such as
+# /sketchbook/style.css and /assets/* still win, because these rules are not forced.
+/sketchbook                 /sketchbook/index.html                 200
+/sketchbook/                /sketchbook/index.html                 200
+/contact                    /contact/index.html                    200
+/contact/                   /contact/index.html                    200
+/portfolio                  /portfolio/index.html                  200
+/portfolio/                 /portfolio/index.html                  200
+/resume                     /resume/index.html                     200
+/resume/                    /resume/index.html                     200
+/design-process             /design-process/index.html             200
+/design-process/            /design-process/index.html             200
+/experience/janitri         /experience/janitri/index.html         200
+/experience/janitri/        /experience/janitri/index.html         200
+/experience/sant-rams       /experience/sant-rams/index.html       200
+/experience/sant-rams/      /experience/sant-rams/index.html       200
+/work/jazaa                 /work/jazaa/index.html                 200
+/work/jazaa/                /work/jazaa/index.html                 200
+/work/matera                /work/matera/index.html                200
+/work/matera/               /work/matera/index.html                200
+/work/cms                   /work/cms/index.html                   200
+/work/cms/                  /work/cms/index.html                   200
+/work/aether                /work/aether/index.html                200
+/work/aether/               /work/aether/index.html                200
+
+# Any other portfolio path renders through the home shell, which reads the URL.
+/*                          /index.html                            200

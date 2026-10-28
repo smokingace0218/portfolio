@@ -1,0 +1,33 @@
+/* One registered image plane for buildings and their living effects. */
+#destination-detail{background:transparent;filter:none!important;will-change:opacity}
+#destination-detail .detail-main{object-fit:fill;object-position:center;transform-origin:0 0;mask-composite:add;will-change:transform}
+#destination-detail .detail-backdrop{object-fit:fill;transform-origin:0 0;will-change:transform}
+#destination-detail canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#destination-detail .arrival-foreground{transition:opacity .15s linear}
+
+#destination-detail .detail-backdrop{display:none}
+
+/* The same restrained vignette is present on both sides of the camera handoff. */
+#destination-detail:after{background:linear-gradient(180deg,rgba(8,19,22,.42),transparent 39%,rgba(7,17,20,.08) 72%,rgba(7,17,20,.64)),linear-gradient(90deg,rgba(9,20,20,.18),transparent 45%)}
+
+/* Flying accents remain in front of scenery and foreground foliage. */
+#magic{z-index:1}#destination-detail .arrival-foreground{z-index:0}#destination-detail canvas{z-index:1}
+
+#destination-detail canvas{transition:none}
+
+/* The scene picture is moved every frame. A transform transition trails that
+   motion, so zoom and parallax feel late and out of step with the plates. */
+.scene,
+.approaching .scene{transition:none}
+/* Titles, mist, and landmarks track the dolly. A separate fade lags, then smears. */
+.camera-travel .landmarks,
+.camera-travel .intro,
+.camera-travel .scene-caption,
+.camera-travel .mist,
+.camera-travel .near-haze{opacity:calc(1 - var(--camera-progress, 0));transition:none}
+/* A return journey still accepts the next place. Travel otherwise hides the pins. */
+#world.camera-return .landmarks{pointer-events:auto}
+#world.camera-return .pin{pointer-events:auto!important}
+@media (prefers-reduced-motion:reduce){
+  .scene,.approaching .scene,.plate,#willow,.pin,.pin:hover,.pin:focus-visible,#destination-detail,#destination-detail .arrival-foreground,#destination-detail canvas{transition:none;animation:none}
+}

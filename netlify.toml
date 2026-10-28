@@ -1,4 +1,9 @@
+# The approved release is the static snapshot. outputs/portfolio/ stays the inactive draft.
+# Do not change the command to an install or a build of that draft. There is no
+# package at the repository root, and the pages below are already the site.
 [build]
-  base = "outputs/portfolio"
-  command = "npm run build"
-  publish = "dist"
+  base = "."
+  command = "echo Approved static snapshot"
+  publish = "outputs/portfolio-approved/dist"
+
+# Route rules ship inside the publish directory (_redirects and _headers).

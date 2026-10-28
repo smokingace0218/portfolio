@@ -9,12 +9,12 @@ This repository contains the portfolio source. A live Netlify URL is not confirm
 
 ## Netlify deployment
 
-The complete website source is in [outputs/portfolio](outputs/portfolio/). Netlify is configured from the repository root with [netlify.toml](netlify.toml):
+The live site is the approved snapshot in [outputs/portfolio-approved/dist](outputs/portfolio-approved/dist/). [outputs/portfolio](outputs/portfolio/) stays the older draft. Netlify is configured from the repository root with [netlify.toml](netlify.toml):
 
-- **Base directory:** `outputs/portfolio`
-- **Build command:** `npm run build`
-- **Publish directory:** `dist` (relative to the base directory)
+- **Base directory:** `.`
+- **Build command:** `echo Approved static snapshot`
+- **Publish directory:** `outputs/portfolio-approved/dist`
 
-The build script copies the site shell, route pages, and portfolio assets into `dist`. The `_redirects` file routes client-side paths back through the portfolio shell.
+`_redirects` and `_headers` inside that folder are the route and cache rules. The first visit opens `/sketchbook/`.
 
-To publish, connect this GitHub repository to Netlify, set `main` as the production branch, and run the first production deploy. The Netlify connection and build result have not been verified yet.
+If the Netlify UI base directory is still `outputs/portfolio`, `npm run build` copies this same snapshot into `outputs/portfolio/dist` and publishes that. Leave the root command as the echo above. Do not point the build back at the old draft.

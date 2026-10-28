@@ -1,0 +1,6 @@
+# Used when the Netlify UI base directory is outputs/portfolio.
+# The root netlify.toml publishes the snapshot directly. This file is the
+# fallback: npm run build copies that same snapshot into dist.
+[build]
+  command = "npm run build"
+  publish = "dist"

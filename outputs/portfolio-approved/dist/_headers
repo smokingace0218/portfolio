@@ -1,0 +1,28 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# HTML and the unhashed scripts must update on the next publish.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.css
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sketchbook/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sketchbook/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sketchbook/*.css
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/*
+  Cache-Control: public, max-age=86400
+
+/sketchbook/assets/*
+  Cache-Control: public, max-age=86400
