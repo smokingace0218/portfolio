@@ -234,27 +234,27 @@
 /* Phone cover: the world fills the screen and opens on the places, instead of a left-hand crop with the camera switched off. Desktop rules above 700px are unchanged. */
 @media(max-width:700px){
   #world{min-height:100svh!important;height:100svh}
-  .scene-viewport{overflow:hidden!important;touch-action:none}
+  .scene-viewport{overflow:hidden!important;touch-action:manipulation}
   .scene,.approaching .scene{
-    width:calc(100svh * 1.776833)!important;
-    height:100svh!important;
-    left:0!important;
-    top:0!important;
+    width:min(100%,calc(72svh * 1.776833))!important;
+    height:min(calc(100vw / 1.776833),72svh)!important;
+    left:50%!important;
+    top:46%!important;
     min-width:0!important;
-    transform:translate3d(var(--phone-x,-62%),0,0)!important;
+    transform:translate(-50%,-50%)!important;
   }
   #world>header .utilities{left:12px!important;right:auto!important;transform:none!important;top:46px!important;max-width:calc(100vw - 108px)}
   .intro{
-    top:108px!important;
-    left:14px!important;
-    right:auto!important;
-    max-width:min(196px,52vw)!important;
+    top:82px!important;
+    left:16px!important;
+    right:16px!important;
+    max-width:none!important;
     margin:0!important;
     padding:0!important;
     background:none!important;
   }
-  .intro h1{font-size:30px!important;line-height:.96}
-  .intro-copy{font-size:12.5px!important;line-height:1.35}
+  .intro h1{font-size:clamp(30px,8vw,40px)!important;line-height:.96}
+  .intro-copy,.intro-about{font-size:13px!important;line-height:1.35;max-width:34ch}
   .landmarks{z-index:8}
   .instruction{
     left:50%!important;
@@ -273,6 +273,11 @@
     z-index:13;
   }
   .bottom-ctas{bottom:max(8px,env(safe-area-inset-bottom))!important;z-index:14}
+  #world .pin.location-marker{width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important}
+  #world .pin.location-marker .location-drop{width:44px;height:52px}
+  #world .pin.location-marker .location-drop svg{width:36px;height:46px}
+  .utilities button{min-width:48px;min-height:48px}
+  .wizard-cta{min-width:148px!important;min-height:56px!important;font-size:18px!important;padding:14px 18px!important}
   footer .scene-caption,footer .hint{display:none!important}
   #world .pin.location-marker .location-drop{position:relative}
   #world .pin.location-marker .location-drop::after{
@@ -309,5 +314,71 @@
   .wizard-cta{min-width:160px!important;min-height:48px!important;font-size:16px!important;padding:10px 14px!important}
   .instruction{display:none!important}
   footer .scene-caption,footer .hint{display:none!important}
-  .scene,.approaching .scene{transform:translate(-50%,calc(-50% + 28px)) translate(var(--mx,0px),var(--my,0px)) scale(1.015)!important}
+  .wizard-cta{min-width:160px!important;min-height:52px!important}
+  #connect-venom .venom-cta__btn{min-width:176px!important;min-height:52px!important}
+}
+
+/* Phone and tablet: the whole painting stays inside the screen, taps are easier to hit, and the owl button does not wear the white studio floor. */
+@media(max-width:1100px){
+  .scene-viewport{overflow:hidden!important}
+  .scene,.approaching .scene{
+    width:min(100%,calc(72svh * 1.776833))!important;
+    height:min(calc(100vw / 1.776833),72svh)!important;
+    left:50%!important;
+    top:46%!important;
+    min-width:0!important;
+    transform:translate(-50%,-50%)!important;
+  }
+  #world .pin.location-marker{width:56px!important;height:56px!important;min-width:56px!important;min-height:56px!important}
+  .utilities button{min-width:48px;min-height:48px}
+  .wizard-cta{min-height:56px!important;min-width:164px!important}
+  #connect-venom.venom-cta{
+    width:300px!important;height:150px!important;
+    transform:translate(-50%,-50%) scale(.8)!important;
+    background:transparent!important;--venom-feather:0px;
+  }
+  .bottom-ctas,.bottom-ctas .connect-cta-shell,.chapter-connect{background:transparent!important;box-shadow:none!important;border:0!important}
+  .chapter-venom.venom-cta{background:transparent!important}
+  #connect-venom .venom-cta__stage,.chapter-venom .venom-cta__stage{
+    -webkit-mask-image:radial-gradient(ellipse 78% 58% at 50% 52%, #000 0 48%, transparent 70%)!important;
+    mask-image:radial-gradient(ellipse 78% 58% at 50% 52%, #000 0 48%, transparent 70%)!important;
+    -webkit-mask-composite:source-over!important;
+    mask-composite:add!important;
+  }
+  footer .scene-caption,footer .hint{display:none!important}
+}
+@media(max-width:1100px) and (min-height:700px){
+  .intro{top:84px!important;left:18px!important;right:18px!important;max-width:min(520px,92vw)!important}
+  .scene,.approaching .scene{
+    top:268px!important;left:0!important;width:100%!important;
+    height:calc(100vw / 1.776833)!important;transform:none!important;
+  }
+  .instruction{
+    top:calc(268px + (100vw / 1.776833) + 12px)!important;
+    bottom:auto!important;
+  }
+  .bottom-ctas{
+    top:calc(268px + (100vw / 1.776833) + 44px)!important;
+    bottom:auto!important;height:108px!important;
+    width:min(468px,calc(100vw - 24px))!important;max-width:468px!important;
+    left:50%!important;right:auto!important;transform:translateX(-50%)!important;
+  }
+}
+@media(max-width:700px) and (min-height:700px){
+  .intro{top:108px!important}
+  .scene,.approaching .scene{top:312px!important}
+  .instruction{top:calc(312px + (100vw / 1.776833) + 8px)!important}
+  .bottom-ctas{top:calc(312px + (100vw / 1.776833) + 36px)!important;height:96px!important}
+  #world .pin.location-marker.ministry .location-drop::after{content:"Next";left:auto;right:0;top:auto;bottom:calc(100% + 4px);transform:none}
+  #world .pin.location-marker.janitri .location-drop::after{top:-2px}
+  #world .pin.location-marker.sant .location-drop::after{top:30px}
+  #world .pin.location-marker.platform .location-drop::after{left:50%;right:auto;top:auto;bottom:-16px;transform:translateX(-50%)}
+}
+@media(min-width:701px) and (max-width:1100px) and (min-height:700px){
+  .scene,.approaching .scene{top:312px!important}
+  .instruction{top:calc(312px + (100vw / 1.776833) + 12px)!important}
+  .bottom-ctas{top:calc(312px + (100vw / 1.776833) + 48px)!important}
+}
+@media(max-width:380px){
+  #connect-venom.venom-cta{transform:translate(-50%,-50%) scale(.72)!important}
 }
