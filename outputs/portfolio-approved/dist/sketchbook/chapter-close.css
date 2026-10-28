@@ -108,6 +108,13 @@
 #destination-detail .detail-night-image{
   -webkit-mask-image:none!important;
   mask-image:none!important;
+  clip-path:none!important;
+}
+/* The garden strips were a second picture with straight clipped edges. */
+#destination-detail .arrival-foreground{
+  opacity:0!important;
+  visibility:hidden!important;
+  clip-path:none!important;
 }
 /* Pins, title and actions appear together once the night plate is ready. */
 #world:not(.is-ready) .landmarks,
