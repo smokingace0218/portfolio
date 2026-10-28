@@ -269,7 +269,8 @@ html.is-landscape body{overflow:auto!important}
     bottom:auto!important;
     min-width:0!important;
     transform:none!important;
-    left:min(0px,calc(100vw - 36px - .90 * max(100vw,100svh * 1.776833)))!important;
+    /* Phones are already as wide as the painting. Tablets are taller, so the cover grows past the right edge; park that edge on the screen. */
+    left:min(0px,calc(100vw - max(100vw,100svh * 1.776833)))!important;
     top:clamp(calc(56px - .16 * max(100svh,100vw / 1.776833)),calc(100svh - 16px - .74 * max(100svh,100vw / 1.776833)),0px)!important;
   }
   #world>header .utilities{left:auto!important;right:max(12px,18vw)!important;top:8px!important;transform:none!important;width:max-content;max-width:calc(100vw - 220px)!important;overflow:visible}
@@ -362,4 +363,14 @@ html.is-landscape body{overflow:auto!important}
   }
   #paper .chapter-venom.venom-cta,#nift-map .chapter-venom.venom-cta{min-height:0!important;height:110px!important}
  }
+}
+/* iPad landscape is wider than the phone rules and squarer than a desktop, so a centred cover cuts off the right-hand places. Keep the right edge of the painting on the screen. A 1440-wide desktop is wider than 3:2 and stays centred. */
+@media(min-width:1101px) and (max-aspect-ratio:3/2){
+  .scene,.approaching .scene{
+    left:auto!important;
+    right:0!important;
+    top:50%!important;
+    transform-origin:right center!important;
+    transform:translate(var(--mx,0px),calc(-50% + var(--my,0px))) scale(1.015)!important;
+  }
 }
