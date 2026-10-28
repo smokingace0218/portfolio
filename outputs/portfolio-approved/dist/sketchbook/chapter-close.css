@@ -230,3 +230,84 @@
 #nift-map.bursting::after{z-index:0!important}
 #nift-map .map-fold,
 #nift-map .map-sheet{position:relative;z-index:2}
+
+/* Phone cover: the world fills the screen and opens on the places, instead of a left-hand crop with the camera switched off. Desktop rules above 700px are unchanged. */
+@media(max-width:700px){
+  #world{min-height:100svh!important;height:100svh}
+  .scene-viewport{overflow:hidden!important;touch-action:none}
+  .scene,.approaching .scene{
+    width:calc(100svh * 1.776833)!important;
+    height:100svh!important;
+    left:0!important;
+    top:0!important;
+    min-width:0!important;
+    transform:translate3d(var(--phone-x,-62%),0,0)!important;
+  }
+  #world>header .utilities{left:12px!important;right:auto!important;transform:none!important;top:46px!important;max-width:calc(100vw - 108px)}
+  .intro{
+    top:108px!important;
+    left:14px!important;
+    right:auto!important;
+    max-width:min(196px,52vw)!important;
+    margin:0!important;
+    padding:0!important;
+    background:none!important;
+  }
+  .intro h1{font-size:30px!important;line-height:.96}
+  .intro-copy{font-size:12.5px!important;line-height:1.35}
+  .landmarks{z-index:8}
+  .instruction{
+    left:50%!important;
+    right:auto!important;
+    bottom:112px!important;
+    transform:translateX(-50%);
+    width:max-content;
+    max-width:92vw;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#102226d4;
+    color:#f6ead2;
+    font-size:12px;
+    letter-spacing:.01em;
+    text-align:center;
+    z-index:13;
+  }
+  .bottom-ctas{bottom:max(8px,env(safe-area-inset-bottom))!important;z-index:14}
+  footer .scene-caption,footer .hint{display:none!important}
+  #world .pin.location-marker .location-drop{position:relative}
+  #world .pin.location-marker .location-drop::after{
+    position:absolute;
+    right:calc(100% + 8px);
+    top:9px;
+    padding:3px 7px;
+    border-radius:999px;
+    background:#102226d0;
+    font:600 12px/1.15 Georgia,serif;
+    letter-spacing:.03em;
+    color:#fff6df;
+    white-space:nowrap;
+    pointer-events:none;
+  }
+  #world .pin.location-marker.nift .location-drop::after{content:"NIFT";left:50%;right:auto;top:auto;bottom:calc(100% + 6px);transform:translateX(-50%)}
+  #world .pin.location-marker.sant .location-drop::after{content:"Sant Ram’s"}
+  #world .pin.location-marker.janitri .location-drop::after{content:"Janitri"}
+  #world .pin.location-marker.ministry .location-drop::after{content:"Next";top:44px;right:2px}
+  #world .pin.location-marker.platform .location-drop::after{content:"Platform 9¾"}
+  #paper,#nift-map,#snitch-game{width:min(100vw - 16px,740px);max-height:calc(100svh - 16px)}
+  #paper .chapter-cta-dock,#nift-map .chapter-cta-dock{height:auto;min-height:0;padding-bottom:8px}
+}
+
+/* Short landscape phones still use the desktop frame, with the title and actions kept out of the places. */
+@media(max-height:520px) and (min-width:701px){
+  .intro{top:58px!important;max-width:220px!important}
+  .intro h1{font-size:26px!important;line-height:.96}
+  .intro-about{display:none}
+  .bottom-ctas{left:8px!important;right:auto!important;transform:none!important;height:96px!important;bottom:0!important;width:min(420px,64vw)!important;max-width:420px!important;gap:0!important;overflow:visible!important}
+  .bottom-ctas .connect-cta-shell,.bottom-ctas .spider-cta-shell{height:96px!important;overflow:visible!important}
+  #connect-venom.venom-cta{width:310px!important;height:180px!important;transform:translate(-50%,-50%) scale(.62)!important}
+  #designer-spider{width:190px!important;height:120px!important;min-height:0!important;transform:translate(-50%,-50%) scale(.92)!important}
+  .wizard-cta{min-width:160px!important;min-height:48px!important;font-size:16px!important;padding:10px 14px!important}
+  .instruction{display:none!important}
+  footer .scene-caption,footer .hint{display:none!important}
+  .scene,.approaching .scene{transform:translate(-50%,calc(-50% + 28px)) translate(var(--mx,0px),var(--my,0px)) scale(1.015)!important}
+}
