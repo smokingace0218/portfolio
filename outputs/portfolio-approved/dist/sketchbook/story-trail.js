@@ -1,7 +1,7 @@
 function createStoryTrail(world){
  const layer=document.createElement('div');layer.className='story-trail';layer.setAttribute('aria-hidden','true');world.append(layer);
  const banner=document.createElement('div');banner.className='mischief-banner';banner.innerHTML='<span></span><span></span>';layer.append(banner);
- const wand=document.createElement('div');wand.className='arrival-spell';wand.innerHTML='<img src="assets/wand-cast-0.svg" alt=""><span class="spell-tip"></span>';layer.append(wand);
+ const wand=document.createElement('div');wand.className='arrival-spell';wand.innerHTML='<img src="assets/wand-cast-0.svg" alt=""><span class="spell-tip"></span>';layer.append(wand);const hand=wand.querySelector('img');const handFrames=['assets/wand-cast-0.svg','assets/wand-cast-1.svg','assets/wand-cast-2.svg','assets/wand-cast-3.svg','assets/wand-cast-4.svg','assets/wand-cast-3.svg','assets/wand-cast-1.svg'];let handTimer=0;function placeHand(){const w=world.clientWidth,h=world.clientHeight,box=Math.round(Math.min(188,Math.max(132,Math.min(w,h)*.42))),left=Math.round(Math.min(Math.max(16,w*.18),Math.max(16,w-box-16))),top=Math.round(Math.min(Math.max(56,h*.22),Math.max(56,h-box-20)));wand.style.margin='0';wand.style.width=box+'px';wand.style.height=box+'px';wand.style.left=left+'px';wand.style.top=top+'px'}function playHand(){clearTimeout(handTimer);placeHand();wand.classList.add('casting');let frame=0;const step=()=>{if(!wand.classList.contains('casting'))return;hand.src=handFrames[frame%handFrames.length];frame++;handTimer=setTimeout(step,120)};step()}function stopHand(){clearTimeout(handTimer);handTimer=0;wand.classList.remove('casting');hand.src=handFrames[0]}
  const status=document.createElement('div');status.className='arrival-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.hidden=true;world.append(status);
  let pointer={x:.5,y:.55};world.addEventListener('pointerdown',e=>{const r=world.getBoundingClientRect();pointer={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}},{passive:true});
  let sequenceRAF=0,sequenceLast=0,sequenceTime=0,stages=[];
@@ -19,17 +19,17 @@ function createStoryTrail(world){
  if(running||particles.length||rockets.length)raf=requestAnimationFrame(frame);else{raf=0;c.clearRect(0,0,w,h)}}
  function place(host){(host||world).append(fireworks);fireworks.classList.toggle('in-dialog',!!host)}
  function fire(on){const starting=on&&!running;running=on&&!reduced();if(!running)rockets=[];if(running&&starting){burst(innerWidth*.26,innerHeight*.23);launch();next=elapsed+1.5}if(running&&!raf){last=performance.now();raf=requestAnimationFrame(frame)}}
- function cancel(){token++;cancelAnimationFrame(sequenceRAF);sequenceRAF=0;stages=[];layer.querySelectorAll('.map-step').forEach(el=>el.remove());layer.dataset.phase='idle';banner.classList.remove('visible');wand.classList.remove('casting');status.hidden=true;document.body.classList.remove('casting-spell');document.body.style.removeProperty('--spell-cursor');fire(false)}
+ function cancel(){token++;cancelAnimationFrame(sequenceRAF);sequenceRAF=0;stages=[];layer.querySelectorAll('.map-step').forEach(el=>el.remove());layer.dataset.phase='idle';banner.classList.remove('visible');stopHand();status.hidden=true;document.body.classList.remove('casting-spell');document.body.style.removeProperty('--spell-cursor');fire(false)}
  function arrive(id,reveal){cancel();const mine=token;if(reduced()){reveal();return}const w=world.clientWidth,h=world.clientHeight;const banners={nift:['I solemnly swear','I am up to no good'],sant:['A little craft','A whole new world'],janitri:['Listening first','Designing for care'],me:['Mischief','Managed']};const words=banners[id]||['Mischief','Managed'];banner.querySelectorAll('span').forEach((el,i)=>el.textContent=words[i]);status.hidden=false;status.textContent='Follow the footsteps.';layer.dataset.phase='footsteps';
  const schedule=(at,run)=>stages.push({at,run:()=>{if(token===mine)run()}});
  // Alternating prints settle fully before the wand begins. All times are milliseconds after arrival.
  for(let i=0;i<6;i++){const q=i/5,v=1-q,side=i%2?-1:1;const x=(v*v*.10+2*v*q*.30+q*q*.23)*w+side*(w<650?15:23),y=(v*v*.82+2*v*q*.58+q*q*.30)*h;const dx=2*v*(.30-.10)+2*q*(.23-.30),dy=2*v*(.58-.82)+2*q*(.30-.58),angle=Math.atan2(dx*w,-dy*h)*180/Math.PI;const step=document.createElement('span');step.className='map-step';step.dataset.tone=i%2?'beige':'orange';step.style.cssText=`left:${x}px;top:${y}px;--step-scale:${1.1-q*.20};--step-side:${side};--step-turn:${angle}deg`;layer.append(step);schedule(i*80,()=>step.classList.add('visible'))}
- schedule(460,()=>{layer.dataset.phase='spell';status.textContent='A little magic…';wand.style.left=Math.max(100,w*.23)+'px';wand.style.top=(h*.31)+'px';wand.classList.add('casting');worldSound.paper()});
- schedule(1120,()=>{wand.classList.remove('casting');layer.dataset.phase='fireworks';status.textContent='Your chapter is about to unfold.';fire(true);layer.querySelectorAll('.map-step').forEach(el=>el.classList.add('fading'))});
- schedule(1240,()=>{layer.dataset.phase='banner';status.hidden=true;banner.querySelectorAll('span').forEach((el,i)=>{el.textContent=words[i]});banner.classList.add('visible')});
- // Long enough to read both lines once, then the chapter follows the fade.
- schedule(3640,()=>banner.classList.remove('visible'));
- schedule(4020,()=>{layer.dataset.phase='chapter';status.hidden=true;fire(false);layer.querySelectorAll('.map-step').forEach(el=>el.remove());reveal()});
+ // Footprints settle, then the hand casts, then the fireworks, then the chapter.
+ schedule(760,()=>{layer.dataset.phase='spell';status.textContent='A little magic…';playHand();worldSound.paper()});
+ schedule(1720,()=>{stopHand();layer.dataset.phase='fireworks';status.textContent='Your chapter is about to unfold.';fire(true);layer.querySelectorAll('.map-step').forEach(el=>el.classList.add('fading'))});
+ schedule(1880,()=>{layer.dataset.phase='banner';status.hidden=true;banner.querySelectorAll('span').forEach((el,i)=>{el.textContent=words[i]});banner.classList.add('visible')});
+ schedule(4280,()=>banner.classList.remove('visible'));
+ schedule(4660,()=>{layer.dataset.phase='chapter';status.hidden=true;fire(false);layer.querySelectorAll('.map-step').forEach(el=>el.remove());reveal()});
  sequenceTime=0;sequenceLast=performance.now();sequenceRAF=requestAnimationFrame(sequenceFrame);
  }
  return{arrive,cancel,fire,place};
