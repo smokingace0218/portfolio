@@ -1,3 +1,5 @@
+/* The picture element only chooses the file. The painting itself stays the plate. */
+picture.plate-slot{display:contents}
 /* Shared close control for every chapter and contact panel. */
 #paper .close,#nift-map .chapter-close,#snitch-game .chapter-close,#connect-card #close-connect{
   box-sizing:border-box;width:44px;height:44px;min-width:44px;min-height:44px;
