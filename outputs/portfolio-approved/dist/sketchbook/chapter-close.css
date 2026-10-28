@@ -175,8 +175,7 @@
   #nift-map.bursting::after{content:none!important;animation:none!important}
 }
 
-/* The glimmer sits on the ball. A wide box left a flat rectangle with hard edges. */
-#snitch-game .golden-snitch{background:none;overflow:visible}
+/* Soften only the highlight. Image position stays with the original wing and ball layout. */
 #snitch-game:not(.caught) .golden-snitch::before{
   content:"";
   position:absolute;
@@ -196,7 +195,6 @@
   z-index:0;
   animation:snitch-glimmer 2.4s ease-in-out infinite;
 }
-#snitch-game .golden-snitch img{position:relative;z-index:1}
 #snitch-game .snitch-glow{
   border-radius:50%!important;
   overflow:visible;
