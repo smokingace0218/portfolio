@@ -7,7 +7,8 @@ function paintLivingAccents(c,t,w,h,night,id){
 }
 const magicalFlightImages={};
 function whenScenePaints(fn){let started=false;const go=()=>{if(started)return;started=true;if('requestIdleCallback' in window)requestIdleCallback(fn,{timeout:900});else setTimeout(fn,500)};const plate=document.querySelector('.plate.night');if(plate&&plate.complete&&plate.naturalWidth)go();else if(plate)plate.addEventListener('load',go,{once:true});setTimeout(go,1800)}
-function loadFlightSprites(){['dragon','wizard','buckbeak','dragon-down','buckbeak-down','dementor'].forEach((name,i)=>{setTimeout(()=>{const im=new Image();im.decoding='async';im.fetchPriority='low';im.src='assets/'+name+'-flight.webp';magicalFlightImages[name]=im},i<2?0:i*220)})}
+function loadFlightSprite(name,waited){if(magicalFlightImages[name])return;if(window.__chapterBusy&&(waited||0)<8){setTimeout(()=>loadFlightSprite(name,(waited||0)+1),400);return}const im=new Image();im.decoding='async';im.fetchPriority='low';im.src='assets/'+name+'-flight.webp';magicalFlightImages[name]=im}
+function loadFlightSprites(){['dragon','wizard','buckbeak','dragon-down','buckbeak-down','dementor'].forEach((name,i)=>setTimeout(()=>loadFlightSprite(name,0),i<2?0:i*220))}
 whenScenePaints(loadFlightSprites);
 function paintSkyMagic(c,t,w,h,night,id){c.save();c.beginPath();[[.32,0],[.80,0],[.77,.10],[.65,.14],[.57,.18],[.48,.16],[.40,.18],[.32,.13]].forEach(([x,y],i)=>i?c.lineTo(x*w,y*h):c.moveTo(x*w,y*h));c.closePath();c.clip();
  if(night){c.restore();return;
