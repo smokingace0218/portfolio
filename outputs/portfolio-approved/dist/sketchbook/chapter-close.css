@@ -255,6 +255,14 @@ html.is-portrait .turn-landscape{display:flex;position:fixed;inset:0;z-index:200
 html.is-portrait body{overflow:hidden}
 html.is-landscape .turn-landscape{display:none!important}
 html.is-landscape body{overflow:auto!important}
+/* iPad portrait, even when the script has not labelled the page yet. A landscape iPad carries is-landscape and this stays hidden. */
+@media (orientation:portrait) and (any-pointer:coarse) and (max-width:1400px){
+  html:not(.is-landscape) .turn-landscape{display:flex;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;padding:28px;background:#10201c;text-align:center}
+  html:not(.is-landscape) body{overflow:hidden}
+}
+@media (any-pointer:coarse){
+  #paper[data-kind=wanted] .chapter-venom.venom-cta{background:#e4cba0!important}
+}
 
 @media(max-width:1100px){
  html.is-landscape{
@@ -331,7 +339,14 @@ html.is-landscape body{overflow:auto!important}
      in the gutter. Fill the width instead, keep the top of the painting
      (Next, the title) on screen, and let the CTAs sit on the bottom edge. */
   @media(max-height:640px) and (min-aspect-ratio:16/9){
-    #world,.scene-viewport{overflow:hidden!important}
+    #world{
+      height:max(100svh,calc(100vw / 1.776833))!important;
+      min-height:max(100svh,calc(100vw / 1.776833))!important;
+      overflow:visible!important;
+    }
+    .scene-viewport{overflow:visible!important;touch-action:pan-y}
+    .scene,.approaching .scene{top:0!important;height:100%!important;width:100%!important}
+    html.is-landscape body{overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch}
     .bottom-ctas{bottom:8px!important}
     #world>header{top:8px!important;left:12px!important;right:12px!important;width:auto!important}
     .intro{top:56px!important;left:14px!important;max-width:min(210px,36vw)!important}
