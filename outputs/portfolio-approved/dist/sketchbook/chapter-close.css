@@ -236,7 +236,7 @@ picture.plate-slot{display:contents}
 #nift-map .map-fold,
 #nift-map .map-sheet{position:relative;z-index:2}
 
-/* Phones and tablets use the landscape cover. Held upright, they only ask to turn sideways. Desktop widths stay on the rules above. */
+/* Phones and tablets use the landscape cover. Held upright, they only ask to turn sideways. A desktop never gets the portrait class, so this stays hidden there even in a tall window. */
 .turn-landscape{display:none}
 .turn-landscape-card{display:flex;flex-direction:column;align-items:center;gap:8px;max-width:280px}
 .turn-landscape p{margin:0;font-family:Georgia,serif;color:#f6ead2}
@@ -250,10 +250,9 @@ picture.plate-slot{display:contents}
 }
 @keyframes turn-tilt{0%,18%{transform:rotate(0)}42%,68%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
 
-@media(max-width:1100px){
-  html.is-portrait .turn-landscape{display:flex;position:fixed;inset:0;z-index:80;align-items:center;justify-content:center;padding:28px;background:#10201c;text-align:center}
-  html.is-portrait body{overflow:hidden}
-}
+/* Portrait covers every tablet width, including an iPad whose layout viewport is wider than a phone. Landscape always clears it. */
+html.is-portrait .turn-landscape{display:flex;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;padding:28px;background:#10201c;text-align:center}
+html.is-portrait body{overflow:hidden}
 html.is-landscape .turn-landscape{display:none!important}
 html.is-landscape body{overflow:auto!important}
 
@@ -365,7 +364,7 @@ html.is-landscape body{overflow:auto!important}
  }
 }
 /* iPad landscape is wider than the phone rules and squarer than a desktop, so a centred cover cuts off the right-hand places. Keep the right edge of the painting on the screen. A 1440-wide desktop is wider than 3:2 and stays centred. */
-@media(min-width:1101px) and (max-aspect-ratio:3/2){
+@media(min-width:1101px) and (max-aspect-ratio:31/20){
   .scene,.approaching .scene{
     left:auto!important;
     right:0!important;
