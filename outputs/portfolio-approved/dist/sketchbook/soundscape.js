@@ -20,18 +20,30 @@ const worldSound=(()=>{
  }
  function context(){
   if(ctx)return ctx;
-  const AC=window.AudioContext||window.webkitAudioContext;
-  if(!AC)return null;
-  ctx=new AC();
-  master=ctx.createGain();
-  master.gain.value=1;
-  master.connect(ctx.destination);
+  const existing=window.__worldAudio;
+  if(existing&&existing.state!=='closed')ctx=existing;
+  else{
+   const AC=window.AudioContext||window.webkitAudioContext;
+   if(!AC)return null;
+   ctx=new AC();
+   window.__worldAudio=ctx;
+  }
+  if(!master){
+   master=ctx.createGain();
+   master.gain.value=1;
+   master.connect(ctx.destination);
+  }
   return ctx;
  }
+ function awake(){return !!(ctx&&ctx.state==='running')}
  function poke(){
   const audioCtx=context();
-  if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});
-  return !!(audioCtx&&audioCtx.state==='running');
+  if(!audioCtx)return Promise.resolve(false);
+  if(audioCtx.state==='running')return Promise.resolve(true);
+  const pending=audioCtx.resume();
+  const done=()=>audioCtx.state==='running';
+  if(pending&&typeof pending.then==='function')return pending.then(done,()=>false);
+  return Promise.resolve(done());
  }
  function stitch(buffer){
   const rate=buffer.sampleRate,channels=buffer.numberOfChannels,n=buffer.length;
@@ -156,7 +168,7 @@ const worldSound=(()=>{
   audio.addEventListener('playing',()=>{if(muted||document.hidden||!allowed(audio))halt(audio)});
  }
  function attach(audio){
-  if(poke())return ensureGain(audio);
+  if(awake())return ensureGain(audio);
   audio.dataset.route='direct';
   return null;
  }
@@ -230,7 +242,7 @@ const worldSound=(()=>{
   });
  }
  async function begin(audio){
-  if(poke()){
+  if(await poke()){
    try{
     const buffer=await seamless(audio.dataset.track);
     const gain=ensureGain(audio);
@@ -276,7 +288,7 @@ const worldSound=(()=>{
   }
   const started=outcome==='ok'||outcome==='playing'||(outcome==='timeout'&&sounding(next));
   if(!started||!sounding(next)){
-   blocked=true;
+   blocked=!(ctx&&ctx.state==='running');
    if(next!==active&&next!==fading)halt(next);
    if(pending===next)pending=null;
    if(starting===mineId)starting=null;
@@ -337,7 +349,7 @@ const worldSound=(()=>{
   },
   preload(id){
    if(!requestedScoreTracks[id])return;
-   if(poke())seamless(id).catch(()=>{});
+   if(awake())seamless(id).catch(()=>{});
    if(cache[id]||library[id]||active?.dataset.track===id||fading?.dataset.track===id||pending?.dataset.track===id)return;
    const audio=new Audio();
    audio.preload='none';audio.loop=true;audio.volume=0;audio.dataset.track=id;

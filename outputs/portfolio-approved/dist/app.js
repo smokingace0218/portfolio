@@ -595,20 +595,39 @@ function holdStoryAudioOpen() {
 }
 // Play-and-pause during a real gesture so a later branch can start the same
 // clip without asking for another tap. Muted intro video stays untouched.
+function adoptPrime(selector, id) {
+  const prime = document.getElementById(id);
+  if (!prime) return document.querySelector(selector);
+  const fresh = [...document.querySelectorAll(selector)].find(node => node !== prime);
+  if (fresh) {
+    prime.className = fresh.className;
+    fresh.replaceWith(prime);
+  }
+  prime.removeAttribute('id');
+  return prime;
+}
+// A clip started during the entry gesture has to keep playing, silently.
+// Pausing it makes the next branch ask for another tap.
 function primeStoryMedia(root = document) {
   const nodes = root instanceof HTMLMediaElement ? [root] : [...root.querySelectorAll('video.think-film-video, audio.intro-narration-audio, audio.gateway-hello-audio')];
   nodes.forEach(media => {
-    if (!(media instanceof HTMLMediaElement) || media.dataset.storyPrimed === 'true') return;
-    if (!media.paused && !media.ended) { media.dataset.storyPrimed = 'true'; return; }
+    if (!(media instanceof HTMLMediaElement)) return;
+    if (media.dataset.storyLive === 'true' && !media.paused && !media.ended) return;
+    if (navigator.userActivation && !navigator.userActivation.isActive) return;
+    media.dataset.storyPrimed = 'pending';
+    const markLive = () => {
+      media.dataset.storyLive = 'true';
+      media.dataset.storyPrimed = 'true';
+      if (media.dataset.storySpeak !== 'true') media.volume = 0;
+    };
+    if (!media.paused && !media.ended) { markLive(); return; }
+    media.loop = true;
+    media.volume = 0;
+    if (media.classList.contains('think-film-video') || media.classList.contains('intro-narration-audio') || media.classList.contains('gateway-hello-audio')) media.muted = false;
     let pending;
     try { pending = media.play(); } catch { return; }
-    media.dataset.storyPrimed = 'true';
-    pending?.then?.(() => {
-      if (media.dataset.storyHold === 'true') return;
-      media.pause();
-      try { if (media.currentTime < .4) media.currentTime = 0; } catch {}
-    }).catch?.(error => {
-      if (error?.name !== 'AbortError') delete media.dataset.storyPrimed;
+    pending?.then?.(markLive).catch?.(error => {
+      if (error?.name !== 'AbortError') media.loop = false;
     });
   });
 }
@@ -950,6 +969,8 @@ function renderHome() {
     </section>
 
     </div>`;
+  adoptPrime('audio.gateway-hello-audio', 'story-hello-prime');
+  adoptPrime('audio.intro-narration-audio', 'story-narration-prime');
   bindGateway();
   restoreJourneyPosition();
 }
@@ -991,9 +1012,11 @@ function bindGateway() {
 
   const playHello = () => {
     if (!helloAudio) return;
+    helloAudio.dataset.storySpeak = 'true';
+    helloAudio.loop = false;
+    helloAudio.muted = false;
     helloAudio.volume = 1;
-    if (!helloAudio.paused && !helloAudio.ended) return;
-    helloAudio.currentTime = 0;
+    try { helloAudio.currentTime = 0; } catch {}
     helloAudio.play().catch(() => {});
   };
   const clearMotionTimers = () => {
@@ -1031,8 +1054,14 @@ function bindGateway() {
     if (gateway.querySelector('.gateway-link:hover, .gateway-invite:hover, .gateway-link:focus-visible, .gateway-invite:focus-visible')) return;
     clearMotionTimers();
     if (helloAudio) {
-      helloAudio.pause();
-      helloAudio.currentTime = 0;
+      if (helloAudio.dataset.storyLive === 'true') {
+        helloAudio.dataset.storySpeak = 'false';
+        helloAudio.loop = true;
+        helloAudio.volume = 0;
+      } else {
+        helloAudio.pause();
+        try { helloAudio.currentTime = 0; } catch {}
+      }
     }
     activeIntent = '';
     delete gateway.dataset.intent;
@@ -1174,6 +1203,15 @@ function startIntroAvatar() {
     skipButton.hidden = true;
     guideIntroContinue();
   };
+  const hushNarration = () => {
+    if (narration.dataset.storyLive === 'true' || narration.dataset.storyPrimed === 'pending') {
+      narration.dataset.storySpeak = 'false';
+      narration.loop = true;
+      narration.volume = 0;
+      return;
+    }
+    narration.pause();
+  };
   const stop = () => {
     generation += 1;
     preparing = false;
@@ -1181,7 +1219,7 @@ function startIntroAvatar() {
     clearTimeout(narrationStartTimer);
     cancelAnimationFrame(cueFrame);
     video.pause();
-    narration.pause();
+    hushNarration();
   };
   skipButton.addEventListener('click', () => {
     if (finished) return;
@@ -1203,7 +1241,7 @@ function startIntroAvatar() {
     narrationUnavailable = false;
     const run = ++generation;
     video.pause();
-    narration.pause();
+    hushNarration();
     if (!hasStarted) {
       video.currentTime = 0;
       narration.currentTime = 0;
@@ -1223,7 +1261,16 @@ function startIntroAvatar() {
       video.pause();
       video.currentTime = 0;
       active = true;
-      narration.play().then(animateIntroCopy).catch(() => { narrationUnavailable = true; finish(); });
+      narration.dataset.storySpeak = 'true';
+      narration.loop = false;
+      narration.muted = false;
+      narration.volume = 1;
+      try { narration.currentTime = 0; } catch {}
+      narration.play().then(animateIntroCopy).catch(() => {
+        if (narration.dataset.storyLive === 'true' && !narration.paused) { animateIntroCopy(); return; }
+        narrationUnavailable = true;
+        finish();
+      });
       hasStarted = true;
     } else {
       wrap.classList.add('has-talking-frame');
@@ -1241,7 +1288,18 @@ function startIntroAvatar() {
       animateIntroCopy();
       const remainingTurnPause = Math.max(0, narrationDelay * 1000 - video.currentTime * 1000);
       narrationStartTimer = window.setTimeout(() => {
-        if (run === generation && visible && active) narration.play().catch(() => { narrationUnavailable = true; finish(); });
+        if (run === generation && visible && active) {
+          narration.dataset.storySpeak = 'true';
+          narration.loop = false;
+          narration.muted = false;
+          narration.volume = 1;
+          try { narration.currentTime = 0; } catch {}
+          narration.play().catch(() => {
+            if (narration.dataset.storyLive === 'true' && !narration.paused) return;
+            narrationUnavailable = true;
+            finish();
+          });
+        }
       }, remainingTurnPause);
     }
   };
@@ -1729,9 +1787,12 @@ function bindHowIThink() {
     film.dataset.beat = beats[0][0];
     video.currentTime = 0;
     video.playbackRate = 1;
-    video.muted = false;
-    video.volume = 1;
+    video.dataset.storySpeak = 'true';
     video.dataset.storyHold = 'true';
+    video.muted = false;
+    video.loop = false;
+    video.volume = 1;
+    try { video.currentTime = 0; } catch {}
     const videoStart = video.play();
     videoStart.then(() => {
       filmStarted = true;
@@ -3957,6 +4018,7 @@ function howThinkMarkup() {
 function renderDesignProcess() {
   document.body.dataset.page = 'process-page';
   main.innerHTML = `<div class="design-process-branch"><a class="process-return" href="/#next-ending">← Back to the next chapter</a>${howThinkMarkup()}</div>`;
+  adoptPrime('video.think-film-video', 'story-film-prime');
   const video = main.querySelector('.think-film-video');
   if (video) {
     video.preload = 'auto';

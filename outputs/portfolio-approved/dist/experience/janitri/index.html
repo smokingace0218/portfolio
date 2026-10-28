@@ -43,6 +43,34 @@
             if (storyResume && storyResume.then) storyResume.then(storyHold).catch(storyHold);
             else storyHold();
           }
+          var storyPath = location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
+          var storyBase = location.hostname.endsWith('.github.io') && (location.pathname === '/portfolio' || location.pathname.startsWith('/portfolio/')) ? '/portfolio' : '';
+          if (storyBase && storyPath.indexOf(storyBase) === 0) storyPath = storyPath.slice(storyBase.length) || '/';
+          var storyClips = [];
+          if (storyPath === '/') {
+            storyClips.push(['audio', 'story-hello-prime', 'gateway-hello-audio', (storyBase || '') + '/assets/avatar-hello.wav']);
+            storyClips.push(['audio', 'story-narration-prime', 'intro-narration-audio', 'https://d8j0ntlcm91z4.cloudfront.net/user_3HGZD0LKCjtuivCHwrpylyAJpwf/hf_20261001_210437_54bc9ee3-38d4-4a14-916d-cc21ceeddbf6.wav']);
+          }
+          if (storyPath === '/design-process') storyClips.push(['video', 'story-film-prime', 'think-film-video', (storyBase || '') + '/assets/how-i-think-web.mp4']);
+          storyClips.forEach(function (clip) {
+            if (document.getElementById(clip[1])) return;
+            var el = document.createElement(clip[0]);
+            el.id = clip[1];
+            el.className = clip[2];
+            el.preload = 'auto';
+            el.playsInline = true;
+            el.setAttribute('playsinline', '');
+            el.setAttribute('aria-hidden', 'true');
+            el.src = clip[3];
+            el.loop = true;
+            el.volume = 0;
+            el.muted = false;
+            document.documentElement.appendChild(el);
+            var started = el.play();
+            var mark = function () { el.dataset.storyLive = 'true'; if (el.dataset.storySpeak !== 'true') el.volume = 0; };
+            if (started && started.then) started.then(mark).catch(function () {});
+            else mark();
+          });
         }
       } catch (e) {}
     </script>
@@ -64,14 +92,14 @@
     <link rel="preload" as="image" href="../../assets/optimized/janitri-concepts/newborn-3d.webp" />
     <link rel="preload" as="image" href="../../assets/optimized/janitri-concepts/emergency-alert-3d.webp" />
     <link rel="preload" as="image" href="../../assets/optimized/janitri-concepts/mother-3d-full.webp" />
-    <link rel="preload" as="script" href="../../app.js?v=158-together" />
+    <link rel="preload" as="script" href="../../app.js?v=160-desktop" />
     <link rel="stylesheet" href="../../styles.css?v=156-smooth" />
     <link rel="stylesheet" href="../../responsive.css?v=158-together" />
     <script src="../../vendor/gsap.min.js" defer></script>
     <script src="../../vendor/ScrollTrigger.min.js" defer></script>
     <script src="../../vendor/lenis.min.js" defer></script>
     <script src="../../motion.js?v=156-smooth" defer></script>
-    <script src="../../app.js?v=158-together" defer></script>
+    <script src="../../app.js?v=160-desktop" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to story</a>

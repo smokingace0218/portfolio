@@ -174,3 +174,61 @@
   #nift-map.bursting::before,
   #nift-map.bursting::after{content:none!important;animation:none!important}
 }
+
+/* The glimmer sits on the ball. A wide box left a flat rectangle with hard edges. */
+#snitch-game .golden-snitch{background:none;overflow:visible}
+#snitch-game:not(.caught) .golden-snitch::before{
+  content:"";
+  position:absolute;
+  inset:auto;
+  left:50%;
+  top:58%;
+  right:auto;
+  bottom:auto;
+  width:38%;
+  height:auto;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,226,168,.55) 0%, rgba(255,204,112,.18) 34%, rgba(255,204,112,0) 62%);
+  filter:blur(18px);
+  pointer-events:none;
+  z-index:0;
+  animation:snitch-glimmer 2.4s ease-in-out infinite;
+}
+#snitch-game .golden-snitch img{position:relative;z-index:1}
+#snitch-game .snitch-glow{
+  border-radius:50%!important;
+  overflow:visible;
+  -webkit-mask-image:radial-gradient(circle closest-side, #000 0%, #000 42%, transparent 68%);
+  mask-image:radial-gradient(circle closest-side, #000 0%, #000 42%, transparent 68%);
+}
+#snitch-game.caught .golden-snitch::before,
+#snitch-game.opening .golden-snitch::before,
+#snitch-game.opened .golden-snitch::before{content:none;animation:none}
+
+/* Both ribbon lines share the centre of the banner. */
+.story-trail .mischief-banner,
+.story-trail .mischief-banner.visible{
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%) rotate(-3deg) scale(1);
+  text-align:center;
+}
+.story-trail .mischief-banner span{
+  left:50%!important;
+  width:68%!important;
+  text-align:center;
+  translate:-50% 0;
+  rotate:0deg;
+}
+.story-trail .mischief-banner span:first-child{top:22%!important}
+.story-trail .mischief-banner span:last-child{top:47%!important}
+.chapter-message-ribbon{margin-left:auto;margin-right:auto;text-align:center}
+.chapter-message-ribbon span{left:50%!important;width:68%!important;text-align:center;translate:-50% 0;rotate:0deg}
+
+/* The burst shines out from behind the parchment, not across the map. */
+#nift-map.bursting::before,
+#nift-map.bursting::after{z-index:0!important}
+#nift-map .map-fold,
+#nift-map .map-sheet{position:relative;z-index:2}
