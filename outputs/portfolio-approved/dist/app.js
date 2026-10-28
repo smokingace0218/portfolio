@@ -3239,16 +3239,19 @@ function bindCaseStudyOpening() {
     const avatarStates = ['greet', 'title', 'thinking', 'screen-up', 'screen-down'];
     const stateImage = introArt.querySelector('.matera-intro-avatar__state');
     const blinkImage = introArt.querySelector('.matera-intro-avatar__blink');
-    const avatarFrameCache = new Map(avatarStates.map(state => {
+    const stillAvatar = introArt.dataset.avatarStill === '1';
+    const avatarFrameCache = stillAvatar ? null : new Map(avatarStates.map(state => {
       const open = new Image();
       const blink = new Image();
       open.src = `${ASSET}optimized/matera-intro-v3/${state}-open.webp`;
       blink.src = `${ASSET}optimized/matera-intro-v3/${state}-blink.webp`;
       return [state, { open, blink }];
     }));
-    const frameReady = Promise.all([...avatarFrameCache.values()].flatMap(({ open, blink }) =>
-      [open, blink].map(image => image.decode?.().catch(() => {}) || Promise.resolve())
-    ));
+    const frameReady = stillAvatar
+      ? Promise.resolve()
+      : Promise.all([...avatarFrameCache.values()].flatMap(({ open, blink }) =>
+          [open, blink].map(image => image.decode?.().catch(() => {}) || Promise.resolve())
+        ));
     screenCards.forEach(card => {
       const image = card.querySelector('img');
       if (image) image.decode().then(() => card.classList.add('is-loaded')).catch(() => {});
@@ -3294,24 +3297,28 @@ function bindCaseStudyOpening() {
       currentBeat = next;
       if (previousBeat >= 0) playMateraScrollCue(intro);
       const copyFinished = next >= copySteps.length;
-      const beatAvatarStates = [0, 1, 2, 0, 0];
-      const stateIndex = beatAvatarStates[next] ?? avatarStates.length - 1;
-      const state = avatarStates[stateIndex] || 'screen-down';
-      introArt.classList.remove('is-blinking');
-      introArt.dataset.avatarFrame = state;
-      introArt.dataset.avatarMotion = 'rest';
-      stateImage.src = `${ASSET}optimized/matera-intro-v3/${state}-open.webp`;
-      blinkImage.src = `${ASSET}optimized/matera-intro-v3/${state}-blink.webp`;
+      if (!stillAvatar) {
+        const beatAvatarStates = [0, 1, 2, 0, 0];
+        const stateIndex = beatAvatarStates[next] ?? avatarStates.length - 1;
+        const state = avatarStates[stateIndex] || 'screen-down';
+        introArt.classList.remove('is-blinking');
+        introArt.dataset.avatarFrame = state;
+        introArt.dataset.avatarMotion = 'rest';
+        stateImage.src = `${ASSET}optimized/matera-intro-v3/${state}-open.webp`;
+        blinkImage.src = `${ASSET}optimized/matera-intro-v3/${state}-blink.webp`;
+      }
       if (next === 1) {
         headlineParts.forEach(part => { part.textContent = ''; });
         heroHeadline?.classList.add('is-headline-visible', 'is-typing');
         frameReady.then(() => {
           if (currentBeat !== 1) return;
-          introArt.classList.add('is-blinking');
-          window.setTimeout(() => introArt.classList.remove('is-blinking'), 150);
+          if (!stillAvatar) {
+            introArt.classList.add('is-blinking');
+            window.setTimeout(() => introArt.classList.remove('is-blinking'), 150);
+          }
           headlineStartTimer = window.setTimeout(() => {
             if (currentBeat === 1) typeHeroHeadline();
-          }, reduced ? 0 : 420);
+          }, (reduced || stillAvatar) ? 0 : 420);
         });
       }
       copyStage?.classList.toggle('is-swapped', copyFinished);
@@ -3332,7 +3339,7 @@ function bindCaseStudyOpening() {
     };
     setBeat(0);
     frameReady.then(() => intro.classList.add('is-avatar-ready'));
-    if (!reduced && 'IntersectionObserver' in window) {
+    if (!reduced && !stillAvatar && 'IntersectionObserver' in window) {
       let blinkTimer = 0;
       const blinkObserver = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting && !blinkTimer) {
@@ -3543,7 +3550,19 @@ function renderResume() {
   location.replace(`${ASSET}shruti-kumari-resume.pdf`);
 }
 
+function primeCraftAvatar() {
+  if (primeCraftAvatar.done) return;
+  primeCraftAvatar.done = true;
+  const link = document.createElement('link');
+  link.rel = 'preload';
+  link.as = 'image';
+  link.fetchPriority = 'high';
+  link.href = `${ASSET}optimized/matera-intro-v3/greet-open.webp`;
+  document.head.append(link);
+}
+
 function renderCraftCluster() {
+  primeCraftAvatar();
   document.body.dataset.page = 'deep-page';
   main.innerHTML = `<article class="deep-page matera-case-page craft-cluster-page">
     <div class="wrap">
@@ -3551,21 +3570,21 @@ function renderCraftCluster() {
       <section class="matera-case-section matera-moment-intro" aria-labelledby="craft-cluster-title">
         <div class="wrap matera-moment-intro__layout">
           <figure class="matera-moment-intro__avatar" aria-label="Shruti seated with her notebook">
-            <div class="matera-intro-avatar__art">
+            <div class="matera-intro-avatar__art" data-avatar-frame="greet" data-avatar-still="1">
               <img class="matera-intro-avatar__state" src="${ASSET}optimized/matera-intro-v3/greet-open.webp" alt="" width="1301" height="1209" fetchpriority="high" decoding="async">
             </div>
           </figure>
           <div class="matera-moment-intro__content">
-            <p class="eyebrow matera-hero-kicker">College projects · Fashion Communication</p>
-            <div class="matera-hero-title-block"><h1 class="matera-moment-intro__title" id="craft-cluster-title">Craft cluster</h1><p class="matera-hero-subtitle">India’s crafts and handloom textiles</p></div>
-            <p class="deep-lede matera-moment-intro__lede">A study of the crafts and handloom textiles of India: who makes them, who uses them, and how the work has changed.</p>
-            <p class="craft-aims-label">Objectives</p>
-            <ul class="craft-aims">
-              <li>To document the various crafts and handloom textiles of India.</li>
-              <li>To gather information regarding the traditional communities of makers and users, craft clusters, and the significance of the craft, objects and textiles.</li>
-              <li>To understand the evolution of the craft and the reasons for the same.</li>
-              <li>To provide information regarding the crafts and textiles, craftspeople and NGOs to various stakeholders.</li>
-            </ul>
+            <div class="matera-opening-story" aria-label="Craft cluster introduction">
+              <div class="matera-opening-story__pin matera-hero-story__pin" aria-live="polite">
+                <div class="matera-hero-copy-stage" data-matera-copy aria-hidden="false">
+                  <div class="matera-hero-copy-beat" data-copy-reveal="0"><p class="eyebrow matera-hero-kicker">College projects · Fashion Communication</p><div class="matera-hero-title-block"><h1 class="matera-moment-intro__title" id="craft-cluster-title">Craft cluster</h1><p class="matera-hero-subtitle">India’s crafts and handloom textiles</p></div></div>
+                  <div class="matera-hero-copy-beat" data-copy-reveal="1"><h2 id="matera-intro-title" aria-label="A study of the crafts and handloom textiles of India. Who makes them, who uses them, and how the work has changed."><span data-headline-part="0">A study of the crafts and handloom textiles of India.</span><br><em><span data-headline-part="1">Who makes them, who uses them, and how the work has changed.</span></em></h2></div>
+                  <div class="matera-hero-copy-beat" data-copy-reveal="2"><p class="craft-aims-label">Objectives</p><ul class="craft-aims"><li>To document the various crafts and handloom textiles of India.</li><li>To gather information regarding the traditional communities of makers and users, craft clusters, and the significance of the craft, objects and textiles.</li><li>To understand the evolution of the craft and the reasons for the same.</li><li>To provide information regarding the crafts and textiles, craftspeople and NGOs to various stakeholders.</li></ul></div>
+                </div>
+              </div>
+              <div class="matera-opening-story__track" aria-hidden="true">${Array.from({ length: 3 }, (_, index) => `<span data-story-beat="${index}"></span>`).join('')}</div>
+            </div>
           </div>
         </div>
       </section>
@@ -3576,6 +3595,7 @@ function renderCraftCluster() {
       </section>
     </div>
   </article>`;
+  bindCaseStudyOpening();
 }
 
 function renderPortfolio() {
@@ -4718,6 +4738,13 @@ function renderRoute() {
   else if (pathname.startsWith('/experience/')) renderExperience(pathname.split('/')[2]);
   else renderNotFound();
 }
+
+document.addEventListener('pointerover', event => {
+  if (event.target.closest?.('a[href="/work/craft-cluster"]')) primeCraftAvatar();
+}, { capture: true, passive: true });
+document.addEventListener('pointerdown', event => {
+  if (event.target.closest?.('a[href="/work/craft-cluster"]')) primeCraftAvatar();
+}, { capture: true, passive: true });
 
 document.addEventListener('click', event => {
   const projectLink = event.target.closest('[data-project-link]');

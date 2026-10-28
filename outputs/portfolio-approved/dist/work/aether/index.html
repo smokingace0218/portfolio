@@ -121,7 +121,7 @@
         ? ['/assets/optimized/chandigarh-drop-entry-aligned.webp','/assets/optimized/janitri-concepts/nurse-3d.webp','/assets/optimized/janitri-concepts/newborn-3d.webp','/assets/optimized/janitri-concepts/emergency-alert-3d.webp','/assets/optimized/janitri-concepts/mother-3d-full.webp']
         : bareRoute === '/portfolio'
         ? ['/assets/optimized/janitri-concepts/shruti-idea-snap-open.webp','/assets/optimized/janitri-concepts/nurse-3d.webp','/assets/optimized/janitri-concepts/jazaa-diamond-3d.webp']
-        : bareRoute === '/work/jazaa' || bareRoute === '/work/matera' || bareRoute === '/work/cms'
+        : bareRoute === '/work/jazaa' || bareRoute === '/work/matera' || bareRoute === '/work/cms' || bareRoute === '/work/craft-cluster'
         ? ['/assets/optimized/matera-intro-v3/greet-open.webp']
         : bareRoute === '/contact'
         ? ['/assets/connect-v1/neutral-closed-smile.webp']
@@ -131,14 +131,14 @@
       const imagePreloads = routeImages.map(href => `<link rel="preload" as="image" href="${assetRoot}${href}">`).join('');
       document.write(`
         ${imagePreloads}
-        <link rel="preload" as="script" href="${assetRoot}/app.js?v=205-craft">
-        <link rel="stylesheet" href="${assetRoot}/styles.css?v=205-craft">
+        <link rel="preload" as="script" href="${assetRoot}/app.js?v=206-craft-scroll">
+        <link rel="stylesheet" href="${assetRoot}/styles.css?v=206-craft-scroll">
         <link rel="stylesheet" href="${assetRoot}/responsive.css?v=158-together">
         <script src="${assetRoot}/vendor/gsap.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/ScrollTrigger.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/lenis.min.js" defer><\/script>
         <script src="${assetRoot}/motion.js?v=156-smooth" defer><\/script>
-        <script src="${assetRoot}/app.js?v=205-craft" defer><\/script>
+        <script src="${assetRoot}/app.js?v=206-craft-scroll" defer><\/script>
       `);
     </script>
   </head>
