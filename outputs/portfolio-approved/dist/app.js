@@ -962,7 +962,7 @@ function renderHome() {
         <p class="next-ending-room">room for one more.</p>
         <p class="next-ending-copy">I’m looking for a team to ask better questions with, challenge ideas, and build things that make a difference.</p>
         <div class="next-ending-actions">
-          <a class="button-link" href="/contact">Let’s make something together <span aria-hidden="true">↗</span></a>
+          <a class="button-link" href="/contact" data-route="/contact">Let’s make something together <span aria-hidden="true">↗</span></a>
           <a class="text-link next-process-cta" href="/design-process" hidden>My design process <span aria-hidden="true">↗</span></a>
         </div>
       </div>
@@ -3734,7 +3734,7 @@ function renderContact() {
         <span class="connect-message" aria-hidden="true"><svg viewBox="0 0 32 28" fill="none"><path d="M7 2h18a5 5 0 0 1 5 5v11a5 5 0 0 1-5 5H13l-7 4v-4a5 5 0 0 1-4-5V7a5 5 0 0 1 5-5Z" fill="currentColor"/><path d="M9 10h14M9 15h9" stroke="var(--paper-light)" stroke-width="2" stroke-linecap="round"/></svg></span>
       </figure>
     </section>
-    <footer class="connect-closing"><h2>Maybe your team is my next chapter.</h2><a class="text-link" href="mailto:Shruti786aaa@gmail.com">Let's make something together. <span aria-hidden="true">↗</span></a></footer>
+    <footer class="connect-closing"><h2>Maybe your team is my next chapter.</h2><a class="text-link" href="/contact" data-route="/contact">Let's make something together. <span aria-hidden="true">↗</span></a></footer>
   </div></article>`;
   bindConnectAnimation();
   const contactScene = document.querySelector('.connect-scene');

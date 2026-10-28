@@ -131,14 +131,14 @@
       const imagePreloads = routeImages.map(href => `<link rel="preload" as="image" href="${assetRoot}${href}">`).join('');
       document.write(`
         ${imagePreloads}
-        <link rel="preload" as="script" href="${assetRoot}/app.js?v=160-desktop">
+        <link rel="preload" as="script" href="${assetRoot}/app.js?v=190-connect">
         <link rel="stylesheet" href="${assetRoot}/styles.css?v=156-smooth">
         <link rel="stylesheet" href="${assetRoot}/responsive.css?v=158-together">
         <script src="${assetRoot}/vendor/gsap.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/ScrollTrigger.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/lenis.min.js" defer><\/script>
         <script src="${assetRoot}/motion.js?v=156-smooth" defer><\/script>
-        <script src="${assetRoot}/app.js?v=160-desktop" defer><\/script>
+        <script src="${assetRoot}/app.js?v=190-connect" defer><\/script>
       `);
     </script>
   </head>

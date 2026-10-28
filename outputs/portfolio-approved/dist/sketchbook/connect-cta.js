@@ -11,8 +11,13 @@ function openPortfolioContact(){goToPortfolio('/contact?from=magic')}
 let connectCTA=null;
 function mountWorldConnect(){
  if(connectCTA)return;
- connectCTA=VenomCTA.mount(document.querySelector('#connect-venom'),{
-  label:'SEND AN OWL',labelFont:'Harry P',floor:[1,1,1],labelSize:29,buttonHeight:64,paddingX:36,
+ const host=document.querySelector('#connect-venom');
+ if(!host)return;
+ // Send an owl sits on the painting. A white studio floor reads as a slab behind the pill on every screen size.
+ connectCTA=VenomCTA.mount(host,{
+  label:'SEND AN OWL',labelFont:'Harry P',
+  floor:[0.004,0.006,0.004],
+  labelSize:29,buttonHeight:64,paddingX:36,
   onActivate:openPortfolioContact,
   params:{reach:600,awareness:700,maxStrands:6,maxLen:650,sheen:.4}
  });
@@ -44,7 +49,7 @@ function mountChapterCTAs(dialog,container){
  let venom=null;
  const mountVenom=()=>{
   if(!dock.isConnected||venom)return;
-  venom=VenomCTA.mount(dock.querySelector('.chapter-venom'),{label:'SEND AN OWL',labelFont:'Harry P',labelSize:dialog.id==='nift-map'?34:26,buttonHeight:dialog.id==='nift-map'?76:72,paddingX:dialog.id==='nift-map'?36:22,floor:[1,1,1],params:{reach:550,awareness:600,maxStrands:5,maxLen:580},onActivate:openPortfolioContact});
+  venom=VenomCTA.mount(dock.querySelector('.chapter-venom'),{label:'SEND AN OWL',labelFont:'Harry P',labelSize:dialog.id==='nift-map'?34:26,buttonHeight:dialog.id==='nift-map'?76:72,paddingX:dialog.id==='nift-map'?36:22,params:{reach:550,awareness:600,maxStrands:5,maxLen:580},onActivate:openPortfolioContact});
   venom.element.setAttribute('aria-label','Send an owl');
  };
  const mountFrame=matchMedia('(prefers-reduced-motion: reduce)').matches?0:requestAnimationFrame(mountVenom);

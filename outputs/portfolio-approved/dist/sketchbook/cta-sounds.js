@@ -41,12 +41,18 @@
   }
 
   document.addEventListener('pointerover', event => {
+    if (event.pointerType && event.pointerType !== 'mouse') return;
     const kind = kindFrom(event.target);
     if (!kind) return;
     const host = event.target.closest(hosts[kind]);
     if (host && event.relatedTarget instanceof Node && host.contains(event.relatedTarget)) return;
     play(kind);
   });
+  document.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'mouse') return;
+    const kind = kindFrom(event.target);
+    if (kind) play(kind);
+  }, true);
 
   player('wizard');
   player('owl');

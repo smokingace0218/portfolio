@@ -245,21 +245,27 @@
 }
 @keyframes turn-tilt{0%,18%{transform:rotate(0)}42%,68%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
 
-@media(max-width:1100px) and (orientation:portrait){
-  .turn-landscape{display:flex;position:fixed;inset:0;z-index:80;align-items:center;justify-content:center;padding:28px;background:#10201c;text-align:center}
-  body{overflow:hidden}
+@media(max-width:1100px){
+  html.is-portrait .turn-landscape{display:flex;position:fixed;inset:0;z-index:80;align-items:center;justify-content:center;padding:28px;background:#10201c;text-align:center}
+  html.is-portrait body{overflow:hidden}
 }
+html.is-landscape .turn-landscape{display:none!important}
+html.is-landscape body{overflow:auto!important}
 
-@media(max-width:1100px) and (orientation:landscape){
-  #world{min-height:100svh!important;height:100svh}
+@media(max-width:1100px){
+ html.is-landscape{
+  #world{min-height:100svh!important;height:100svh;overflow:hidden}
   .scene-viewport{overflow:hidden!important;touch-action:manipulation}
+  /* Cover the whole screen. A fitted 16:9 frame leaves black bars; this one fills the viewport and keeps the places on the painting. */
   .scene,.approaching .scene{
-    width:min(100vw,calc(100svh * 1.776833))!important;
-    height:min(100svh,calc(100vw / 1.776833))!important;
-    left:50%!important;
-    top:50%!important;
+    width:max(100vw,calc(100svh * 1.776833))!important;
+    height:max(100svh,calc(100vw / 1.776833))!important;
+    right:auto!important;
+    bottom:auto!important;
     min-width:0!important;
-    transform:translate(-50%,-50%)!important;
+    transform:none!important;
+    left:min(0px,calc(100vw - 36px - .90 * max(100vw,100svh * 1.776833)))!important;
+    top:clamp(calc(56px - .16 * max(100svh,100vw / 1.776833)),calc(100svh - 16px - .74 * max(100svh,100vw / 1.776833)),0px)!important;
   }
   #world>header .utilities{left:auto!important;right:12px!important;top:10px!important;transform:none!important;max-width:calc(100vw - 140px)}
   .utilities button{min-width:44px;min-height:44px}
@@ -282,23 +288,23 @@
   .instruction{display:none!important}
   footer .scene-caption,footer .hint{display:none!important}
   .bottom-ctas{
-    left:12px!important;right:auto!important;top:auto!important;
-    bottom:max(4px,env(safe-area-inset-bottom))!important;
-    transform:none!important;
-    width:min(440px,56vw)!important;max-width:440px!important;
+    /* Centred on the painting, just inside its bottom edge, not in the letterbox. */
+    left:50%!important;right:auto!important;top:auto!important;
+    bottom:10px!important;
+    transform:translateX(-50%)!important;
+    width:min(400px,calc(min(100vw,100svh * 1.776833) - 32px))!important;
+    max-width:400px!important;
+    gap:14px!important;
     height:92px!important;z-index:14;
+    justify-content:center!important;
+    align-items:center!important;
     background:transparent!important;box-shadow:none!important;border:0!important;
   }
+  .return-world{top:64px!important;right:12px!important;min-height:44px;z-index:22}
   .bottom-ctas .connect-cta-shell,.bottom-ctas .spider-cta-shell,.chapter-connect{background:transparent!important;box-shadow:none!important;border:0!important;height:92px!important}
   .wizard-cta{min-width:148px!important;min-height:52px!important;font-size:17px!important;padding:12px 16px!important}
   #connect-venom.venom-cta,.chapter-venom.venom-cta{background:transparent!important;--venom-feather:0px}
-  #connect-venom.venom-cta{width:260px!important;height:120px!important;transform:translate(-50%,-50%) scale(.8)!important}
-  #connect-venom .venom-cta__stage,.chapter-venom .venom-cta__stage{
-    -webkit-mask-image:radial-gradient(ellipse 86% 72% at 50% 50%, #000 0 60%, transparent 80%)!important;
-    mask-image:radial-gradient(ellipse 86% 72% at 50% 50%, #000 0 60%, transparent 80%)!important;
-    -webkit-mask-composite:source-over!important;
-    mask-composite:add!important;
-  }
+  #connect-venom.venom-cta{width:260px!important;height:120px!important;transform:translate(-50%,-50%) scale(.8)!important;--venom-feather:22px}
   #world .pin.location-marker{width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important}
   #world .pin.location-marker .location-drop{position:relative;width:40px;height:48px}
   #world .pin.location-marker .location-drop svg{width:34px;height:44px}
@@ -312,6 +318,40 @@
   #world .pin.location-marker.janitri .location-drop::after{content:"Janitri";top:-4px}
   #world .pin.location-marker.ministry .location-drop::after{content:"Next";left:auto;right:0;top:auto;bottom:calc(100% + 4px);transform:none}
   #world .pin.location-marker.platform .location-drop::after{content:"Platform 9¾";left:50%;right:auto;top:auto;bottom:-14px;transform:translateX(-50%)}
+  /* Short wide landscape (phones): the visible area is much wider than the
+     painting, so a fitted 16:9 frame leaves black columns and parks the title
+     in the gutter. Fill the width instead, keep the top of the painting
+     (Next, the title) on screen, and let the CTAs sit on the bottom edge. */
+  @media(max-height:640px) and (min-aspect-ratio:16/9){
+    #world,.scene-viewport{overflow:hidden!important}
+    .bottom-ctas{bottom:8px!important}
+    #world>header{top:8px!important;left:12px!important;right:auto!important}
+    .intro{top:56px!important;left:14px!important;max-width:min(210px,36vw)!important}
+    #world>header .utilities{
+      left:118px!important;right:auto!important;top:0!important;
+      max-width:min(250px,calc(100vw - 250px));
+    }
+    #world .pin.location-marker.ministry .location-drop::after{
+      content:"Next";left:auto;right:calc(100% + 6px);top:8px;bottom:auto;transform:none;
+    }
+    #world .pin.location-marker.janitri .location-drop::after{top:8px}
+    #world .pin.location-marker.platform .location-drop::after{
+      content:"Platform 9¾";left:auto;right:calc(100% + 6px);top:8px;bottom:auto;transform:none;
+    }
+  }
   #paper,#nift-map,#snitch-game{width:min(100vw - 16px,860px);max-height:calc(100svh - 16px)}
   #paper .chapter-cta-dock,#nift-map .chapter-cta-dock{height:auto;min-height:0;padding-bottom:8px}
+  /* Location pages keep their frame. The parchment itself has to scroll, or the rest of the chapter stays out of reach. */
+  body:has(dialog[open]){overflow:hidden!important;position:fixed;inset:0;width:100%;height:100%}
+  #paper[open],#nift-map[open]{
+    top:8px!important;bottom:auto!important;height:auto!important;
+    max-height:calc(100svh - 16px)!important;
+    overflow-x:hidden!important;overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;
+  }
+  #snitch-game.opened .snitch-reveal{
+    overflow-y:auto!important;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;
+  }
+  #paper .chapter-venom.venom-cta,#nift-map .chapter-venom.venom-cta{min-height:0!important;height:110px!important}
+ }
 }
