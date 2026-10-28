@@ -579,6 +579,7 @@ let storyAudioKeepalive = null;
 function holdStoryAudioOpen() {
   const context = interfaceAudioContext;
   if (!context || context.state !== 'running' || storyAudioKeepalive) return;
+  if (window.__storyKeepalive) { storyAudioKeepalive = window.__storyKeepalive; return; }
   const length = Math.max(1, Math.floor(context.sampleRate * .25));
   const buffer = context.createBuffer(1, length, context.sampleRate);
   const samples = buffer.getChannelData(0);
@@ -622,6 +623,7 @@ function carryStoryAudioFromMagic() {
 function unlockInterfaceHoverSound() {
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   if (!AudioContextClass) return;
+  if (!interfaceAudioContext && window.__storyAudio && window.__storyAudio.state !== 'closed') interfaceAudioContext = window.__storyAudio;
   interfaceAudioContext ||= new AudioContextClass();
   const context = interfaceAudioContext;
   const syncState = () => {
@@ -3343,23 +3345,25 @@ function renderSantDeepDive() {
   document.body.dataset.page = 'janitri-deep-dive';
   sessionStorage.setItem('restoreJourneyHash', '#sant-rams');
   const points = [
-    { kind: 'ux', label: 'Website · JAZAA', lineOne: 'A new jewellery brand.', lineTwo: 'Where does someone begin?' },
-    { kind: 'photo', label: 'Photography · the piece', lineOne: 'The craft is in the detail.', lineTwo: 'Can a photograph hold it?' },
-    { kind: 'instagram', label: 'Instagram · the feed', lineOne: 'A brand has to live in a scroll.', lineTwo: 'What should a post feel like?' },
-    { kind: 'campaign', label: 'Launch · campaigns', lineOne: 'A launch is more than one picture.', lineTwo: 'How does it reach people?' }
+    { kind: 'ux', label: 'Website · JAZAA', lineOne: 'A new jewellery brand.', lineTwo: 'Where does someone begin?', image: 'jazaa-diamond-3d.webp' },
+    { kind: 'photo', label: 'Photography · the piece', lineOne: 'The craft is in the detail.', lineTwo: 'Can a photograph hold it?', image: 'sant-camera-3d.webp' },
+    { kind: 'instagram', label: 'Instagram · the feed', lineOne: 'A brand has to live in a scroll.', lineTwo: 'What should a post feel like?', image: 'sant-phone-3d.webp' },
+    { kind: 'campaign', label: 'Launch · campaigns', lineOne: 'A launch is more than one picture.', lineTwo: 'How does it reach people?', image: 'sant-campaign-3d.webp' }
   ];
   const projects = [
-    { kind: 'ux', project: 'JAZAA UI/UX', audience: 'Website · Sant Ram’s', answer: 'Website structure and interface for JAZAA, with navigation, typography and a luxury identity explored together.', href: '/work/jazaa' },
-    { kind: 'photo', project: 'Photography', audience: 'The piece itself', answer: 'Jewellery photography and visual content, so a piece can be understood before a word is read.' },
-    { kind: 'instagram', project: 'Instagram posts', audience: 'The feed', answer: 'Post designs that kept one visual language across the feed, from the first look to the detail of a piece.' },
-    { kind: 'campaign', project: 'Marketing & campaigns', audience: 'Launch execution', answer: 'Launch marketing and campaign execution for JAZAA, carrying the same visual language across every touchpoint.' }
+    { kind: 'ux', project: 'JAZAA', audience: 'The main project · Website', answer: 'The JAZAA website: navigation, typography and a luxury identity, explored as one shopping experience.', href: '/work/jazaa', primary: true },
+    { kind: 'photo', project: 'Photography', audience: 'The piece itself', answer: 'Jewellery photography, so a piece can be understood before a word is read.', soon: true },
+    { kind: 'instagram', project: 'Instagram posts', audience: 'The feed', answer: 'Post designs that keep one visual language across the feed.', soon: true },
+    { kind: 'campaign', project: 'Marketing & campaigns', audience: 'Launch execution', answer: 'Campaign work that carries JAZAA across every touchpoint.', soon: true }
   ];
-  const art = `${ASSET}optimized/janitri-concepts/jazaa-diamond-3d.webp`;
-  const cards = points.map((point, index) => `<article class="jd-question" data-question-card="${index}" data-question-kind="${point.kind}"><div class="jd-question-copy"><p class="jd-question-kicker">0${index + 1} · ${point.label}</p><h3><span>${point.lineOne}</span><span>${point.lineTwo}</span></h3></div><div class="jd-question-illustration" data-illustration-kind="${point.kind}" aria-hidden="true"><img class="jd-question-art" src="${art}" alt="" width="1024" height="1024" loading="eager" decoding="async"></div></article>`).join('');
+  const artFor = image => `${ASSET}optimized/janitri-concepts/${image}`;
+  const cards = points.map((point, index) => `<article class="jd-question" data-question-card="${index}" data-question-kind="${point.kind}"><div class="jd-question-copy"><p class="jd-question-kicker">0${index + 1} · ${point.label}</p><h3><span>${point.lineOne}</span><span>${point.lineTwo}</span></h3></div><div class="jd-question-illustration jd-question-illustration--${point.kind}" data-illustration-kind="${point.kind}" aria-hidden="true"><img class="jd-question-art" src="${artFor(point.image)}" alt="" width="1024" height="1024" loading="eager" decoding="async"></div></article>`).join('');
   const answerCards = projects.map(project => {
-    const linked = project.href ? `href="${project.href}"` : '';
+    const point = points.find(item => item.kind === project.kind);
     const tag = project.href ? 'a' : 'article';
-    return `<${tag} class="jd-answer-card jd-answer-card--${project.kind}${project.href ? ' jd-answer-card--link' : ''}" data-answer-kind="${project.kind}" ${linked} aria-label="${project.project}: ${project.answer}"><div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${art}" alt="" width="1024" height="1024" loading="eager" decoding="async"></div><div class="jd-answer-copy"><p class="jd-answer-audience">${project.audience}</p><h3>${project.project}</h3><p class="jd-answer-text">${project.answer}</p>${project.href ? '<span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span>' : ''}</div></${tag}>`;
+    const linked = project.href ? `href="${project.href}"` : '';
+    const cta = project.href ? '<span class="jd-answer-cta">Explore the case study <span aria-hidden="true">↗</span></span>' : '<span class="jd-answer-cta">Coming soon</span>';
+    return `<${tag} class="jd-answer-card jd-answer-card--${project.kind}${project.primary ? ' jd-answer-card--primary' : ''}${project.href ? ' jd-answer-card--link' : ' is-coming-soon'}" data-answer-kind="${project.kind}" ${linked} aria-label="${project.project}: ${project.soon ? 'Coming soon' : project.answer}"><div class="jd-answer-art-wrap"><img class="jd-answer-art" src="${artFor(point.image)}" alt="" width="1024" height="1024" loading="eager" decoding="async"></div><div class="jd-answer-copy"><p class="jd-answer-audience">${project.audience}</p><h3>${project.project}</h3><p class="jd-answer-text">${project.answer}</p>${cta}</div></${tag}>`;
   }).join('');
   main.innerHTML = `<article class="janitri-deep-page sant-deep-page">
     <section class="jd-arrival chandigarh-arrival" data-date-copy="JUNE — AUGUST 2025" data-caption-copy="A heritage jeweller, and a new brand called JAZAA." aria-label="Arrival at Sant Ram’s">
@@ -3392,7 +3396,7 @@ function renderSantDeepDive() {
       <div class="jd-question-clusters" aria-live="polite">${cards}</div>
       <p class="jd-question-resolution"><span>One brand. Four kinds of making.</span></p>
     </section>
-    <section class="jd-screens jd-answers" aria-labelledby="sant-screens-title"><header class="jd-screens-heading"><p class="eyebrow">From the brief to the work</p><h2 id="sant-screens-title">Okay. Let's put it to work.</h2><p>Four projects. One visual language.</p></header><div class="jd-answer-stage" aria-label="Four Sant Ram’s projects with Shruti seated at the frame edge"><div class="jd-idea-avatar" aria-hidden="true"><img class="jd-idea-frame jd-idea-frame--snap-open" src="${ASSET}optimized/janitri-concepts/shruti-idea-snap-open.webp" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-wink" src="${ASSET}optimized/janitri-concepts/shruti-idea-snap-wink.webp" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-blink" src="${ASSET}optimized/janitri-concepts/shruti-idea-snap-blink.webp" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-final" src="${ASSET}optimized/janitri-concepts/shruti-idea-got-it-final.webp" alt="" width="1024" height="1536" loading="eager" decoding="async"></div>${answerCards}</div><div class="jd-answer-lower"><p>Website, photographs, posts and the launch. All of it had to feel like JAZAA.</p></div></section>
+    <section class="jd-screens jd-answers" aria-labelledby="sant-screens-title"><header class="jd-screens-heading"><p class="eyebrow">From the brief to the work</p><h2 id="sant-screens-title">Okay. Let's put it to work.</h2><p>JAZAA opens now. Photography, the feed and the campaigns are coming soon.</p></header><div class="jd-answer-stage" aria-label="Four Sant Ram’s projects with Shruti seated at the frame edge"><div class="jd-idea-avatar" aria-hidden="true"><img class="jd-idea-frame jd-idea-frame--snap-open" src="${ASSET}optimized/janitri-concepts/shruti-idea-snap-open.webp" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-wink" src="${ASSET}optimized/janitri-concepts/shruti-idea-snap-wink.webp" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-blink" src="${ASSET}optimized/janitri-concepts/shruti-idea-snap-blink.webp" alt="" width="1024" height="1536" loading="eager" decoding="async"><img class="jd-idea-frame jd-idea-frame--snap-final" src="${ASSET}optimized/janitri-concepts/shruti-idea-got-it-final.webp" alt="" width="1024" height="1536" loading="eager" decoding="async"></div>${answerCards}</div><div class="jd-answer-lower"><p>Website, photographs, posts and the launch. All of it had to feel like JAZAA.</p></div></section>
   </article>`;
   bindReturnLinks('sant-rams');
   bindJanitriDeepDive();
@@ -4125,8 +4129,9 @@ function bindJanitriDeepDive() {
       watchForStoryInteraction();
       storyAutoScrollTimer = window.setTimeout(() => {
         const top = questions.getBoundingClientRect().top + window.scrollY;
-        storyAutoScrollTo(top, 1450);
-      }, 1500);
+        const sant = page.classList.contains('sant-deep-page');
+        storyAutoScrollTo(top, sant ? 820 : 1450);
+      }, page.classList.contains('sant-deep-page') ? 280 : 1500);
     };
     if (!avatar) return;
     if (reduced) {
@@ -4424,7 +4429,7 @@ function bindJanitriDeepDive() {
       [...screens.querySelectorAll('.jd-answer-card')].forEach((card, index) => {
         window.setTimeout(() => {
           card.classList.add('is-answer-revealed');
-        }, 220 + index * 240);
+        }, 40 + index * 45);
       });
       return;
     }
@@ -4531,6 +4536,46 @@ function isPortfolioBranch(pathname) {
 
 let paintedPortfolioKey = '';
 
+function mountScrollCue() {
+  document.querySelectorAll('.scroll-more').forEach(cue => cue.remove());
+  const storyBeats = [...document.querySelectorAll('.matera-moment-intro [data-story-beat]')];
+  const longPage = document.querySelector('.jd-answers, .portfolio-showcase, .jazaa-case-page, .matera-case-page, .experience-page, .design-process-branch');
+  if (!longPage) return;
+  const cue = document.createElement('aside');
+  cue.className = 'scroll-more';
+  cue.setAttribute('aria-hidden', 'true');
+  if (storyBeats.length > 1) {
+    cue.classList.add('is-beats');
+    cue.innerHTML = `<span>Scroll</span><ol>${storyBeats.map(() => '<li></li>').join('')}</ol>`;
+  } else cue.innerHTML = '<span>Scroll</span><i></i>';
+  document.body.append(cue);
+  const update = () => {
+    if (!cue.isConnected) return;
+    const room = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+    cue.classList.toggle('is-done', room < 80);
+    if (!storyBeats.length) return;
+    const mid = window.innerHeight / 2;
+    let nearest = 0;
+    let best = Infinity;
+    storyBeats.forEach((beat, index) => {
+      const rect = beat.getBoundingClientRect();
+      const distance = Math.abs(rect.top + rect.height / 2 - mid);
+      if (distance < best) { best = distance; nearest = index; }
+    });
+    cue.querySelectorAll('li').forEach((dot, index) => {
+      dot.classList.toggle('is-on', index <= nearest);
+      dot.classList.toggle('is-current', index === nearest);
+    });
+  };
+  if (!mountScrollCue.listening) {
+    mountScrollCue.listening = true;
+    const refresh = () => document.querySelector('.scroll-more')?.dispatchEvent(new Event('cue-refresh'));
+    window.addEventListener('scroll', refresh, { passive: true });
+    window.addEventListener('resize', refresh, { passive: true });
+  }
+  cue.addEventListener('cue-refresh', update);
+  update();
+}
 function paintPortfolioRoute() {
   window.PortfolioMotion?.clearSceneMotion?.();
   document.body.style.backgroundColor = '';
@@ -4547,6 +4592,7 @@ function paintPortfolioRoute() {
   primeStoryMedia(document.querySelector('main') || document);
   unlockInterfaceHoverSound();
   carryStoryAudioFromMagic();
+  mountScrollCue();
   if (path === '/' && location.hash) return;
   const hashId = location.hash.replace(/^#/, '');
   const hashed = hashId && document.getElementById(hashId);
@@ -4616,6 +4662,7 @@ if (window.location.hash && portfolioPathname() === '/') sessionStorage.setItem(
 renderRoute();
 paintedPortfolioKey = `${location.pathname}${location.search}`;
 carryStoryAudioFromMagic();
+mountScrollCue();
 window.PortfolioMotion?.init();
 window.addEventListener('popstate', () => {
   const key = `${location.pathname}${location.search}`;

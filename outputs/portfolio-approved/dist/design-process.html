@@ -3,6 +3,49 @@
   <head>
     <meta charset="utf-8" />
     <script>try{if(/(?:^|[?&])from=magic(?:&|$)/.test(location.search))document.documentElement.classList.add("from-magic")}catch(e){}</script>
+    <script>
+      try {
+        var storyFromMagic = /(?:^|[?&])from=magic(?:&|$)/.test(location.search);
+        var storyUnlocked = false;
+        try { storyUnlocked = sessionStorage.getItem('portfolio-audio-unlocked') === '1'; } catch (e) {}
+        if (storyFromMagic) {
+          try {
+            sessionStorage.setItem('portfolio-audio-unlocked', '1');
+            sessionStorage.setItem('storybook-preview-seen', '1');
+          } catch (e) {}
+          storyUnlocked = true;
+        }
+        if (storyUnlocked) {
+          var StoryAudio = window.AudioContext || window.webkitAudioContext;
+          if (StoryAudio && !window.__storyAudio) {
+            var storyAudio = new StoryAudio();
+            window.__storyAudio = storyAudio;
+            document.documentElement.dataset.audioPrimed = 'pending';
+            var storyHold = function () {
+              document.documentElement.dataset.audioPrimed = storyAudio.state;
+              if (storyAudio.state !== 'running' || window.__storyKeepalive) return;
+              try {
+                var length = Math.max(1, Math.floor(storyAudio.sampleRate * 0.25));
+                var buffer = storyAudio.createBuffer(1, length, storyAudio.sampleRate);
+                var data = buffer.getChannelData(0);
+                for (var i = 0; i < length; i++) data[i] = (i & 1 ? 1 : -1) * 0.00002;
+                var source = storyAudio.createBufferSource();
+                var gain = storyAudio.createGain();
+                source.buffer = buffer;
+                source.loop = true;
+                gain.gain.value = 1;
+                source.connect(gain).connect(storyAudio.destination);
+                source.start();
+                window.__storyKeepalive = source;
+              } catch (e) {}
+            };
+            var storyResume = storyAudio.resume();
+            if (storyResume && storyResume.then) storyResume.then(storyHold).catch(storyHold);
+            else storyHold();
+          }
+        }
+      } catch (e) {}
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f5f1e9" />
     <meta name="description" content="Come along with Shruti as she notices, makes, questions and designs." />
@@ -18,13 +61,14 @@
       } catch {}
     </script>
     <link rel="preload" as="video" href="/assets/how-i-think-web.mp4" />
+    <link rel="preload" as="script" href="/app.js?v=158-together" />
     <link rel="stylesheet" href="/styles.css?v=156-smooth" />
-    <link rel="stylesheet" href="/responsive.css?v=143-inside-pages" />
+    <link rel="stylesheet" href="/responsive.css?v=158-together" />
     <script src="/vendor/gsap.min.js" defer></script>
     <script src="/vendor/ScrollTrigger.min.js" defer></script>
     <script src="/vendor/lenis.min.js" defer></script>
     <script src="/motion.js?v=156-smooth" defer></script>
-    <script src="/app.js?v=156-smooth" defer></script>
+    <script src="/app.js?v=158-together" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to story</a>

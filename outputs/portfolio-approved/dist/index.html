@@ -3,6 +3,49 @@
   <head>
     <meta charset="utf-8" />
     <script>try{if(/(?:^|[?&])from=magic(?:&|$)/.test(location.search))document.documentElement.classList.add("from-magic")}catch(e){}</script>
+    <script>
+      try {
+        var storyFromMagic = /(?:^|[?&])from=magic(?:&|$)/.test(location.search);
+        var storyUnlocked = false;
+        try { storyUnlocked = sessionStorage.getItem('portfolio-audio-unlocked') === '1'; } catch (e) {}
+        if (storyFromMagic) {
+          try {
+            sessionStorage.setItem('portfolio-audio-unlocked', '1');
+            sessionStorage.setItem('storybook-preview-seen', '1');
+          } catch (e) {}
+          storyUnlocked = true;
+        }
+        if (storyUnlocked) {
+          var StoryAudio = window.AudioContext || window.webkitAudioContext;
+          if (StoryAudio && !window.__storyAudio) {
+            var storyAudio = new StoryAudio();
+            window.__storyAudio = storyAudio;
+            document.documentElement.dataset.audioPrimed = 'pending';
+            var storyHold = function () {
+              document.documentElement.dataset.audioPrimed = storyAudio.state;
+              if (storyAudio.state !== 'running' || window.__storyKeepalive) return;
+              try {
+                var length = Math.max(1, Math.floor(storyAudio.sampleRate * 0.25));
+                var buffer = storyAudio.createBuffer(1, length, storyAudio.sampleRate);
+                var data = buffer.getChannelData(0);
+                for (var i = 0; i < length; i++) data[i] = (i & 1 ? 1 : -1) * 0.00002;
+                var source = storyAudio.createBufferSource();
+                var gain = storyAudio.createGain();
+                source.buffer = buffer;
+                source.loop = true;
+                gain.gain.value = 1;
+                source.connect(gain).connect(storyAudio.destination);
+                source.start();
+                window.__storyKeepalive = source;
+              } catch (e) {}
+            };
+            var storyResume = storyAudio.resume();
+            if (storyResume && storyResume.then) storyResume.then(storyHold).catch(storyHold);
+            else storyHold();
+          }
+        }
+      } catch (e) {}
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script>
       // GitHub Pages serves this project below /portfolio/. Convert its
@@ -39,20 +82,35 @@
     <title>Shruti — Come with me</title>
     <script>
       const assetRoot = portfolioBase;
+      const bareRoute = (() => {
+        const path = location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
+        if (portfolioBase && (path === portfolioBase || path.startsWith(portfolioBase + '/'))) return path.slice(portfolioBase.length) || '/';
+        return path;
+      })();
+      const routeImages = bareRoute === '/experience/sant-rams'
+        ? ['/assets/optimized/chandigarh-drop-entry-aligned.webp','/assets/optimized/janitri-concepts/jazaa-diamond-3d.webp','/assets/optimized/janitri-concepts/sant-camera-3d.webp','/assets/optimized/janitri-concepts/sant-phone-3d.webp','/assets/optimized/janitri-concepts/sant-campaign-3d.webp']
+        : bareRoute === '/experience/janitri'
+        ? ['/assets/optimized/chandigarh-drop-entry-aligned.webp','/assets/optimized/janitri-concepts/nurse-3d.webp','/assets/optimized/janitri-concepts/newborn-3d.webp','/assets/optimized/janitri-concepts/emergency-alert-3d.webp','/assets/optimized/janitri-concepts/mother-3d-full.webp']
+        : bareRoute === '/portfolio'
+        ? ['/assets/optimized/janitri-concepts/shruti-idea-snap-open.webp','/assets/optimized/janitri-concepts/nurse-3d.webp','/assets/optimized/janitri-concepts/jazaa-diamond-3d.webp']
+        : bareRoute === '/work/jazaa' || bareRoute === '/work/matera' || bareRoute === '/work/cms'
+        ? ['/assets/optimized/matera-intro-v3/greet-open.webp']
+        : bareRoute === '/contact'
+        ? ['/assets/connect-v1/neutral-closed-smile.webp']
+        : bareRoute === '/'
+        ? ['/assets/gateway-frame-01-fingertips.webp','/assets/gateway-frame-02-curious-peek.webp','/assets/gateway-frame-03-happy-smile.webp']
+        : [];
+      const imagePreloads = routeImages.map(href => `<link rel="preload" as="image" href="${assetRoot}${href}">`).join('');
       document.write(`
-        <link rel="preload" as="image" href="${assetRoot}/assets/gateway-frame-01-fingertips.webp">
-        <link rel="preload" as="image" href="${assetRoot}/assets/gateway-frame-02-curious-peek.webp">
-        <link rel="preload" as="image" href="${assetRoot}/assets/gateway-frame-03-happy-smile.webp">
-        <link rel="preload" as="image" href="${assetRoot}/assets/optimized/chandigarh-drop-entry-aligned.webp">
-        <link rel="preload" as="image" href="${assetRoot}/assets/optimized/chandigarh-drop-midair-aligned.webp">
-        <link rel="preload" as="image" href="${assetRoot}/assets/optimized/chandigarh-touchdown-aligned.webp">
+        ${imagePreloads}
+        <link rel="preload" as="script" href="${assetRoot}/app.js?v=158-together">
         <link rel="stylesheet" href="${assetRoot}/styles.css?v=156-smooth">
-        <link rel="stylesheet" href="${assetRoot}/responsive.css?v=143-inside-pages">
+        <link rel="stylesheet" href="${assetRoot}/responsive.css?v=158-together">
         <script src="${assetRoot}/vendor/gsap.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/ScrollTrigger.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/lenis.min.js" defer><\/script>
         <script src="${assetRoot}/motion.js?v=156-smooth" defer><\/script>
-        <script src="${assetRoot}/app.js?v=156-smooth" defer><\/script>
+        <script src="${assetRoot}/app.js?v=158-together" defer><\/script>
       `);
     </script>
   </head>

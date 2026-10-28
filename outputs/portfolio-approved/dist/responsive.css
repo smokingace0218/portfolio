@@ -147,3 +147,90 @@
   .next-journey-copy { width: min(44%, 420px); margin-left: auto; margin-right: clamp(16px, 3vw, 36px); }
   .journey-team-cta { min-width: min(100%, 240px); }
 }
+
+/* A side cue so a long project page shows that scrolling reveals the rest. */
+.scroll-more {
+  position: fixed;
+  right: 16px;
+  top: 46%;
+  z-index: 24;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  color: #8d7360;
+  pointer-events: none;
+  transition: opacity .28s ease;
+}
+.scroll-more span {
+  writing-mode: vertical-rl;
+  font: 600 10px/1 ui-monospace, monospace;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.scroll-more i {
+  position: relative;
+  width: 1px;
+  height: 46px;
+  background: linear-gradient(#c9b6a4, transparent);
+}
+.scroll-more i::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid #c9b6a4;
+  border-bottom: 1.5px solid #c9b6a4;
+  transform: translate(-50%, 1px) rotate(45deg);
+}
+.scroll-more.is-done { opacity: 0; }
+.scroll-more.is-beats ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.scroll-more.is-beats li { width: 6px; height: 6px; border-radius: 50%; background: #e4d5c6; }
+.scroll-more.is-beats li.is-on { background: #8d7360; }
+.scroll-more.is-beats li.is-current { background: #c4654a; transform: scale(1.4); }
+.jd-questions.is-in-view .jd-question:nth-child(n) .jd-question-illustration { animation-delay: 0s; }
+.sant-deep-page .jd-questions.is-in-view .jd-question-art { animation: jd-art-breathe 5.6s ease-in-out .2s infinite; }
+
+.sant-deep-page .jd-answer-card--ux { top: 1%; left: 0; width: min(50%, 560px); }
+.sant-deep-page .jd-answer-card--photo { top: 4%; right: 1%; }
+.sant-deep-page .jd-answer-card--instagram { top: 34%; left: 1%; }
+.sant-deep-page .jd-answer-card--campaign { top: 34%; right: 1%; }
+.sant-deep-page .jd-answer-card--primary { z-index: 5; }
+.sant-deep-page .jd-answer-card.is-coming-soon { cursor: default; }
+.sant-deep-page .jd-answer-card.is-coming-soon .jd-answer-cta {
+  color: #8a7564;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .jd-answer-stage {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 4px;
+    padding: 8px 18% 28px 4px !important;
+    margin-bottom: 12px;
+  }
+  .jd-answer-stage::-webkit-scrollbar { height: 0; }
+  .jd-answer-stage .jd-answer-card {
+    position: relative !important;
+    inset: auto !important;
+    flex: 0 0 84%;
+    width: 84% !important;
+    scroll-snap-align: start;
+  }
+  .sant-deep-page .jd-answer-card--ux { order: 1; }
+  .sant-deep-page .jd-answer-card--photo { order: 2; }
+  .sant-deep-page .jd-answer-card--instagram { order: 3; }
+  .sant-deep-page .jd-answer-card--campaign { order: 4; }
+  .scroll-more { right: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-more { display: none; }
+}

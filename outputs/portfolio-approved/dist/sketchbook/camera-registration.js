@@ -15,9 +15,7 @@ const CameraRegistration=(()=>{
  // Ease into the frame edge. A hard clamp stops the pan while the zoom keeps going.
  const easeEdge=(x,lo,hi)=>{if(!(hi>lo))return (lo+hi)/2||x;const m=Math.min(.05,(hi-lo)*.28);if(x<=lo)return lo;if(x>=hi)return hi;const glide=t=>t*t*(2-t);if(x<lo+m){const t=(x-lo)/m;return lo+m*glide(t)}if(x>hi-m){const t=(hi-x)/m;return hi-m*glide(t)}return x};
   function view(id,progress,viewport,scene,home,idle=0,pointer={x:0,y:0}){
-  const profile=profiles[id];if(!profile)return null;const p=clamp(progress,0,1),travel=pace(p);
-  // The closeup is the same framing as the dolly. A second crop used to slide across it on the way in and the way out.
-  const fade=clamp((p-.2)/.68,0,1),alpha=fade*fade*(3-2*fade),aspect=1672/941;
+  const profile=profiles[id];if(!profile)return null;const p=clamp(progress,0,1),travel=pace(p),aspect=1672/941;
   const cover=Math.max(viewport.w/1672,viewport.h/941),photoW=1672*cover*1.065,photoH=941*cover*1.065;
   const portrait=clamp((1.15-viewport.w/viewport.h)/.65,0,1);
   const horizontalBias=id==='ministry'?viewport.w*.07*(1-portrait):0;
@@ -37,6 +35,9 @@ const CameraRegistration=(()=>{
   const focus={x:easeEdge(profile.wide[0]-((pathAnchor.x-scene.x)/scene.w-.5)/z,viewBounds.left,viewBounds.right),y:easeEdge(profile.wide[1]-((pathAnchor.y-scene.y)/scene.h-.5)/z,viewBounds.top,viewBounds.bottom)};
   const wideAnchor=project(focus,z);
   const span=scene.h*z*profile.wideSpan;
+  const dayH=span/profile.day.span,dayW=dayH*aspect,coverNow=Math.min(dayW/Math.max(1,viewport.w),dayH/Math.max(1,viewport.h));
+  // Keep the closeup hidden until it fills the screen. A smaller plate reads as a cropped second layer.
+  const fade=clamp((coverNow-.96)/.07,0,1),alpha=fade*fade*(3-2*fade);
   const plate=theme=>{const a=profile[theme].anchor,h=span/profile[theme].span,w=h*aspect;
    return{x:wideAnchor.x-a[0]*w,y:wideAnchor.y-a[1]*h,w,h,anchor:a};
   };

@@ -103,6 +103,22 @@
   #nift-map .map-stops button,.chapter-menu button{animation:none;transition:none}
 }
 
+/* The closeup must not wear a soft crop. Those masks read as a second frame over the world. */
+#destination-detail .detail-main,
+#destination-detail .detail-night-image{
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+}
+/* Pins, title and actions appear together once the night plate is ready. */
+#world:not(.is-ready) .landmarks,
+#world:not(.is-ready) .intro,
+#world:not(.is-ready) .bottom-ctas,
+#world:not(.is-ready) .utilities{visibility:hidden}
+#world.is-ready .landmarks,
+#world.is-ready .intro,
+#world.is-ready .bottom-ctas,
+#world.is-ready .utilities{visibility:visible}
+
 /* The two world actions need a little air between them. The buttons overflow their cells, so the bar grows with the gap. */
 .bottom-ctas{gap:52px!important;width:min(468px,96vw)!important;max-width:468px!important}
 @media(max-width:650px){
