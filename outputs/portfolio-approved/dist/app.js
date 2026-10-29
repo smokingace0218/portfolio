@@ -1527,7 +1527,7 @@ function bindNextJourney() {
       if (!target) return;
       section.dataset.userActed = 'true';
       section.dataset.destinationChosen = destination;
-      history.pushState(history.state, '', `#${destination}`);
+      history.replaceState(history.state, '', `#${destination}`);
       const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height || 0;
       const top = target.getBoundingClientRect().top + window.scrollY - headerHeight;
       scrollPortfolioTo({ top, behavior: reduced ? 'instant' : 'smooth' });
@@ -4717,6 +4717,12 @@ function isPortfolioBranch(pathname) {
   return path === '/' || path === '/portfolio' || path === '/contact' || path === '/design-process' || path.startsWith('/work/') || path.startsWith('/experience/');
 }
 
+function projectBranchPath(pathname = location.pathname) {
+  const path = portfolioPathname(String(pathname).split('?')[0].split('#')[0]);
+  if (path.startsWith('/work/') || path.startsWith('/experience/') || path === '/design-process') return path;
+  return '';
+}
+
 let paintedPortfolioKey = '';
 
 function mountScrollCue() {
@@ -4822,6 +4828,16 @@ document.addEventListener('click', event => {
     const file = target && /\.(pdf|zip|mp4|wav|webp|png|jpe?g|svg|gif)$/i.test(target.pathname);
     if (target && target.origin === location.origin && !file && !target.pathname.includes('/sketchbook') && !target.pathname.startsWith('/assets') && isPortfolioBranch(target.pathname)) {
       const sameDocument = target.pathname === location.pathname && target.search === location.search;
+      if (sameDocument && target.hash) {
+        let place = null;
+        try { place = document.getElementById(decodeURIComponent(target.hash.slice(1))); } catch { place = null; }
+        if (place) {
+          event.preventDefault();
+          history.replaceState(history.state, '', `${location.pathname}${location.search}${target.hash}`);
+          scrollPortfolioIntoView(place, { behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+          return;
+        }
+      }
       if (!sameDocument) {
         event.preventDefault();
         unlockInterfaceHoverSound();
@@ -4859,8 +4875,30 @@ paintedPortfolioKey = `${location.pathname}${location.search}`;
 carryStoryAudioFromMagic();
 mountScrollCue();
 window.PortfolioMotion?.init();
+let projectBranchExits = 0;
+let projectBranchExitTimer = 0;
+function stopProjectBranchExit() {
+  projectBranchExits = 0;
+  window.clearTimeout(projectBranchExitTimer);
+  document.documentElement.style.visibility = '';
+}
 window.addEventListener('popstate', () => {
   const key = `${location.pathname}${location.search}`;
+  const landed = portfolioPathname();
+  const painted = portfolioPathname(paintedPortfolioKey.split('?')[0]);
+  const samePath = landed === painted;
+  const stillInProject = projectBranchPath(landed) && projectBranchPath(landed) === projectBranchPath(paintedPortfolioKey);
+  const storyStep = landed === '/' && samePath && (location.hash || projectBranchExits > 0);
+  if (samePath && (stillInProject || storyStep) && projectBranchExits < 12) {
+    projectBranchExits += 1;
+    document.documentElement.style.visibility = 'hidden';
+    releaseSceneAudio();
+    window.clearTimeout(projectBranchExitTimer);
+    projectBranchExitTimer = window.setTimeout(stopProjectBranchExit, 800);
+    history.back();
+    return;
+  }
+  stopProjectBranchExit();
   if (!isPortfolioBranch(location.pathname) || key === paintedPortfolioKey) return;
   paintPortfolioRoute();
 });

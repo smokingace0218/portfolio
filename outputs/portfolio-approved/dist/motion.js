@@ -121,7 +121,9 @@
       try { element = document.getElementById(decodeURIComponent(target.hash.slice(1))); } catch (_) { return; }
       if (!element) return;
       event.preventDefault();
-      history.pushState(history.state, '', target.hash);
+      // Chapter jumps stay on this page. Replacing the address keeps one back
+      // step for the whole story instead of a step per section.
+      history.replaceState(history.state, '', target.hash);
       scrollIntoView(element, { behavior: 'smooth', block: 'start' });
       element.focus({ preventScroll: true });
     });
