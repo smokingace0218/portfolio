@@ -426,3 +426,8 @@ html.is-landscape body{overflow:auto!important}
     --venom-feather:18px;
   }
 }
+#paper .chapter-venom.venom-cta,
+#nift-map .chapter-venom.venom-cta,
+#snitch-game .chapter-venom.venom-cta{
+  touch-action:pan-y;
+}

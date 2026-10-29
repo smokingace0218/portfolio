@@ -110,11 +110,33 @@ const worldSound=(()=>{
   }
   return out;
  }
+ function sceneBusy(){
+  return document.hidden||!!window.__sketchTraveling||!!document.querySelector('dialog[open]');
+ }
+ let stitchChain=Promise.resolve();
+ function whenCalm(){
+  return new Promise(resolve=>{
+   const wait=()=>{
+    if(!sceneBusy()){
+     if(window.requestIdleCallback)requestIdleCallback(()=>resolve(),{timeout:700});
+     else setTimeout(resolve,16);
+     return;
+    }
+    setTimeout(wait,180);
+   };
+   wait();
+  });
+ }
+ function stitchLater(buffer){
+  const job=stitchChain.then(()=>whenCalm()).then(()=>new Promise(resolve=>setTimeout(()=>resolve(stitch(buffer)),0)));
+  stitchChain=job.then(()=>{},()=>{});
+  return job;
+ }
  function seamless(id){
   if(loopBuffers[id])return Promise.resolve(loopBuffers[id]);
   if(!loopJobs[id]){
    const audioCtx=context();
-   loopJobs[id]=fetch(srcFor(id)).then(r=>{if(!r.ok)throw new Error('audio');return r.arrayBuffer()}).then(ab=>audioCtx.decodeAudioData(ab.slice(0))).then(stitch).then(b=>{loopBuffers[id]=b;return b}).catch(err=>{delete loopJobs[id];throw err});
+   loopJobs[id]=fetch(srcFor(id)).then(r=>{if(!r.ok)throw new Error('audio');return r.arrayBuffer()}).then(ab=>audioCtx.decodeAudioData(ab.slice(0))).then(buffer=>stitchLater(buffer)).then(b=>{loopBuffers[id]=b;return b}).catch(err=>{delete loopJobs[id];throw err});
   }
   return loopJobs[id];
  }
@@ -259,14 +281,8 @@ const worldSound=(()=>{
    outgoing=null;
   }
   stray(new Set([incoming,outgoing].filter(Boolean)));
-  const gap=outgoing&&incoming?120:0;
-  if(outgoing&&incoming){
-   slide(outgoing,0,gap);
-   setTimeout(()=>{if(job===mix)slide(incoming,volume,ms);},gap);
-  }else{
-   if(outgoing)slide(outgoing,0,ms);
-   if(incoming)slide(incoming,volume,ms);
-  }
+  if(outgoing)slide(outgoing,0,ms);
+  if(incoming)slide(incoming,volume,ms);
   let settled=false;
   const finish=()=>{if(settled)return;settled=true;if(outgoing)outgoing.removeEventListener('timeupdate',onTime);finishMix(job,outgoing,incoming)};
   function onTime(){
@@ -277,7 +293,7 @@ const worldSound=(()=>{
    finish();
   }
   if(outgoing)outgoing.addEventListener('timeupdate',onTime);
-  setTimeout(()=>{if(job===mix)finish()},ms+gap+90);
+  setTimeout(()=>{if(job===mix)finish()},ms+90);
  }
  function elementBegin(audio){
   return new Promise(resolve=>{
@@ -323,7 +339,7 @@ const worldSound=(()=>{
   audio.preload='auto';
   audio.dataset.route='direct';
   const outcome=elementBegin(audio);
-  if(awake()||context())seamless(id).then(buffer=>adoptBuffer(audio,buffer)).catch(()=>{});
+  if((awake()||context())&&!sceneBusy())seamless(id).then(buffer=>adoptBuffer(audio,buffer)).catch(()=>{});
   return outcome;
  }
  function settledOn(id){
@@ -418,11 +434,27 @@ const worldSound=(()=>{
   },
   preload(id){
    if(!requestedScoreTracks[id])return;
-   if(context())seamless(id).catch(()=>{});
    if(cache[id]||library[id]||active?.dataset.track===id||fading?.dataset.track===id||pending?.dataset.track===id)return;
    const audio=new Audio();
    audio.preload='auto';audio.loop=true;audio.volume=0;audio.dataset.track=id;audio.src=srcFor(id);
    cache[id]=audio;
+  },
+  warm(ids){
+   const list=(ids||[]).filter(id=>requestedScoreTracks[id]&&!loopBuffers[id]);
+   let i=0;
+   const step=()=>{
+    if(i>=list.length)return;
+    if(sceneBusy()){setTimeout(step,240);return}
+    const id=list[i++];
+    if(loopBuffers[id]){step();return}
+    const run=()=>seamless(id).catch(()=>{}).then(()=>{
+     if(window.requestIdleCallback)requestIdleCallback(step,{timeout:1000});
+     else setTimeout(step,180);
+    });
+    if(window.requestIdleCallback)requestIdleCallback(run,{timeout:1400});
+    else setTimeout(run,80);
+   };
+   step();
   },
   paper(){},
   kick(){if(!muted&&!document.hidden){poke();play()}}
