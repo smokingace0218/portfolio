@@ -612,6 +612,7 @@ function primeStoryMedia(root = document) {
   const nodes = root instanceof HTMLMediaElement ? [root] : [...root.querySelectorAll('video.think-film-video, audio.intro-narration-audio, audio.gateway-hello-audio')];
   nodes.forEach(media => {
     if (!(media instanceof HTMLMediaElement)) return;
+    if (media.classList.contains('gateway-hello-audio') && document.querySelector('.hero-gateway.is-entering')) return;
     if (media.dataset.storyLive === 'true' && !media.paused && !media.ended) return;
     if (navigator.userActivation && !navigator.userActivation.isActive) return;
     media.dataset.storyPrimed = 'pending';
@@ -981,8 +982,9 @@ function bindGateway() {
   const invite = gateway.querySelector('.gateway-invite');
   const reply = gateway.querySelector('.gateway-reply');
   const helloAudio = gateway.querySelector('.gateway-hello-audio');
-  if (helloAudio) helloAudio.volume = 1;
+  if (helloAudio && helloAudio.dataset.storySpeak !== 'true') helloAudio.volume = 0;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let lastTouchAt = 0;
   if (reducedMotion) gateway.classList.add('is-ready');
   else invite.addEventListener('animationend', event => {
     if (event.target === invite && event.animationName === 'gateway-arrive') {
@@ -1010,14 +1012,26 @@ function bindGateway() {
   document.addEventListener('visibilitychange', () => { stopGatewayBlink(); if (!document.hidden) scheduleGatewayBlink(1200); });
   window.addEventListener('pagehide', stopGatewayBlink);
 
-  const playHello = () => {
+  const hushHello = () => {
     if (!helloAudio) return;
+    helloAudio.dataset.storySpeak = 'false';
+    helloAudio.loop = false;
+    helloAudio.volume = 0;
+    helloAudio.pause();
+    try { helloAudio.currentTime = 0; } catch {}
+  };
+  const playHello = () => {
+    if (!helloAudio || gateway.classList.contains('is-entering')) return;
+    if (helloAudio.dataset.storySpeak === 'true' && !helloAudio.paused && !helloAudio.ended) return;
     helloAudio.dataset.storySpeak = 'true';
     helloAudio.loop = false;
     helloAudio.muted = false;
     helloAudio.volume = 1;
     try { helloAudio.currentTime = 0; } catch {}
-    helloAudio.play().catch(() => {});
+    const pending = helloAudio.play();
+    pending?.then?.(() => {
+      if (helloAudio.dataset.storySpeak !== 'true' || gateway.classList.contains('is-entering')) helloAudio.volume = 0;
+    }).catch(() => {});
   };
   const clearMotionTimers = () => {
     clearTimeout(revealTimer);
@@ -1032,6 +1046,7 @@ function bindGateway() {
     delete gateway.dataset.gaze;
   };
   const beginPeek = (mode, gaze = '', speak = false) => {
+    if (gateway.classList.contains('is-entering')) return;
     clearMotionTimers();
     activeIntent = mode;
     gateway.dataset.intent = mode;
@@ -1054,11 +1069,10 @@ function bindGateway() {
     if (gateway.querySelector('.gateway-link:hover, .gateway-invite:hover, .gateway-link:focus-visible, .gateway-invite:focus-visible')) return;
     clearMotionTimers();
     if (helloAudio) {
-      if (helloAudio.dataset.storyLive === 'true') {
-        helloAudio.dataset.storySpeak = 'false';
-        helloAudio.loop = true;
-        helloAudio.volume = 0;
-      } else {
+      helloAudio.dataset.storySpeak = 'false';
+      helloAudio.loop = false;
+      helloAudio.volume = 0;
+      if (helloAudio.dataset.storyLive !== 'true') {
         helloAudio.pause();
         try { helloAudio.currentTime = 0; } catch {}
       }
@@ -1080,20 +1094,28 @@ function bindGateway() {
     const link = event.target.closest('.gateway-link');
     if (link) beginPeek('menu', link.dataset.gaze);
   });
-  invite.addEventListener('pointerenter', event => beginPeek('invite', '', event.pointerType === 'mouse' || event.pointerType === 'pen'));
+  gateway.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'touch') lastTouchAt = performance.now();
+  }, { capture: true });
+  invite.addEventListener('pointerenter', event => {
+    const fromTouch = performance.now() - lastTouchAt < 900;
+    const hoverSpeak = !fromTouch && (event.pointerType === 'mouse' || event.pointerType === 'pen');
+    beginPeek('invite', '', hoverSpeak);
+  });
   invite.addEventListener('focus', () => beginPeek('invite'));
   gateway.querySelectorAll('.gateway-link, .gateway-invite').forEach(control => {
     control.addEventListener('pointerleave', () => window.setTimeout(returnToFingers, 70));
     control.addEventListener('blur', () => window.setTimeout(returnToFingers, 70));
   });
   invite.addEventListener('click', () => {
+    hushHello();
+    gateway.classList.add('is-entering');
     const story = document.getElementById('journey-content');
     document.body.classList.add('story-open');
     story.hidden = false;
     primeStoryMedia();
     story.classList.add('is-revealed');
     stopGatewayBlink();
-    gateway.classList.add('is-entering');
     bindHomeInteractions();
     bindScrollStory();
     observeReveal();
