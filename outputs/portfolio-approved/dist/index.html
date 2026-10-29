@@ -62,7 +62,7 @@
             el.setAttribute('playsinline', '');
             el.setAttribute('aria-hidden', 'true');
             el.src = clip[3];
-            el.loop = true;
+            el.loop = clip[1] !== 'story-hello-prime';
             el.volume = 0;
             el.muted = false;
             document.documentElement.appendChild(el);
@@ -131,14 +131,14 @@
       const imagePreloads = routeImages.map(href => `<link rel="preload" as="image" href="${assetRoot}${href}">`).join('');
       document.write(`
         ${imagePreloads}
-        <link rel="preload" as="script" href="${assetRoot}/app.js?v=210-hello-once">
+        <link rel="preload" as="script" href="${assetRoot}/app.js?v=211-hello-desktop">
         <link rel="stylesheet" href="${assetRoot}/styles.css?v=206-craft-scroll">
         <link rel="stylesheet" href="${assetRoot}/responsive.css?v=158-together">
         <script src="${assetRoot}/vendor/gsap.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/ScrollTrigger.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/lenis.min.js" defer><\/script>
         <script src="${assetRoot}/motion.js?v=156-smooth" defer><\/script>
-        <script src="${assetRoot}/app.js?v=210-hello-once" defer><\/script>
+        <script src="${assetRoot}/app.js?v=211-hello-desktop" defer><\/script>
       `);
     </script>
   </head>

@@ -612,7 +612,7 @@ function primeStoryMedia(root = document) {
   const nodes = root instanceof HTMLMediaElement ? [root] : [...root.querySelectorAll('video.think-film-video, audio.intro-narration-audio, audio.gateway-hello-audio')];
   nodes.forEach(media => {
     if (!(media instanceof HTMLMediaElement)) return;
-    if (media.classList.contains('gateway-hello-audio') && document.querySelector('.hero-gateway.is-entering')) return;
+    if (media.classList.contains('gateway-hello-audio')) return;
     if (media.dataset.storyLive === 'true' && !media.paused && !media.ended) return;
     if (navigator.userActivation && !navigator.userActivation.isActive) return;
     media.dataset.storyPrimed = 'pending';
@@ -1014,23 +1014,49 @@ function bindGateway() {
 
   const hushHello = () => {
     if (!helloAudio) return;
+    helloAudio.dataset.helloToken = String(Number(helloAudio.dataset.helloToken || 0) + 1);
     helloAudio.dataset.storySpeak = 'false';
     helloAudio.loop = false;
+    helloAudio.removeAttribute('loop');
     helloAudio.volume = 0;
     helloAudio.pause();
     try { helloAudio.currentTime = 0; } catch {}
   };
+  if (helloAudio) {
+    helloAudio.loop = false;
+    helloAudio.removeAttribute('loop');
+    helloAudio.addEventListener('play', () => {
+      if (helloAudio.dataset.storySpeak === 'true' && !gateway.classList.contains('is-entering')) {
+        helloAudio.loop = false;
+        helloAudio.removeAttribute('loop');
+        return;
+      }
+      helloAudio.loop = false;
+      helloAudio.removeAttribute('loop');
+      helloAudio.volume = 0;
+      helloAudio.pause();
+    });
+    helloAudio.addEventListener('ended', () => {
+      helloAudio.dataset.storySpeak = 'false';
+      helloAudio.loop = false;
+      helloAudio.pause();
+    });
+  }
   const playHello = () => {
     if (!helloAudio || gateway.classList.contains('is-entering')) return;
     if (helloAudio.dataset.storySpeak === 'true' && !helloAudio.paused && !helloAudio.ended) return;
+    const token = String(Number(helloAudio.dataset.helloToken || 0) + 1);
+    helloAudio.dataset.helloToken = token;
     helloAudio.dataset.storySpeak = 'true';
     helloAudio.loop = false;
+    helloAudio.removeAttribute('loop');
     helloAudio.muted = false;
+    helloAudio.pause();
     helloAudio.volume = 1;
     try { helloAudio.currentTime = 0; } catch {}
     const pending = helloAudio.play();
     pending?.then?.(() => {
-      if (helloAudio.dataset.storySpeak !== 'true' || gateway.classList.contains('is-entering')) helloAudio.volume = 0;
+      if (helloAudio.dataset.helloToken !== token || helloAudio.dataset.storySpeak !== 'true' || gateway.classList.contains('is-entering')) hushHello();
     }).catch(() => {});
   };
   const clearMotionTimers = () => {
@@ -1068,15 +1094,7 @@ function bindGateway() {
     if (gateway.classList.contains('is-entering')) return;
     if (gateway.querySelector('.gateway-link:hover, .gateway-invite:hover, .gateway-link:focus-visible, .gateway-invite:focus-visible')) return;
     clearMotionTimers();
-    if (helloAudio) {
-      helloAudio.dataset.storySpeak = 'false';
-      helloAudio.loop = false;
-      helloAudio.volume = 0;
-      if (helloAudio.dataset.storyLive !== 'true') {
-        helloAudio.pause();
-        try { helloAudio.currentTime = 0; } catch {}
-      }
-    }
+    hushHello();
     activeIntent = '';
     delete gateway.dataset.intent;
     reply.textContent = '';
@@ -1156,6 +1174,14 @@ function startIntroAvatar() {
   if (!video || !narration || !scene || !continueAction || !continueLink || !skipButton) return;
   const guideIntroContinue = () => guideStoryChoices(scene, [continueLink], () => continueLink.click());
   wrap.dataset.observing = 'true';
+  document.querySelectorAll('audio.gateway-hello-audio').forEach(audio => {
+    audio.dataset.helloToken = String(Number(audio.dataset.helloToken || 0) + 1);
+    audio.dataset.storySpeak = 'false';
+    audio.loop = false;
+    audio.removeAttribute('loop');
+    audio.volume = 0;
+    audio.pause();
+  });
   video.muted = true;
   video.volume = 0;
   let visible = false;
