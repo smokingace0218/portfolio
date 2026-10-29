@@ -48,7 +48,6 @@
           if (storyBase && storyPath.indexOf(storyBase) === 0) storyPath = storyPath.slice(storyBase.length) || '/';
           var storyClips = [];
           if (storyPath === '/') {
-            storyClips.push(['audio', 'story-hello-prime', 'gateway-hello-audio', (storyBase || '') + '/assets/avatar-hello.wav']);
             storyClips.push(['audio', 'story-narration-prime', 'intro-narration-audio', 'https://d8j0ntlcm91z4.cloudfront.net/user_3HGZD0LKCjtuivCHwrpylyAJpwf/hf_20261001_210437_54bc9ee3-38d4-4a14-916d-cc21ceeddbf6.wav']);
           }
           if (storyPath === '/design-process') storyClips.push(['video', 'story-film-prime', 'think-film-video', (storyBase || '') + '/assets/how-i-think-web.mp4']);
@@ -131,14 +130,14 @@
       const imagePreloads = routeImages.map(href => `<link rel="preload" as="image" href="${assetRoot}${href}">`).join('');
       document.write(`
         ${imagePreloads}
-        <link rel="preload" as="script" href="${assetRoot}/app.js?v=211-hello-desktop">
+        <link rel="preload" as="script" href="${assetRoot}/app.js?v=212-quiet-hello">
         <link rel="stylesheet" href="${assetRoot}/styles.css?v=206-craft-scroll">
         <link rel="stylesheet" href="${assetRoot}/responsive.css?v=158-together">
         <script src="${assetRoot}/vendor/gsap.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/ScrollTrigger.min.js" defer><\/script>
         <script src="${assetRoot}/vendor/lenis.min.js" defer><\/script>
         <script src="${assetRoot}/motion.js?v=156-smooth" defer><\/script>
-        <script src="${assetRoot}/app.js?v=211-hello-desktop" defer><\/script>
+        <script src="${assetRoot}/app.js?v=212-quiet-hello" defer><\/script>
       `);
     </script>
   </head>

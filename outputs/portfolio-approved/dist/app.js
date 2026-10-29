@@ -1018,6 +1018,7 @@ function bindGateway() {
     helloAudio.dataset.storySpeak = 'false';
     helloAudio.loop = false;
     helloAudio.removeAttribute('loop');
+    helloAudio.muted = true;
     helloAudio.volume = 0;
     helloAudio.pause();
     try { helloAudio.currentTime = 0; } catch {}
@@ -1025,40 +1026,18 @@ function bindGateway() {
   if (helloAudio) {
     helloAudio.loop = false;
     helloAudio.removeAttribute('loop');
+    helloAudio.muted = true;
+    helloAudio.volume = 0;
     helloAudio.addEventListener('play', () => {
-      if (helloAudio.dataset.storySpeak === 'true' && !gateway.classList.contains('is-entering')) {
-        helloAudio.loop = false;
-        helloAudio.removeAttribute('loop');
-        return;
-      }
       helloAudio.loop = false;
       helloAudio.removeAttribute('loop');
+      helloAudio.muted = true;
       helloAudio.volume = 0;
       helloAudio.pause();
     });
-    helloAudio.addEventListener('ended', () => {
-      helloAudio.dataset.storySpeak = 'false';
-      helloAudio.loop = false;
-      helloAudio.pause();
-    });
+    hushHello();
   }
-  const playHello = () => {
-    if (!helloAudio || gateway.classList.contains('is-entering')) return;
-    if (helloAudio.dataset.storySpeak === 'true' && !helloAudio.paused && !helloAudio.ended) return;
-    const token = String(Number(helloAudio.dataset.helloToken || 0) + 1);
-    helloAudio.dataset.helloToken = token;
-    helloAudio.dataset.storySpeak = 'true';
-    helloAudio.loop = false;
-    helloAudio.removeAttribute('loop');
-    helloAudio.muted = false;
-    helloAudio.pause();
-    helloAudio.volume = 1;
-    try { helloAudio.currentTime = 0; } catch {}
-    const pending = helloAudio.play();
-    pending?.then?.(() => {
-      if (helloAudio.dataset.helloToken !== token || helloAudio.dataset.storySpeak !== 'true' || gateway.classList.contains('is-entering')) hushHello();
-    }).catch(() => {});
-  };
+  const playHello = () => hushHello();
   const clearMotionTimers = () => {
     clearTimeout(revealTimer);
     clearTimeout(retreatTimer);
@@ -1311,6 +1290,7 @@ function startIntroAvatar() {
       active = true;
       narration.dataset.storySpeak = 'true';
       narration.loop = false;
+      narration.removeAttribute('loop');
       narration.muted = false;
       narration.volume = 1;
       try { narration.currentTime = 0; } catch {}
@@ -1339,6 +1319,7 @@ function startIntroAvatar() {
         if (run === generation && visible && active) {
           narration.dataset.storySpeak = 'true';
           narration.loop = false;
+          narration.removeAttribute('loop');
           narration.muted = false;
           narration.volume = 1;
           try { narration.currentTime = 0; } catch {}
