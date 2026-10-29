@@ -608,6 +608,24 @@ function adoptPrime(selector, id) {
 }
 // A clip started during the entry gesture has to keep playing, silently.
 // Pausing it makes the next branch ask for another tap.
+function silenceGatewayHello() {
+  document.querySelectorAll('audio.gateway-hello-audio').forEach(audio => {
+    audio.loop = false;
+    audio.removeAttribute('loop');
+    audio.muted = true;
+    audio.volume = 0;
+    audio.pause();
+  });
+}
+document.addEventListener('play', event => {
+  const media = event.target;
+  if (!(media instanceof HTMLMediaElement) || !media.classList.contains('gateway-hello-audio')) return;
+  media.loop = false;
+  media.removeAttribute('loop');
+  media.muted = true;
+  media.volume = 0;
+  media.pause();
+}, true);
 function primeStoryMedia(root = document) {
   const nodes = root instanceof HTMLMediaElement ? [root] : [...root.querySelectorAll('video.think-film-video, audio.intro-narration-audio, audio.gateway-hello-audio')];
   nodes.forEach(media => {
@@ -732,7 +750,6 @@ function renderHome() {
         <a class="gateway-link" href="/contact" data-route="/contact" data-gaze="left">Connect <span aria-hidden="true">↗</span></a>
         <button class="gateway-invite" type="button" aria-describedby="gateway-reply">Come along <span aria-hidden="true">↓</span></button>
       </nav>
-      <audio class="gateway-hello-audio" preload="auto" src="${ASSET}avatar-hello.wav" aria-hidden="true"></audio>
       <div class="gateway-character" aria-hidden="true">
         ${image('gateway-frame-01-fingertips.webp', '', 'gateway-frame gateway-fingers', true)}
         ${image('gateway-frame-02-curious-peek.webp', '', 'gateway-frame gateway-curious', false)}
@@ -1151,6 +1168,22 @@ function startIntroAvatar() {
   const continueLink = continueAction?.querySelector('.intro-summary-continue');
   const skipButton = scene?.querySelector('.intro-skip');
   if (!video || !narration || !scene || !continueAction || !continueLink || !skipButton) return;
+  silenceGatewayHello();
+  if (narration.dataset.voiceLocked !== 'true') {
+    narration.dataset.voiceLocked = 'true';
+    narration.addEventListener('play', () => {
+      if (narration.dataset.storySpeak === 'true') {
+        narration.loop = false;
+        narration.removeAttribute('loop');
+        return;
+      }
+      if (narration.volume > 0) narration.volume = 0;
+    });
+    narration.addEventListener('ended', () => {
+      narration.loop = false;
+      narration.pause();
+    });
+  }
   const guideIntroContinue = () => guideStoryChoices(scene, [continueLink], () => continueLink.click());
   wrap.dataset.observing = 'true';
   document.querySelectorAll('audio.gateway-hello-audio').forEach(audio => {
@@ -1293,7 +1326,7 @@ function startIntroAvatar() {
       narration.removeAttribute('loop');
       narration.muted = false;
       narration.volume = 1;
-      try { narration.currentTime = 0; } catch {}
+      try { if (narration.currentTime > 0.05) narration.currentTime = 0; } catch {}
       narration.play().then(animateIntroCopy).catch(() => {
         if (narration.dataset.storyLive === 'true' && !narration.paused) { animateIntroCopy(); return; }
         narrationUnavailable = true;
@@ -1306,7 +1339,12 @@ function startIntroAvatar() {
       // revised standalone Ainsley take is the only voice the visitor hears.
       video.muted = true;
       video.volume = 0;
+      video.muted = true;
+      video.defaultMuted = true;
+      video.volume = 0;
       const started = await Promise.allSettled([video.play(), waitForPresentedFrame()]);
+      video.muted = true;
+      video.volume = 0;
       if (run !== generation || !visible || started[0].status === 'rejected' || started[1].status === 'rejected' || !started[1].value) {
         stop();
         return;
@@ -1322,7 +1360,7 @@ function startIntroAvatar() {
           narration.removeAttribute('loop');
           narration.muted = false;
           narration.volume = 1;
-          try { narration.currentTime = 0; } catch {}
+          try { if (narration.currentTime > 0.05) narration.currentTime = 0; } catch {}
           narration.play().catch(() => {
             if (narration.dataset.storyLive === 'true' && !narration.paused) return;
             narrationUnavailable = true;
