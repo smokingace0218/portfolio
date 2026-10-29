@@ -259,8 +259,14 @@ const worldSound=(()=>{
    outgoing=null;
   }
   stray(new Set([incoming,outgoing].filter(Boolean)));
-  if(outgoing)slide(outgoing,0,ms);
-  if(incoming)slide(incoming,volume,ms);
+  const gap=outgoing&&incoming?120:0;
+  if(outgoing&&incoming){
+   slide(outgoing,0,gap);
+   setTimeout(()=>{if(job===mix)slide(incoming,volume,ms);},gap);
+  }else{
+   if(outgoing)slide(outgoing,0,ms);
+   if(incoming)slide(incoming,volume,ms);
+  }
   let settled=false;
   const finish=()=>{if(settled)return;settled=true;if(outgoing)outgoing.removeEventListener('timeupdate',onTime);finishMix(job,outgoing,incoming)};
   function onTime(){
@@ -271,7 +277,7 @@ const worldSound=(()=>{
    finish();
   }
   if(outgoing)outgoing.addEventListener('timeupdate',onTime);
-  setTimeout(()=>{if(job===mix)finish()},ms+90);
+  setTimeout(()=>{if(job===mix)finish()},ms+gap+90);
  }
  function elementBegin(audio){
   return new Promise(resolve=>{
@@ -284,21 +290,41 @@ const worldSound=(()=>{
    setTimeout(()=>finish('timeout'),1200);
   });
  }
+ function adoptBuffer(audio,buffer){
+  if(!buffer||muted||document.hidden||!ctx||ctx.state!=='running')return;
+  if(audio!==active&&audio!==pending&&audio!==fading)return;
+  const gain=ensureGain(audio);
+  if(!gain)return;
+  const now=ctx.currentTime;
+  const ride=rides.get(audio);
+  const job=direct.get(audio);
+  const level=audio.dataset.route==='graph'?graphLevel(audio,now):(audio.volume||0);
+  const target=job?job.to:(ride&&ride.end>now+.02?ride.to:level);
+  startVoice(audio,buffer,gain);
+  direct.delete(audio);
+  gain.gain.cancelScheduledValues(now);
+  gain.gain.setValueAtTime(clamp(level),now);
+  if(Math.abs(target-level)>.001){
+   const remain=job?Math.max(.06,(job.started+job.ms-performance.now())/1000):Math.max(.06,(ride?ride.end:now)-now);
+   const end=now+remain;
+   gain.gain.linearRampToValueAtTime(clamp(target),end);
+   rides.set(audio,{from:level,to:target,start:now,end});
+  }else rides.set(audio,{from:level,to:level,start:now,end:now});
+ }
  async function begin(audio){
   if(muted||document.hidden)return 'skip';
-  if(await poke()){
+  const id=audio.dataset.track;
+  if(loopBuffers[id]&&await poke()){
    if(muted||document.hidden)return 'skip';
-   try{
-    const buffer=await seamless(audio.dataset.track);
-    if(muted||document.hidden)return 'skip';
-    const gain=ensureGain(audio);
-    if(gain){startVoice(audio,buffer,gain);return 'ok'}
-   }catch{}
+   const gain=ensureGain(audio);
+   if(gain){startVoice(audio,loopBuffers[id],gain);return 'ok'}
   }
-  if(muted||document.hidden)return 'skip';
-  if(!audio.src)audio.src=srcFor(audio.dataset.track);
+  if(!audio.src)audio.src=srcFor(id);
+  audio.preload='auto';
   audio.dataset.route='direct';
-  return elementBegin(audio);
+  const outcome=elementBegin(audio);
+  if(awake()||context())seamless(id).then(buffer=>adoptBuffer(audio,buffer)).catch(()=>{});
+  return outcome;
  }
  function settledOn(id){
   return pending?.dataset.track===id||(active?.dataset.track===id&&sounding(active)&&fading!==active);
@@ -345,7 +371,7 @@ const worldSound=(()=>{
   if(starting===mineId)starting=null;
   active=next;
   const outgoing=previous&&previous!==next&&sounding(previous)?previous:null;
-  handoff(next,outgoing,outgoing?680:420);
+  handoff(next,outgoing,outgoing?180:90);
   ui();
  }
  function stopScore(){
@@ -392,10 +418,10 @@ const worldSound=(()=>{
   },
   preload(id){
    if(!requestedScoreTracks[id])return;
-   if(awake())seamless(id).catch(()=>{});
+   if(context())seamless(id).catch(()=>{});
    if(cache[id]||library[id]||active?.dataset.track===id||fading?.dataset.track===id||pending?.dataset.track===id)return;
    const audio=new Audio();
-   audio.preload='none';audio.loop=true;audio.volume=0;audio.dataset.track=id;
+   audio.preload='auto';audio.loop=true;audio.volume=0;audio.dataset.track=id;audio.src=srcFor(id);
    cache[id]=audio;
   },
   paper(){},
