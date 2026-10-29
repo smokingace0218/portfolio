@@ -2926,9 +2926,7 @@ function renderProject(slug) {
   if (slug === 'matera') return renderMateraCaseStudy();
   renderComingSoon({
     title: `The ${project.title} story is coming together.`,
-    message: `I’m gathering the work and decisions behind ${project.title}. I’ll bring you through it soon.`,
-    backHref: '/',
-    backLabel: 'Back to my journey'
+    message: `I’m gathering the work and decisions behind ${project.title}. I’ll bring you through it soon.`
   });
 }
 
@@ -3010,13 +3008,8 @@ function renderCmsCaseStudy() {
 
 function renderMateraCaseStudy() {
   document.body.dataset.page = 'deep-page';
-  const fromPortfolio = new URLSearchParams(location.search).get('from') === 'portfolio';
-  const backLink = fromPortfolio
-    ? '<a class="back-link" href="/portfolio/">← Back to Portfolio</a>'
-    : '<a class="back-link" href="/experience/janitri#matera-answer" data-return-to-journey data-return-hash="#matera-answer">← Back to the Matera card</a>';
   main.innerHTML = `<article class="deep-page matera-case-page">
     <div class="wrap">
-      ${backLink}
       <section class="matera-case-section matera-moment-intro" aria-labelledby="matera-intro-title">
         <div class="wrap matera-moment-intro__layout">
           <figure class="matera-moment-intro__avatar" aria-label="Shruti seated with her notebook, smiling and blinking through the project reveal, design overview, role showcase and project links">
@@ -3382,9 +3375,9 @@ function bindCaseStudyOpening() {
     }
   }
 }
-function renderComingSoon({ title = 'This page is still taking shape.', message = 'A little more of my story is on its way.', backHref = '/', backLabel = 'Back to my journey' } = {}) {
+function renderComingSoon({ title = 'This page is still taking shape.', message = 'A little more of my story is on its way.' } = {}) {
   document.body.dataset.page = 'deep-page';
-  main.innerHTML = `<article class="deep-page coming-soon-page"><div class="wrap coming-soon-layout"><div class="coming-soon-copy"><p class="eyebrow">Coming soon</p><h1>${title}</h1><p class="deep-lede">${message}</p><a class="button-link" href="${backHref}">${backLabel} <span aria-hidden="true">↗</span></a></div><figure class="coming-soon-avatar"><img src="${ASSET}gateway-frame-03-happy-smile.webp" alt="Shruti smiling and peeking onto the page" width="1024" height="1536" loading="eager" decoding="async"><figcaption>I’m putting the finishing touches on this bit <span aria-hidden="true">☺</span></figcaption></figure></div></article>`;
+  main.innerHTML = `<article class="deep-page coming-soon-page"><div class="wrap coming-soon-layout"><div class="coming-soon-copy"><p class="eyebrow">Coming soon</p><h1>${title}</h1><p class="deep-lede">${message}</p></div><figure class="coming-soon-avatar"><img src="${ASSET}gateway-frame-03-happy-smile.webp" alt="Shruti smiling and peeking onto the page" width="1024" height="1536" loading="eager" decoding="async"><figcaption>I’m putting the finishing touches on this bit <span aria-hidden="true">☺</span></figcaption></figure></div></article>`;
 }
 
 const experienceContent = {
@@ -3406,7 +3399,7 @@ function renderExperience(slug) {
   const experience = experienceContent[slug];
   if (!experience) return renderNotFound();
   document.body.dataset.page = 'deep-page';
-  main.innerHTML = `<article class="deep-page experience-page"><div class="wrap"><a class="back-link" href="/" data-return-to-journey>← Return to the journey</a><header class="deep-hero"><div><p class="eyebrow">Résumé / Experience</p><h1>${experience.title}</h1><p class="deep-lede">${experience.intro}</p><div class="deep-meta"><span>${experience.role}</span><span>${experience.date}</span></div></div><div class="experience-stamp"><span>SHRUTI<br>KUMARI</span><b>${experience.role}</b><small>${experience.date}</small></div></header><div class="experience-list"><p class="eyebrow">What I worked on</p>${experience.work.map((item,index)=>`<article class="experience-item"><span>0${index+1}</span><div><h2>${item[0]}</h2><p>${item[1]}</p>${(slug==='sant-rams'&&item[0]==='JAZAA')?'<a class="text-link" href="/work/jazaa">Open the JAZAA case study ↗</a>':''}${(slug==='janitri'&&item[0]==='Matera / ANC')?'<a class="text-link" href="/work/matera">Open the Matera case study ↗</a>':''}</div></article>`).join('')}</div><aside class="learning-note"><p class="eyebrow">What I carried forward</p><p>${experience.learning}</p></aside><footer class="deep-footer"><a class="button-link" href="/" data-return-to-journey>Back to my journey <span>↓</span></a></footer></div></article>`;
+  main.innerHTML = `<article class="deep-page experience-page"><div class="wrap"><header class="deep-hero"><div><p class="eyebrow">Résumé / Experience</p><h1>${experience.title}</h1><p class="deep-lede">${experience.intro}</p><div class="deep-meta"><span>${experience.role}</span><span>${experience.date}</span></div></div><div class="experience-stamp"><span>SHRUTI<br>KUMARI</span><b>${experience.role}</b><small>${experience.date}</small></div></header><div class="experience-list"><p class="eyebrow">What I worked on</p>${experience.work.map((item,index)=>`<article class="experience-item"><span>0${index+1}</span><div><h2>${item[0]}</h2><p>${item[1]}</p>${(slug==='sant-rams'&&item[0]==='JAZAA')?'<a class="text-link" href="/work/jazaa">Open the JAZAA case study ↗</a>':''}${(slug==='janitri'&&item[0]==='Matera / ANC')?'<a class="text-link" href="/work/matera">Open the Matera case study ↗</a>':''}</div></article>`).join('')}</div><aside class="learning-note"><p class="eyebrow">What I carried forward</p><p>${experience.learning}</p></aside></div></article>`;
   bindReturnLinks(slug);
 }
 
@@ -3566,7 +3559,6 @@ function renderCraftCluster() {
   document.body.dataset.page = 'deep-page';
   main.innerHTML = `<article class="deep-page matera-case-page craft-cluster-page">
     <div class="wrap">
-      <a class="back-link" href="/portfolio/">← Back to Portfolio</a>
       <section class="matera-case-section matera-moment-intro" aria-labelledby="craft-cluster-title">
         <div class="wrap matera-moment-intro__layout">
           <figure class="matera-moment-intro__avatar" aria-label="Shruti seated with her notebook">
@@ -4000,7 +3992,7 @@ function bindConnectIntroduction(stage, react, reset) {
 }
 
 function renderNotFound() {
-  renderComingSoon({ title: 'This page is still taking shape.', message: 'I’m working on this part of the story. There’ll be more to see here soon.', backHref: '/', backLabel: 'Back to my journey' });
+  renderComingSoon({ title: 'This page is still taking shape.', message: 'I’m working on this part of the story. There’ll be more to see here soon.' });
 }
 
 function bindReturnLinks(scene) {
@@ -4079,7 +4071,7 @@ function howThinkMarkup() {
 
 function renderDesignProcess() {
   document.body.dataset.page = 'process-page';
-  main.innerHTML = `<div class="design-process-branch"><a class="process-return" href="/#next-ending">← Back to the next chapter</a>${howThinkMarkup()}</div>`;
+  main.innerHTML = `<div class="design-process-branch">${howThinkMarkup()}</div>`;
   adoptPrime('video.think-film-video', 'story-film-prime');
   const video = main.querySelector('.think-film-video');
   if (video) {
@@ -4748,11 +4740,13 @@ document.addEventListener('pointerdown', event => {
 
 document.addEventListener('click', event => {
   const projectLink = event.target.closest('[data-project-link]');
+  let leavingHash = '';
   if (projectLink) {
     const exactProject = projectLink.closest('.selected-project');
     const storySection = projectLink.closest('section[id]');
     const fallback = projectLink.dataset.project === 'jazaa' ? 'sant-rams' : projectLink.dataset.project === 'matera' ? 'janitri' : 'selected-work';
-    sessionStorage.setItem('journeyHash', `#${exactProject?.id || storySection?.id || fallback}`);
+    leavingHash = `#${exactProject?.id || storySection?.id || fallback}`;
+    sessionStorage.setItem('journeyHash', leavingHash);
   }
   const anchor = event.target.closest('a[href]');
   if (anchor && !BASE_PATH && !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && anchor.target !== '_blank' && !anchor.hasAttribute('download')) {
@@ -4764,6 +4758,9 @@ document.addEventListener('click', event => {
       if (!sameDocument) {
         event.preventDefault();
         unlockInterfaceHoverSound();
+        if (portfolioPathname() === '/' && leavingHash && leavingHash !== location.hash) {
+          history.replaceState({ portfolio: true }, '', `${location.pathname}${location.search}${leavingHash}`);
+        }
         history.pushState({ portfolio: true }, '', `${target.pathname}${target.search}${target.hash}`);
         paintPortfolioRoute();
         return;
