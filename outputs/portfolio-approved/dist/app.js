@@ -612,20 +612,12 @@ function silenceGatewayHello() {
   document.querySelectorAll('audio.gateway-hello-audio').forEach(audio => {
     audio.loop = false;
     audio.removeAttribute('loop');
-    audio.muted = true;
+    audio.dataset.storySpeak = 'false';
     audio.volume = 0;
     audio.pause();
+    try { audio.currentTime = 0; } catch {}
   });
 }
-document.addEventListener('play', event => {
-  const media = event.target;
-  if (!(media instanceof HTMLMediaElement) || !media.classList.contains('gateway-hello-audio')) return;
-  media.loop = false;
-  media.removeAttribute('loop');
-  media.muted = true;
-  media.volume = 0;
-  media.pause();
-}, true);
 function primeStoryMedia(root = document) {
   const nodes = root instanceof HTMLMediaElement ? [root] : [...root.querySelectorAll('video.think-film-video, audio.intro-narration-audio, audio.gateway-hello-audio')];
   nodes.forEach(media => {
@@ -750,6 +742,7 @@ function renderHome() {
         <a class="gateway-link" href="/contact" data-route="/contact" data-gaze="left">Connect <span aria-hidden="true">↗</span></a>
         <button class="gateway-invite" type="button" aria-describedby="gateway-reply">Come along <span aria-hidden="true">↓</span></button>
       </nav>
+      <audio class="gateway-hello-audio" preload="auto" src="${ASSET}avatar-hello.wav" aria-hidden="true"></audio>
       <div class="gateway-character" aria-hidden="true">
         ${image('gateway-frame-01-fingertips.webp', '', 'gateway-frame gateway-fingers', true)}
         ${image('gateway-frame-02-curious-peek.webp', '', 'gateway-frame gateway-curious', false)}
@@ -1001,7 +994,7 @@ function bindGateway() {
   const helloAudio = gateway.querySelector('.gateway-hello-audio');
   if (helloAudio && helloAudio.dataset.storySpeak !== 'true') helloAudio.volume = 0;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let lastTouchAt = 0;
+  let lastTouchAt = -1e9;
   if (reducedMotion) gateway.classList.add('is-ready');
   else invite.addEventListener('animationend', event => {
     if (event.target === invite && event.animationName === 'gateway-arrive') {
@@ -1035,26 +1028,47 @@ function bindGateway() {
     helloAudio.dataset.storySpeak = 'false';
     helloAudio.loop = false;
     helloAudio.removeAttribute('loop');
-    helloAudio.muted = true;
     helloAudio.volume = 0;
     helloAudio.pause();
     try { helloAudio.currentTime = 0; } catch {}
   };
-  if (helloAudio) {
+  const armHello = () => {
+    if (!helloAudio || helloAudio.dataset.armed === 'true' || gateway.classList.contains('is-entering')) return;
+    helloAudio.loop = true;
+    helloAudio.muted = false;
+    helloAudio.volume = 0;
+    const pending = helloAudio.play();
+    pending?.then?.(() => {
+      helloAudio.dataset.armed = 'true';
+      if (helloAudio.dataset.storySpeak !== 'true') helloAudio.volume = 0;
+    }).catch(() => {});
+  };
+  armHello();
+  document.addEventListener('pointerdown', armHello, { capture: true });
+  const playHello = () => {
+    if (!helloAudio || gateway.classList.contains('is-entering')) return;
+    if (helloAudio.dataset.storySpeak === 'true' && !helloAudio.paused && !helloAudio.ended) return;
+    const token = String(Number(helloAudio.dataset.helloToken || 0) + 1);
+    helloAudio.dataset.helloToken = token;
+    helloAudio.dataset.storySpeak = 'true';
+    helloAudio.muted = false;
+    helloAudio.volume = 1;
+    helloAudio.loop = true;
+    try { helloAudio.currentTime = 0; } catch {}
     helloAudio.loop = false;
     helloAudio.removeAttribute('loop');
-    helloAudio.muted = true;
-    helloAudio.volume = 0;
-    helloAudio.addEventListener('play', () => {
-      helloAudio.loop = false;
-      helloAudio.removeAttribute('loop');
-      helloAudio.muted = true;
-      helloAudio.volume = 0;
-      helloAudio.pause();
-    });
-    hushHello();
-  }
-  const playHello = () => hushHello();
+    if (!helloAudio.paused && !helloAudio.ended) return;
+    const pending = helloAudio.play();
+    pending?.then?.(() => {
+      if (helloAudio.dataset.helloToken !== token || gateway.classList.contains('is-entering')) hushHello();
+    }).catch(() => {});
+  };
+  helloAudio?.addEventListener('ended', () => {
+    helloAudio.dataset.storySpeak = 'false';
+    helloAudio.loop = false;
+    helloAudio.removeAttribute('loop');
+    helloAudio.pause();
+  });
   const clearMotionTimers = () => {
     clearTimeout(revealTimer);
     clearTimeout(retreatTimer);
@@ -1173,6 +1187,7 @@ function startIntroAvatar() {
     narration.dataset.voiceLocked = 'true';
     narration.addEventListener('play', () => {
       if (narration.dataset.storySpeak === 'true') {
+        if (narration.dataset.rewinding === 'true') return;
         narration.loop = false;
         narration.removeAttribute('loop');
         return;
@@ -1272,6 +1287,25 @@ function startIntroAvatar() {
     }
     narration.pause();
   };
+  const speakNarration = () => {
+    narration.dataset.storySpeak = 'true';
+    narration.muted = false;
+    narration.volume = 1;
+    const releaseLoop = () => {
+      delete narration.dataset.rewinding;
+      narration.loop = false;
+      narration.removeAttribute('loop');
+    };
+    if (narration.currentTime > 0.05) {
+      narration.dataset.rewinding = 'true';
+      narration.loop = true;
+      const onSeek = () => { narration.removeEventListener('seeked', onSeek); releaseLoop(); };
+      narration.addEventListener('seeked', onSeek);
+      try { narration.currentTime = 0; } catch { releaseLoop(); }
+    } else releaseLoop();
+    if (!narration.paused && !narration.ended) return Promise.resolve();
+    return narration.play();
+  };
   const stop = () => {
     generation += 1;
     preparing = false;
@@ -1321,14 +1355,8 @@ function startIntroAvatar() {
       video.pause();
       video.currentTime = 0;
       active = true;
-      narration.dataset.storySpeak = 'true';
-      narration.loop = false;
-      narration.removeAttribute('loop');
-      narration.muted = false;
-      narration.volume = 1;
-      try { if (narration.currentTime > 0.05) narration.currentTime = 0; } catch {}
-      narration.play().then(animateIntroCopy).catch(() => {
-        if (narration.dataset.storyLive === 'true' && !narration.paused) { animateIntroCopy(); return; }
+      speakNarration().then(animateIntroCopy).catch(() => {
+        if (narration.dataset.storyLive === 'true' && !narration.paused && narration.volume > 0) { animateIntroCopy(); return; }
         narrationUnavailable = true;
         finish();
       });
@@ -1355,14 +1383,8 @@ function startIntroAvatar() {
       const remainingTurnPause = Math.max(0, narrationDelay * 1000 - video.currentTime * 1000);
       narrationStartTimer = window.setTimeout(() => {
         if (run === generation && visible && active) {
-          narration.dataset.storySpeak = 'true';
-          narration.loop = false;
-          narration.removeAttribute('loop');
-          narration.muted = false;
-          narration.volume = 1;
-          try { if (narration.currentTime > 0.05) narration.currentTime = 0; } catch {}
-          narration.play().catch(() => {
-            if (narration.dataset.storyLive === 'true' && !narration.paused) return;
+          speakNarration().catch(() => {
+            if (!narration.paused && narration.volume > 0) return;
             narrationUnavailable = true;
             finish();
           });
