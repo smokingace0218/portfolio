@@ -431,3 +431,11 @@ html.is-landscape body{overflow:auto!important}
 #snitch-game .chapter-venom.venom-cta{
   touch-action:pan-y;
 }
+/* The snitch chapter is open night. A studio floor reads as a white slab on iPad and phone, so the painting shows through. */
+#snitch-game .chapter-venom.venom-cta,
+#snitch-game .chapter-venom .venom-cta__stage,
+#snitch-game .chapter-venom .venom-cta__btn{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#snitch-game .chapter-venom.venom-cta{--venom-feather:18px}

@@ -49,7 +49,7 @@ function mountChapterCTAs(dialog,container){
  let venom=null;
  const mountVenom=()=>{
   if(!dock.isConnected||venom)return;
-  venom=VenomCTA.mount(dock.querySelector('.chapter-venom'),{label:'SEND AN OWL',labelFont:'Harry P',labelSize:dialog.id==='nift-map'?34:26,buttonHeight:dialog.id==='nift-map'?76:72,paddingX:dialog.id==='nift-map'?36:22,clearFloor:isWanted,params:{reach:550,awareness:600,maxStrands:5,maxLen:580},onActivate:openPortfolioContact});
+  venom=VenomCTA.mount(dock.querySelector('.chapter-venom'),{label:'SEND AN OWL',labelFont:'Harry P',labelSize:dialog.id==='nift-map'?34:26,buttonHeight:dialog.id==='nift-map'?76:72,paddingX:dialog.id==='nift-map'?36:22,clearFloor:isWanted||dialog.id==='snitch-game',params:{reach:550,awareness:600,maxStrands:5,maxLen:580},onActivate:openPortfolioContact});
   venom.element.setAttribute('aria-label','Send an owl');
  };
  const mountFrame=matchMedia('(prefers-reduced-motion: reduce)').matches?0:requestAnimationFrame(mountVenom);
